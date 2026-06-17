@@ -12,20 +12,20 @@ copyFileSync(join(root, 'revizzi_os_panel.html'), join(root, 'dist', 'revizzi_os
 
 console.log('→ Copiando imagens...');
 copyFileSync(
-  join(root, 'Logo Da Revizzi.jpeg'),
-  join(root, 'dist', 'Logo Da Revizzi.jpeg')
+  join(root, 'logo-da-revizzi.jpeg'),
+  join(root, 'dist', 'logo-da-revizzi.jpeg')
 );
 copyFileSync(
-  join(root, 'Crie_a_vista_de_frente_202606171225.jpeg'),
-  join(root, 'dist', 'Crie_a_vista_de_frente_202606171225.jpeg')
+  join(root, 'crie-vista.jpeg'),
+  join(root, 'dist', 'crie-vista.jpeg')
 );
 copyFileSync(
   join(root, 'A_premium_horizontal_lineup_of_202606170926.jpeg'),
   join(root, 'dist', 'A_premium_horizontal_lineup_of_202606170926.jpeg')
 );
 copyFileSync(
-  join(root, 'Aumente_a_qualidade_da_imagem_202606170954.jpeg'),
-  join(root, 'dist', 'Aumente_a_qualidade_da_imagem_202606170954.jpeg')
+  join(root, 'aumente.jpeg'),
+  join(root, 'dist', 'aumente.jpeg')
 );
 
 console.log('\n✓ Build completo! Pasta dist/ pronta para deploy.');
