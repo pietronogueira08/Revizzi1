@@ -1,0 +1,11 @@
+{
+  "name": "revizzi",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node local-dev-server.mjs",
+    "build:admin": "cd revizzi-os && npm run build",
+    "dev:admin": "cd revizzi-os && npm run dev",
+    "build": "bash build.sh"
+  }
+}
