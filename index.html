@@ -1347,7 +1347,7 @@ async function handleConfirmOrder() {
     // Save to Supabase
     try {
         if (typeof supabaseClient !== 'undefined') {
-            await supabaseClient.from('orders').insert([{
+            const { error } = await supabaseClient.from('orders').insert([{
                 customer_name:  customerName,
                 customer_email: customerEmail,
                 customer_phone: customerPhone,
@@ -1363,9 +1363,20 @@ async function handleConfirmOrder() {
                 status:         'pending',
                 payment_method: paymentMethod
             }]);
+            
+            if (error) {
+                alert('Erro do banco de dados: ' + error.message);
+                console.error('Supabase error:', error);
+                return; // Stop checkout flow if error
+            }
+        } else {
+            alert('Erro: supabaseClient não encontrado!');
+            return;
         }
     } catch(e) {
-        console.warn('Supabase order save failed:', e);
+        alert('Erro de conexão: ' + e.message);
+        console.error('Supabase exception:', e);
+        return;
     }
 
     setTimeout(function() {
