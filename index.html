@@ -878,7 +878,7 @@ function renderCartDrawer() {
             list.appendChild(li);
         });
         list.querySelectorAll('[data-remove-id]').forEach(btn => {
-            btn.addEventListener('click', () => Cart.remove(Number(btn.dataset.removeId)));
+            btn.addEventListener('click', () => Cart.remove(btn.dataset.removeId));
         });
     }
     totalEl.textContent = Cart.totalFormatted();
@@ -897,6 +897,43 @@ function closeCartDrawer() {
     document.body.style.overflow = '';
 }
 
+function flyToCart(e, imgSource) {
+    if (!e || !imgSource) return;
+    const cartIcon = document.getElementById('cart-btn');
+    if (!cartIcon) return;
+
+    const imgRect = imgSource.getBoundingClientRect();
+    const cartRect = cartIcon.getBoundingClientRect();
+
+    const clone = imgSource.cloneNode(true);
+    clone.style.position = 'fixed';
+    clone.style.top = imgRect.top + 'px';
+    clone.style.left = imgRect.left + 'px';
+    clone.style.width = imgRect.width + 'px';
+    clone.style.height = imgRect.height + 'px';
+    clone.style.zIndex = '9999';
+    clone.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+    clone.style.opacity = '0.9';
+    clone.style.borderRadius = '50%';
+    clone.style.objectFit = 'cover';
+    document.body.appendChild(clone);
+
+    clone.offsetHeight; // trigger reflow
+
+    clone.style.top = cartRect.top + 'px';
+    clone.style.left = cartRect.left + 'px';
+    clone.style.width = '24px';
+    clone.style.height = '24px';
+    clone.style.opacity = '0';
+
+    setTimeout(() => {
+        if (clone.parentNode) clone.parentNode.removeChild(clone);
+        cartIcon.style.transform = 'scale(1.2)';
+        cartIcon.style.transition = 'transform 0.15s ease';
+        setTimeout(() => cartIcon.style.transform = 'scale(1)', 150);
+    }, 600);
+}
+
 function initCart() {
     document.getElementById('cart-btn').addEventListener('click', openCartDrawer);
     document.getElementById('cart-close-btn').addEventListener('click', closeCartDrawer);
@@ -906,7 +943,15 @@ function initCart() {
         const btn = e.target.closest('[data-add-to-cart]');
         if (btn) {
             e.stopPropagation();
+            const card = btn.closest('.bg-surface-card');
+            const img = card ? card.querySelector('img') : null;
             Cart.add(btn.dataset.addToCart);
+            if (img) {
+                flyToCart(e, img);
+                setTimeout(openCartDrawer, 600);
+            } else {
+                openCartDrawer();
+            }
         }
     });
     // Esc key closes overlays
@@ -950,10 +995,11 @@ function initProductModal() {
             closeProductModal();
         }
     });
-    document.getElementById('product-modal-add').addEventListener('click', function() {
+    document.getElementById('product-modal-add').addEventListener('click', function(e) {
         Cart.add(this.dataset.currentProductId);
+        flyToCart(e, document.getElementById('product-modal-img'));
         closeProductModal();
-        setTimeout(openCartDrawer, 300);
+        setTimeout(openCartDrawer, 600);
     });
     // Card click → open modal (delegated)
     document.addEventListener('click', function(e) {
