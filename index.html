@@ -144,7 +144,7 @@
             to { background-position: -100vw center; }
         }
         .bg-parallax-marquee {
-            background-image: url('Aumente_a_qualidade_da_imagem_202606170954.jpeg');
+            background-image: url('aumente.jpeg');
             background-size: auto 250%;
             background-position: center center;
             background-repeat: repeat-x;
@@ -260,7 +260,7 @@
 <nav class="flex justify-between items-center px-margin-desktop py-4 w-full max-w-[1920px] mx-auto">
 <div class="flex items-center gap-4">
 <a class="flex items-center space-x-3 shrink-0 group" href="#">
-<img alt="REVIZZI Logo" class="h-16 w-16 md:h-24 md:w-24 object-contain group-hover:scale-105 transition-transform" src="Logo Da Revizzi.jpeg"/>
+<img alt="REVIZZI Logo" class="h-16 w-16 md:h-24 md:w-24 object-contain group-hover:scale-105 transition-transform" src="logo-da-revizzi.jpeg"/>
 </a>
 <span class="font-headline-lg text-headline-lg text-primary tracking-widest">REVIZZI</span>
 </div>
@@ -316,7 +316,7 @@ Performance, proteção e o brilho impecável que seu veículo merece. Engenhari
 </div>
 <div class="absolute right-0 top-0 h-full w-1/2 hidden md:block">
 <div class="absolute inset-0 bg-gradient-to-r from-surface-main via-transparent to-transparent z-10"></div>
-<img class="w-full h-full object-cover" src="Crie_a_vista_de_frente_202606171225.jpeg" alt="Frente da Estética Automotiva Revizzi"/>
+<img class="w-full h-full object-cover" src="crie-vista.jpeg" alt="Frente da Estética Automotiva Revizzi"/>
 </div>
 </section>
 
@@ -710,7 +710,7 @@ Performance, proteção e o brilho impecável que seu veículo merece. Engenhari
 <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-section-padding w-full max-w-7xl mx-auto">
 <div class="mb-8 md:mb-0 max-w-xs">
 <a class="flex items-center space-x-3 mb-6 group" href="#">
-<img alt="REVIZZI Logo" class="h-14 w-14 object-contain group-hover:scale-105 transition-transform" src="Logo Da Revizzi.jpeg"/>
+<img alt="REVIZZI Logo" class="h-14 w-14 object-contain group-hover:scale-105 transition-transform" src="logo-da-revizzi.jpeg"/>
 </a>
 <p class="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed">Elevando o padrão da estética automotiva brasileira através de engenharia e precisão.</p>
 <div class="flex gap-4 mt-6">
@@ -788,7 +788,7 @@ async function fetchProductsFromSupabase() {
                     priceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price),
                     category: item.category,
                     badge: item.badge_text ? { text: item.badge_text, style: item.badge_style || 'bg-primary text-surface-main' } : null,
-                    img: item.img_url || 'Logo Da Revizzi.jpeg',
+                    img: item.img_url || 'logo-da-revizzi.jpeg',
                     description: item.description
                 };
             });
