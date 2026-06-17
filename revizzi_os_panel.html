@@ -400,7 +400,23 @@ function openOrderModal(order) {
         overlay.addEventListener('click', e => { if (e.target === overlay) overlay.style.display = 'none'; });
     }
     document.getElementById('modal-id').textContent = order.id;
-    document.getElementById('modal-body').innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;"><div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Cliente</div><div style="color:#fff;font-size:14px;font-weight:600;">${order.client}</div></div><div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Total</div><div style="color:#fff;font-size:18px;font-weight:700;">${order.total}</div></div></div><button onclick="document.getElementById('order-modal-overlay').style.display='none';showToast('Pedido ${order.id} atualizado!')" style="width:100%;background:#fff;color:#000;border:none;padding:12px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">MARCAR COMO CONCLUÍDO →</button>`;
+    
+    // Render address
+    const addressStr = order.address ? `${order.address}, ${order.number || 'S/N'} ${order.complement ? '- ' + order.complement : ''}<br>${order.district} - ${order.city}/${order.state}<br>CEP: ${order.cep}` : 'Endereço não informado';
+    
+    document.getElementById('modal-body').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Cliente</div><div style="color:#fff;font-size:14px;font-weight:600;">${order.client}</div></div>
+            <div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Total</div><div style="color:#fff;font-size:18px;font-weight:700;">${order.total}</div></div>
+            <div style="grid-column:span 2;"><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Endereço de Entrega</div><div style="color:#fff;font-size:12px;line-height:1.4;">${addressStr}</div></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:12px;">
+            <button onclick="printCorreiosLabel('${order.id}')" style="flex:1;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:12px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <span class="material-symbols-outlined" style="font-size:16px;">print</span> IMPRIMIR ETIQUETA
+            </button>
+        </div>
+        <button onclick="document.getElementById('order-modal-overlay').style.display='none';showToast('Pedido ${order.id} atualizado!')" style="width:100%;background:#fff;color:#000;border:none;padding:12px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">MARCAR COMO CONCLUÍDO →</button>
+    `;
     overlay.style.display = 'flex';
 }
 
@@ -479,6 +495,14 @@ async function fetchOrders() {
                 rawStatus: o.status,
                 supabase_id: o.id,
                 customer_email: o.customer_email,
+                phone: o.customer_phone,
+                cep: o.customer_cep,
+                address: o.customer_address,
+                number: o.customer_number,
+                complement: o.customer_complement,
+                district: o.customer_district,
+                city: o.customer_city,
+                state: o.customer_state,
                 payment_method: o.payment_method,
                 items: o.items || []
             }));
@@ -492,6 +516,99 @@ async function fetchOrders() {
         console.error('Error fetching orders:', err);
         renderOrderTable([]);
     }
+}
+
+function printCorreiosLabel(orderId) {
+    const order = ORDERS.find(o => o.id === orderId);
+    if (!order) return;
+
+    let printArea = document.getElementById('correios-print-area');
+    if (!printArea) {
+        printArea = document.createElement('div');
+        printArea.id = 'correios-print-area';
+        document.body.appendChild(printArea);
+    }
+    
+    let itemsRows = '';
+    let totalQtd = 0;
+    let totalValor = 0;
+    (order.items || []).forEach(item => {
+        itemsRows += `<tr><td style="border:1px solid #000;padding:4px 8px;">${item.name}</td><td style="border:1px solid #000;padding:4px 8px;text-align:center;">${item.quantity}</td><td style="border:1px solid #000;padding:4px 8px;text-align:right;">R$ ${item.price}</td></tr>`;
+        totalQtd += item.quantity;
+        totalValor += (parseFloat(item.price.toString().replace(',','.')) * item.quantity) || 0;
+    });
+
+    const html = `
+    <div style="font-family:Arial,sans-serif;color:#000;background:#fff;width:100%;max-width:800px;margin:0 auto;padding:20px;box-sizing:border-box;">
+        <!-- ETIQUETA DE POSTAGEM -->
+        <div style="border:2px dashed #000;padding:20px;margin-bottom:40px;page-break-after:always;">
+            <div style="text-align:center;font-weight:bold;font-size:24px;margin-bottom:10px;border-bottom:2px solid #000;padding-bottom:10px;">ETIQUETA DE ENDEREÇAMENTO</div>
+            <div style="display:flex;justify-content:space-between;margin-top:20px;">
+                <div style="width:48%;border:1px solid #000;padding:15px;box-sizing:border-box;">
+                    <h3 style="margin-top:0;font-size:14px;text-transform:uppercase;border-bottom:1px solid #ccc;padding-bottom:5px;">Remetente</h3>
+                    <p style="margin:8px 0;font-weight:bold;font-size:16px;">Revizzi Store</p>
+                    <p style="margin:5px 0;font-size:14px;">Avenida Genecy Mendonca, 10</p>
+                    <p style="margin:5px 0;font-size:14px;">bairro de Fátima</p>
+                    <p style="margin:5px 0;font-size:14px;">São João da Barra - RJ</p>
+                    <p style="margin:10px 0 0 0;font-weight:bold;font-size:16px;">CEP: 28200-000</p>
+                </div>
+                <div style="width:48%;border:1px solid #000;padding:15px;background:#f9f9f9;box-sizing:border-box;">
+                    <h3 style="margin-top:0;font-size:14px;text-transform:uppercase;border-bottom:1px solid #ccc;padding-bottom:5px;">Destinatário</h3>
+                    <p style="margin:8px 0;font-weight:bold;font-size:18px;">${order.client || 'Cliente'}</p>
+                    <p style="margin:5px 0;font-size:14px;">${order.address || 'Endereço não informado'}, ${order.number || 'S/N'} ${order.complement ? '- ' + order.complement : ''}</p>
+                    <p style="margin:5px 0;font-size:14px;">${order.district || 'Bairro'}</p>
+                    <p style="margin:5px 0;font-size:14px;">${order.city || 'Cidade'} - ${order.state || 'UF'}</p>
+                    <p style="margin:10px 0 0 0;font-weight:bold;font-size:18px;">CEP: ${order.cep || '00000-000'}</p>
+                    <p style="margin:5px 0 0 0;font-size:12px;">Cel: ${order.phone || ''}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DECLARAÇÃO DE CONTEÚDO -->
+        <div style="border:2px solid #000;padding:20px;">
+            <div style="text-align:center;font-weight:bold;font-size:20px;margin-bottom:20px;">DECLARAÇÃO DE CONTEÚDO</div>
+            <div style="margin-bottom:15px;font-size:14px;">
+                <strong>Remetente:</strong> Revizzi Store | <strong>Destinatário:</strong> ${order.client}
+            </div>
+            <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px;">
+                <thead>
+                    <tr><th style="border:1px solid #000;padding:6px;text-align:left;background:#eee;">Item / Conteúdo</th><th style="border:1px solid #000;padding:6px;background:#eee;">Qtd</th><th style="border:1px solid #000;padding:6px;background:#eee;">Valor</th></tr>
+                </thead>
+                <tbody>
+                    ${itemsRows}
+                    <tr><td style="border:1px solid #000;padding:6px;text-align:right;font-weight:bold;">TOTAIS</td><td style="border:1px solid #000;padding:6px;text-align:center;font-weight:bold;">${totalQtd}</td><td style="border:1px solid #000;padding:6px;text-align:right;font-weight:bold;">${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(totalValor)}</td></tr>
+                </tbody>
+            </table>
+            <div style="font-size:12px;text-align:justify;margin-bottom:30px;">
+                Declaro que não me enquadro no conceito de contribuinte previsto no art. 4º da Lei Complementar nº 87/1996, uma vez que não realizo, com habitualidade ou em volume que caracterize intuito comercial, operações de circulação de mercadoria, ainda que se iniciem no exterior, ou estou dispensado da emissão da nota fiscal por força de legislação tributária vigente.
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:end;margin-top:40px;">
+                <div style="width:45%;border-top:1px solid #000;text-align:center;font-size:14px;padding-top:5px;">Assinatura do Remetente / Declarante</div>
+                <div style="width:45%;font-size:14px;">Data: ___/___/20___</div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    printArea.innerHTML = html;
+    
+    let style = document.getElementById('print-style');
+    if (!style) {
+        style = document.createElement('style');
+        style.id = 'print-style';
+        style.innerHTML = `
+            @media print {
+                body > *:not(#correios-print-area) { display: none !important; }
+                body { background: white; margin: 0; padding: 0; }
+                #correios-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    setTimeout(() => {
+        window.print();
+    }, 500);
 }
 
 function updateKPIs(data) {

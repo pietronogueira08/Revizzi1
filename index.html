@@ -1265,6 +1265,14 @@ async function handleConfirmOrder() {
     const customerEmail = (document.getElementById('ck-email') || {}).value || '';
     const customerPhone = (document.getElementById('ck-phone') || {}).value || '';
     const customerCep   = (document.getElementById('ck-cep')   || {}).value || '';
+    
+    // Address data
+    const customerAddress    = (document.getElementById('ck-address')   || {}).value || '';
+    const customerNumber     = (document.getElementById('ck-number')    || {}).value || '';
+    const customerComplement = (document.getElementById('ck-complement')|| {}).value || '';
+    const customerDistrict   = (document.getElementById('ck-district')  || {}).value || '';
+    const customerCity       = (document.getElementById('ck-city')      || {}).value || '';
+    const customerState      = (document.getElementById('ck-state')     || {}).value || '';
 
     // Determine payment method
     const isCard = !document.getElementById('pay-card-form').classList.contains('hidden');
@@ -1289,6 +1297,12 @@ async function handleConfirmOrder() {
                 customer_email: customerEmail,
                 customer_phone: customerPhone,
                 customer_cep:   customerCep,
+                customer_address: customerAddress,
+                customer_number: customerNumber,
+                customer_complement: customerComplement,
+                customer_district: customerDistrict,
+                customer_city: customerCity,
+                customer_state: customerState,
                 items:          orderItems,
                 total:          orderTotal,
                 status:         'pending',
