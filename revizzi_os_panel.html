@@ -582,8 +582,10 @@ function openProductModal(product = null) {
                     <input id="pm-badge" type="text" value="${isEdit ? product.badge_text || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ex: Lançamento, -15%">
                 </div>
                 <div style="grid-column:span 2;">
-                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">URL da Imagem</label>
-                    <input id="pm-img" type="text" value="${isEdit ? product.img_url || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="https://... (deixe vazio para usar a logo da Revizzi)">
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Imagem do Produto (Até 25MB)</label>
+                    <input type="hidden" id="pm-old-img" value="${isEdit ? product.img_url || '' : ''}">
+                    <input id="pm-img-file" type="file" accept="image/*" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;">
+                    <p style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:6px;">Deixe vazio para manter a imagem atual.</p>
                 </div>
                 <div style="grid-column:span 2;">
                     <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Descrição</label>
@@ -609,10 +611,11 @@ async function saveProduct(id) {
     const brand = document.getElementById('pm-brand').value.trim();
     const category = document.getElementById('pm-category').value.trim();
     const price = parseFloat(document.getElementById('pm-price').value);
-    const imgUrl = document.getElementById('pm-img').value.trim();
     const description = document.getElementById('pm-desc').value.trim();
     const badgeText = document.getElementById('pm-badge').value.trim();
     const errEl = document.getElementById('pm-error');
+    const fileInput = document.getElementById('pm-img-file');
+    let imgUrl = document.getElementById('pm-old-img').value.trim() || null;
 
     if (!name || !brand || !category || isNaN(price) || price <= 0) {
         errEl.style.display = 'block';
@@ -621,7 +624,39 @@ async function saveProduct(id) {
     }
     errEl.style.display = 'none';
 
-    const payload = { name, brand, category, price, img_url: imgUrl || null, description: description || null, badge_text: badgeText || null };
+    const btn = document.querySelector('button[onclick^="saveProduct"]');
+    const oldBtnText = btn.textContent;
+    btn.disabled = true;
+
+    if (fileInput && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        if (file.size > 25 * 1024 * 1024) {
+            errEl.style.display = 'block';
+            errEl.textContent = '⚠ O arquivo de imagem excede o limite de 25MB.';
+            btn.disabled = false;
+            return;
+        }
+
+        btn.textContent = 'FAZENDO UPLOAD...';
+        const fileExt = file.name.split('.').pop();
+        const fileName = Math.random().toString(36).substring(2) + Date.now() + '.' + fileExt;
+        const filePath = `produtos/${fileName}`;
+
+        const { data, error } = await db.storage.from('produtos').upload(filePath, file);
+        if (error) {
+            errEl.style.display = 'block';
+            errEl.textContent = '⚠ Erro no upload: ' + error.message + ' (Crie um bucket "produtos" público no Supabase)';
+            btn.textContent = oldBtnText;
+            btn.disabled = false;
+            return;
+        }
+
+        const { data: publicUrlData } = db.storage.from('produtos').getPublicUrl(filePath);
+        imgUrl = publicUrlData.publicUrl;
+    }
+
+    btn.textContent = 'SALVANDO...';
+    const payload = { name, brand, category, price, img_url: imgUrl, description: description || null, badge_text: badgeText || null };
 
     try {
         let result;
