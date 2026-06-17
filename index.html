@@ -1193,13 +1193,53 @@ function renderCheckoutSummary() {
     totalEl.textContent = Cart.totalFormatted();
 }
 
-function handleConfirmOrder() {
+async function handleConfirmOrder() {
     const btn = document.getElementById('checkout-confirm-btn');
     const text = document.getElementById('confirm-btn-text');
     const check = document.getElementById('confirm-checkmark');
     btn.disabled = true;
     btn.style.opacity = '0.7';
     text.textContent = 'Processando...';
+
+    // Collect customer data
+    const customerName  = (document.getElementById('ck-name')  || {}).value || 'Cliente';
+    const customerEmail = (document.getElementById('ck-email') || {}).value || '';
+    const customerPhone = (document.getElementById('ck-phone') || {}).value || '';
+    const customerCep   = (document.getElementById('ck-cep')   || {}).value || '';
+
+    // Determine payment method
+    const isCard = !document.getElementById('pay-card-form').classList.contains('hidden');
+    const paymentMethod = isCard ? 'card' : 'pix';
+
+    // Build order items array
+    const orderItems = Cart.items.map(({ product, qty }) => ({
+        product_id: product.id,
+        name: product.name,
+        brand: product.brand,
+        price: product.price,
+        quantity: qty
+    }));
+
+    const orderTotal = Cart.total();
+
+    // Save to Supabase
+    try {
+        if (window._supabaseClient) {
+            await window._supabaseClient.from('orders').insert([{
+                customer_name:  customerName,
+                customer_email: customerEmail,
+                customer_phone: customerPhone,
+                customer_cep:   customerCep,
+                items:          orderItems,
+                total:          orderTotal,
+                status:         'pending',
+                payment_method: paymentMethod
+            }]);
+        }
+    } catch(e) {
+        console.warn('Supabase order save failed:', e);
+    }
+
     setTimeout(function() {
         text.textContent = 'Pedido Confirmado!';
         check.classList.remove('hidden');

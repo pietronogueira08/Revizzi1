@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>REVIZZI OS | Paddock Edition</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
@@ -446,15 +447,21 @@
     <a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary transition-all" href="#">SUPORTE</a>
   </div>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = 'https://lpovueymplmwuljohysj.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_R515ACD0X12zo_inHPj_1w_ElYu0B0A';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const ORDERS = [];
 const CHART_DATA = { '24H': [0,0,0,0,0,0,0,0,0,0,0,0], '7D': [0,0,0,0,0,0,0,0,0,0,0,0] };
 
-function showToast(msg) {
+function showToast(msg, type='default') {
     let t = document.getElementById('os-toast');
     if (!t) { t = document.createElement('div'); t.id = 'os-toast'; t.style.cssText = 'position:fixed;bottom:56px;right:24px;z-index:9999;background:#222;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:12px 20px;font-size:11px;font-family:Inter,sans-serif;letter-spacing:0.08em;text-transform:uppercase;transition:opacity 0.3s;pointer-events:none;'; document.body.appendChild(t); }
+    t.style.borderColor = type === 'success' ? 'rgba(74,222,128,0.5)' : type === 'error' ? 'rgba(248,113,113,0.5)' : 'rgba(255,255,255,0.12)';
     t.textContent = msg; t.style.opacity = '1';
-    clearTimeout(t._timer); t._timer = setTimeout(() => t.style.opacity = '0', 2500);
+    clearTimeout(t._timer); t._timer = setTimeout(() => t.style.opacity = '0', 2800);
 }
 
 function switchSection(name) {
@@ -574,9 +581,244 @@ function initKPI() {
     });
 }
 
+// ═══════════════════════════════════════════════════
+// SUPABASE: FETCH ORDERS
+// ═══════════════════════════════════════════════════
+async function fetchOrders() {
+    try {
+        const { data, error } = await db.from('orders').select('*').order('created_at', { ascending: false }).limit(50);
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            const mapped = data.map(o => ({
+                id: '#' + String(o.id).slice(0,8).toUpperCase(),
+                client: o.customer_name || 'Cliente',
+                total: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(o.total || 0),
+                status: o.status === 'completed' ? 'Concluído' : o.status === 'processing' ? 'Em Andamento' : 'Pendente',
+                statusCls: o.status === 'completed' ? 'bg-green-500/20 text-green-400' : o.status === 'processing' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-white/10 text-white/60',
+                rawStatus: o.status,
+                supabase_id: o.id,
+                customer_email: o.customer_email,
+                payment_method: o.payment_method,
+                items: o.items || []
+            }));
+            window._OS_ORDERS = mapped;
+            renderOrderTable(mapped);
+            updateKPIs(data);
+        } else {
+            renderOrderTable([]);
+        }
+    } catch(err) {
+        console.error('Error fetching orders:', err);
+        renderOrderTable([]);
+    }
+}
+
+function updateKPIs(data) {
+    const total = data.reduce((s, o) => s + (parseFloat(o.total) || 0), 0);
+    const fmtd = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
+    const kpiReceita = document.querySelector('#section-Painel .font-display-lg');
+    if (kpiReceita) kpiReceita.textContent = fmtd;
+
+    const ticket = data.length > 0 ? total / data.length : 0;
+    const ticketEl = document.querySelectorAll('#section-Painel .font-display-lg')[3];
+    if (ticketEl) ticketEl.textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(ticket);
+
+    const countEl = document.querySelectorAll('#section-Painel .font-display-lg')[2];
+    if (countEl) countEl.textContent = data.filter(o => o.status === 'completed').length;
+}
+
+function renderOrderTable(orders) {
+    const tbody = document.getElementById('orders-tbody');
+    if (!tbody) return;
+    if (!orders || orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center text-[10px] font-label-caps text-on-surface-variant tracking-widest">Nenhum pedido no momento.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = orders.map((o, i) => `
+        <tr class="hover:bg-[#171717] transition-colors cursor-pointer" data-idx="${i}">
+            <td class="px-6 py-4 text-[11px] font-mono text-primary/80">${o.id}</td>
+            <td class="px-6 py-4 text-[11px] text-primary">${o.client}</td>
+            <td class="px-6 py-4 text-[11px] font-bold">${o.total}</td>
+            <td class="px-6 py-4 text-right"><span class="inline-block px-2 py-1 text-[9px] font-bold tracking-tighter ${o.statusCls}">${o.status}</span></td>
+        </tr>`).join('');
+    tbody.querySelectorAll('tr[data-idx]').forEach(row => {
+        row.addEventListener('click', () => openOrderModal(orders[row.dataset.idx]));
+    });
+}
+
+async function completeOrder(id) {
+    try {
+        await db.from('orders').update({ status: 'completed' }).eq('id', id);
+        showToast('Pedido atualizado!', 'success');
+        fetchOrders();
+    } catch(e) { showToast('Erro ao atualizar pedido', 'error'); }
+}
+
+// ═══════════════════════════════════════════════════
+// SUPABASE: PRODUCTS CRUD
+// ═══════════════════════════════════════════════════
+async function fetchEstoqueProducts() {
+    try {
+        const { data, error } = await db.from('products').select('*').order('name');
+        if (error) throw error;
+        renderEstoqueTable(data || []);
+        updateEstoqueKPIs(data || []);
+    } catch(err) { console.error('Error fetching products:', err); }
+}
+
+function updateEstoqueKPIs(data) {
+    const skuEl = document.querySelector('#section-Estoque .font-display-lg');
+    if (skuEl) skuEl.textContent = data.length;
+    const valorTotal = data.reduce((s, p) => s + (parseFloat(p.price) || 0), 0);
+    const valorEls = document.querySelectorAll('#section-Estoque .font-display-lg');
+    if (valorEls[2]) valorEls[2].textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valorTotal);
+}
+
+function renderEstoqueTable(products) {
+    const tbody = document.getElementById('estoque-tbody');
+    if (!tbody) return;
+    if (!products || products.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-[10px] font-label-caps text-on-surface-variant/40 uppercase tracking-widest">Nenhum produto cadastrado ainda. Clique em "Adicionar Item".</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = products.map(p => `
+        <tr class="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+            <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <img src="${p.img_url || 'Logo Da Revizzi.jpeg'}" class="w-10 h-10 object-cover bg-surface-main flex-shrink-0" onerror="this.src='Logo Da Revizzi.jpeg'">
+                    <span class="text-[11px] font-label-caps text-primary uppercase">${p.name}</span>
+                </div>
+            </td>
+            <td class="px-6 py-4 text-[11px] font-label-caps text-on-surface-variant">${p.brand || '-'}</td>
+            <td class="px-6 py-4 text-[11px] font-label-caps text-on-surface-variant">${p.category || '-'}</td>
+            <td class="px-6 py-4 text-[11px] font-label-caps text-primary">${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(p.price || 0)}</td>
+            <td class="px-6 py-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                    <button onclick="openProductModal(${JSON.stringify(p).replace(/"/g, '&quot;')})" class="text-[9px] font-label-caps uppercase border border-white/20 px-3 py-1.5 hover:border-white/50 transition-all">Editar</button>
+                    <button onclick="deleteProduct('${p.id}', '${p.name.replace(/'/g, "\\'")}}')" class="text-[9px] font-label-caps uppercase border border-red-500/30 text-red-400 px-3 py-1.5 hover:bg-red-500/10 transition-all">Excluir</button>
+                </div>
+            </td>
+        </tr>`).join('');
+}
+
+function openProductModal(product = null) {
+    const isEdit = product && product.id;
+    let modal = document.getElementById('product-modal-overlay');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'product-modal-overlay';
+        modal.style.cssText = 'position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:20px;';
+        document.body.appendChild(modal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeProductModal(); });
+    }
+    modal.innerHTML = `
+    <div style="background:#131313;border:1px solid rgba(255,255,255,0.1);width:100%;max-width:540px;font-family:Inter,sans-serif;max-height:90vh;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.05em;color:#fff;">${isEdit ? 'EDITAR PRODUTO' : 'NOVO PRODUTO'}</span>
+            <button onclick="closeProductModal()" class="material-symbols-outlined" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:20px;">close</button>
+        </div>
+        <div style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div style="grid-column:span 2;">
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Nome do Produto *</label>
+                    <input id="pm-name" type="text" value="${isEdit ? product.name : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ex: Ceramic Coating Pro">
+                </div>
+                <div>
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Marca *</label>
+                    <input id="pm-brand" type="text" value="${isEdit ? product.brand || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ex: Vintex">
+                </div>
+                <div>
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Categoria *</label>
+                    <input id="pm-category" type="text" value="${isEdit ? product.category || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ex: Polimento">
+                </div>
+                <div>
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Preço (R$) *</label>
+                    <input id="pm-price" type="number" step="0.01" value="${isEdit ? product.price || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="0.00">
+                </div>
+                <div>
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Selo (badge)</label>
+                    <input id="pm-badge" type="text" value="${isEdit ? product.badge_text || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ex: Lançamento, -15%">
+                </div>
+                <div style="grid-column:span 2;">
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">URL da Imagem</label>
+                    <input id="pm-img" type="text" value="${isEdit ? product.img_url || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="https://... (deixe vazio para usar a logo da Revizzi)">
+                </div>
+                <div style="grid-column:span 2;">
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Descrição</label>
+                    <textarea id="pm-desc" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;resize:vertical;min-height:80px;" placeholder="Descreva o produto...">${isEdit ? product.description || '' : ''}</textarea>
+                </div>
+            </div>
+            <div id="pm-error" style="display:none;color:#f87171;font-size:11px;font-family:Inter;letter-spacing:0.05em;"></div>
+            <button onclick="saveProduct(${isEdit ? `'${product.id}'` : 'null'})" style="width:100%;background:#fff;color:#000;border:none;padding:13px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:4px;">
+                ${isEdit ? 'SALVAR ALTERAÇÕES' : 'CADASTRAR PRODUTO'} →
+            </button>
+        </div>
+    </div>`;
+    modal.style.display = 'flex';
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('product-modal-overlay');
+    if (modal) modal.style.display = 'none';
+}
+
+async function saveProduct(id) {
+    const name = document.getElementById('pm-name').value.trim();
+    const brand = document.getElementById('pm-brand').value.trim();
+    const category = document.getElementById('pm-category').value.trim();
+    const price = parseFloat(document.getElementById('pm-price').value);
+    const imgUrl = document.getElementById('pm-img').value.trim();
+    const description = document.getElementById('pm-desc').value.trim();
+    const badgeText = document.getElementById('pm-badge').value.trim();
+    const errEl = document.getElementById('pm-error');
+
+    if (!name || !brand || !category || isNaN(price) || price <= 0) {
+        errEl.style.display = 'block';
+        errEl.textContent = '⚠ Preencha todos os campos obrigatórios (*).';
+        return;
+    }
+    errEl.style.display = 'none';
+
+    const payload = { name, brand, category, price, img_url: imgUrl || null, description: description || null, badge_text: badgeText || null };
+
+    try {
+        let result;
+        if (id) {
+            result = await db.from('products').update(payload).eq('id', id);
+        } else {
+            result = await db.from('products').insert([payload]);
+        }
+        if (result.error) throw result.error;
+        closeProductModal();
+        showToast(id ? 'Produto atualizado!' : 'Produto cadastrado!', 'success');
+        fetchEstoqueProducts();
+    } catch(err) {
+        errEl.style.display = 'block';
+        errEl.textContent = '⚠ Erro: ' + (err.message || 'Tente novamente.');
+    }
+}
+
+async function deleteProduct(id, name) {
+    if (!confirm(`Excluir "${name}" permanentemente?`)) return;
+    try {
+        const { error } = await db.from('products').delete().eq('id', id);
+        if (error) throw error;
+        showToast('Produto excluído.', 'success');
+        fetchEstoqueProducts();
+    } catch(err) {
+        showToast('Erro ao excluir: ' + err.message, 'error');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    initSidebar(); initTopTabs(); initChartButtons(); initOrderTable();
+    initSidebar(); initTopTabs(); initChartButtons();
     initNotifications(); initProfile(); initSearch(); initFooter(); initKPI();
+    fetchOrders();
+    fetchEstoqueProducts();
+    // Bind Estoque "Adicionar Item" button
+    document.querySelector('#section-Estoque button[onclick]') && null;
+    const addBtn = document.querySelector('#section-Estoque header button, #section-Estoque .flex.items-center.justify-between.mb-8 button');
 });
 </script>
 </body></html>
