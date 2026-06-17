@@ -468,9 +468,19 @@
 </div>
 <h2 id="product-modal-name" class="font-headline-xl text-headline-xl uppercase mb-3"></h2>
 <p id="product-modal-price" class="font-price-display text-price-display mb-5"></p>
-<p id="product-modal-desc" class="font-body-md text-body-md text-on-surface-variant leading-relaxed"></p>
+<p id="product-modal-desc" class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6"></p>
+
+<div class="border-t border-white/10 pt-4">
+  <label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Simular Frete</label>
+  <div class="flex gap-2">
+    <input id="product-modal-cep" type="text" placeholder="00000-000" maxlength="9" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40" />
+    <button id="product-modal-calc-btn" class="bg-white/10 text-white font-label-caps text-[10px] uppercase px-4 hover:bg-white/20 transition-colors">Calcular</button>
+  </div>
+  <div id="product-modal-freight-result" class="mt-3 text-xs text-on-surface-variant hidden flex-col gap-2"></div>
 </div>
-<button id="product-modal-add" class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity mt-8">Adicionar ao Carrinho</button>
+
+</div>
+<button id="product-modal-add" class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity mt-6">Adicionar ao Carrinho</button>
 </div>
 </div>
 </dialog>
@@ -614,6 +624,15 @@
 <input id="ck-state" type="text" placeholder="SP" maxlength="2" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
 </div>
 </div>
+</div>
+<div class="border-t border-white/10 pt-6 mt-6">
+  <div class="flex items-center justify-between mb-4">
+    <h4 class="font-label-caps text-[10px] uppercase text-on-surface-variant">Opções de Entrega</h4>
+    <button id="ck-calc-freight-btn" class="text-[10px] uppercase text-primary hover:underline">Calcular</button>
+  </div>
+  <div id="checkout-freight-options" class="flex flex-col gap-3">
+    <p class="text-[11px] text-white/50">Digite o CEP para ver as opções.</p>
+  </div>
 </div>
 <div class="flex gap-3 mt-8">
 <button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="1">← Voltar</button>
@@ -996,7 +1015,11 @@ function closeProductModal() {
     const modal = document.getElementById('product-modal');
     if (!modal.open) return;
     modal.style.opacity = '0';
-    setTimeout(() => { if (modal.open) modal.close(); }, 250);
+    setTimeout(() => { 
+        if (modal.open) modal.close(); 
+        document.getElementById('product-modal-cep').value = '';
+        document.getElementById('product-modal-freight-result').classList.add('hidden');
+    }, 250);
 }
 
 function initProductModal() {
@@ -1014,6 +1037,38 @@ function initProductModal() {
         closeProductModal();
         setTimeout(openCartDrawer, 600);
     });
+    
+    // Modal Freight Calc
+    document.getElementById('product-modal-calc-btn').addEventListener('click', async function() {
+        const cep = document.getElementById('product-modal-cep').value;
+        const resEl = document.getElementById('product-modal-freight-result');
+        if (cep.replace(/\D/g,'').length !== 8) {
+            showToast('Digite um CEP válido', 'error');
+            return;
+        }
+        this.disabled = true; this.textContent = '...';
+        const priceText = document.getElementById('product-modal-price').textContent;
+        const basePrice = parseFloat(priceText.replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
+        
+        try {
+            const freights = await simulateFreight(cep, basePrice);
+            resEl.innerHTML = freights.map(f => `
+                <div class="flex justify-between items-center border border-white/10 p-2 rounded-[2px] bg-white/5">
+                    <div>
+                        <span class="font-bold text-white uppercase text-[10px]">${f.name}</span>
+                        <span class="text-[9px] block">Chega em até ${f.days} dias úteis</span>
+                    </div>
+                    <span class="font-bold text-primary">${f.price === 0 ? 'GRÁTIS' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(f.price)}</span>
+                </div>
+            `).join('');
+            resEl.classList.remove('hidden');
+            resEl.classList.add('flex');
+        } catch(e) {
+            showToast('Erro ao calcular frete', 'error');
+        }
+        this.disabled = false; this.textContent = 'Calcular';
+    });
+
     // Card click → open modal (delegated)
     document.addEventListener('click', function(e) {
         if (e.target.closest('[data-add-to-cart]')) return; // button handled above
@@ -1287,12 +1342,12 @@ async function handleConfirmOrder() {
         quantity: qty
     }));
 
-    const orderTotal = Cart.total();
+    const orderTotal = Cart.total() + (window.CheckoutFreight.price || 0);
 
     // Save to Supabase
     try {
-        if (window._supabaseClient) {
-            await window._supabaseClient.from('orders').insert([{
+        if (typeof supabaseClient !== 'undefined') {
+            await supabaseClient.from('orders').insert([{
                 customer_name:  customerName,
                 customer_email: customerEmail,
                 customer_phone: customerPhone,
@@ -1303,7 +1358,7 @@ async function handleConfirmOrder() {
                 customer_district: customerDistrict,
                 customer_city: customerCity,
                 customer_state: customerState,
-                items:          orderItems,
+                items:          [...orderItems, { name: 'Frete', price: window.CheckoutFreight.price, quantity: 1, method: window.CheckoutFreight.name }],
                 total:          orderTotal,
                 status:         'pending',
                 payment_method: paymentMethod
@@ -1322,6 +1377,42 @@ async function handleConfirmOrder() {
     }, 1500);
 }
 
+// ═══════════════════════════════════
+// I. FREIGHT SIMULATION LOGIC
+// ═══════════════════════════════════
+async function simulateFreight(cep, orderTotal) {
+    const rawCep = cep.replace(/\D/g, '');
+    let uf = 'SP'; // Default fallback
+    try {
+        const res = await fetch(`https://viacep.com.br/ws/${rawCep}/json/`);
+        const data = await res.json();
+        if (!data.erro && data.uf) uf = data.uf;
+    } catch(e) { console.warn('ViaCEP failed, fallback to SP', e); }
+
+    const isSudeste = ['SP','RJ','MG','ES'].includes(uf);
+    const isSul = ['RS','SC','PR'].includes(uf);
+    
+    let pacBase = isSudeste ? 15 : isSul ? 22 : 35;
+    let sedexBase = isSudeste ? 25 : isSul ? 40 : 60;
+    
+    let pacDays = isSudeste ? 4 : isSul ? 6 : 9;
+    let sedexDays = isSudeste ? 2 : isSul ? 3 : 5;
+
+    let options = [];
+    
+    if (orderTotal >= 199) {
+        options.push({ id: 'free', name: 'Frete Grátis', price: 0, days: pacDays + 1 });
+    }
+    
+    options.push({ id: 'pac', name: 'PAC', price: pacBase, days: pacDays });
+    options.push({ id: 'sedex', name: 'Sedex', price: sedexBase, days: sedexDays });
+    
+    return options;
+}
+
+// Global Freight State
+window.CheckoutFreight = { method: null, price: 0, days: 0 };
+
 function initCheckout() {
     applyMask(document.getElementById('ck-cpf'),         '###.###.###-##');
     applyMask(document.getElementById('ck-phone'),       '(##) #####-####');
@@ -1329,15 +1420,65 @@ function initCheckout() {
     applyMask(document.getElementById('ck-card-num'),    '#### #### #### ####');
     applyMask(document.getElementById('ck-card-expiry'), '##/##');
 
-    // CEP mock auto-fill
-    document.getElementById('ck-cep-search').addEventListener('click', function() {
-        const raw = document.getElementById('ck-cep').value.replace(/\D/g, '');
+    // CEP auto-fill and freight trigger
+    document.getElementById('ck-cep').addEventListener('blur', async function() {
+        const raw = this.value.replace(/\D/g, '');
         if (raw.length === 8) {
-            document.getElementById('ck-address').value = 'Av. Performance';
-            document.getElementById('ck-district').value = 'Paddock Industrial';
-            document.getElementById('ck-city').value = 'São Paulo';
-            document.getElementById('ck-state').value = 'SP';
+            try {
+                const res = await fetch(`https://viacep.com.br/ws/${raw}/json/`);
+                const data = await res.json();
+                if (!data.erro) {
+                    document.getElementById('ck-address').value = data.logradouro || '';
+                    document.getElementById('ck-district').value = data.bairro || '';
+                    document.getElementById('ck-city').value = data.localidade || '';
+                    document.getElementById('ck-state').value = data.uf || '';
+                }
+            } catch(e) { console.warn(e); }
         }
+    });
+
+    // Checkout Freight Calc
+    document.getElementById('ck-calc-freight-btn').addEventListener('click', async function() {
+        const cep = document.getElementById('ck-cep').value;
+        const optsEl = document.getElementById('checkout-freight-options');
+        if (cep.replace(/\D/g,'').length !== 8) {
+            showToast('Digite um CEP válido', 'error'); return;
+        }
+        
+        this.textContent = '...';
+        optsEl.innerHTML = '<p class="text-[11px] text-white/50 animate-pulse">Calculando opções...</p>';
+        
+        try {
+            const freights = await simulateFreight(cep, Cart.total());
+            optsEl.innerHTML = freights.map((f, i) => `
+                <label class="flex items-center gap-3 border border-white/10 p-3 cursor-pointer hover:bg-white/5 transition-colors">
+                    <input type="radio" name="ck_freight" value='${JSON.stringify(f)}' class="accent-primary w-4 h-4" ${i===0?'checked':''}>
+                    <div class="flex-1">
+                        <span class="font-bold text-white uppercase text-[10px] block">${f.name}</span>
+                        <span class="text-[9px] text-white/50 block">Até ${f.days} dias úteis</span>
+                    </div>
+                    <span class="font-bold text-primary text-[11px]">${f.price === 0 ? 'GRÁTIS' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(f.price)}</span>
+                </label>
+            `).join('');
+            
+            // Re-render summary if radios change
+            optsEl.querySelectorAll('input[type="radio"]').forEach(rad => {
+                rad.addEventListener('change', () => {
+                    if (rad.checked) {
+                        const val = JSON.parse(rad.value);
+                        window.CheckoutFreight = val;
+                    }
+                });
+            });
+            // trigger first
+            const firstRad = optsEl.querySelector('input[type="radio"]');
+            if (firstRad) {
+                window.CheckoutFreight = JSON.parse(firstRad.value);
+            }
+        } catch(e) {
+            optsEl.innerHTML = '<p class="text-[11px] text-red-400">Erro ao calcular frete.</p>';
+        }
+        this.textContent = 'Calcular';
     });
 
     // Payment toggle
