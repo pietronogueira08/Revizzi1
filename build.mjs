@@ -1,4 +1,4 @@
-﻿import { copyFileSync, mkdirSync, existsSync } from 'fs';
+﻿import { copyFileSync, mkdirSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -31,3 +31,6 @@ for (const img of images) {
     console.log('Arquivo no encontrado (pulando): ' + img);
   }
 }
+
+writeFileSync(join(root, 'dist', 'dist_test.txt'), 'served from dist');
+
