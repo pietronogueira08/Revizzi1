@@ -1,17 +1,16 @@
-import { execSync } from 'child_process';
 import { copyFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 const root = new URL('.', import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1');
 
-console.log('→ Building admin (React)...');
-execSync('npm run build', { cwd: join(root, 'revizzi-os'), stdio: 'inherit' });
-
-console.log('→ Copying index.html → dist/index.html...');
+console.log('→ Preparando pasta dist...');
 mkdirSync(join(root, 'dist'), { recursive: true });
-copyFileSync(join(root, 'index.html'), join(root, 'dist', 'index.html'));
 
-console.log('→ Copying images...');
+console.log('→ Copiando HTMLs...');
+copyFileSync(join(root, 'index.html'), join(root, 'dist', 'index.html'));
+copyFileSync(join(root, 'revizzi_os_panel.html'), join(root, 'dist', 'revizzi_os_panel.html'));
+
+console.log('→ Copiando imagens...');
 copyFileSync(
   join(root, 'Logo Da Revizzi.jpeg'),
   join(root, 'dist', 'Logo Da Revizzi.jpeg')
@@ -24,7 +23,9 @@ copyFileSync(
   join(root, 'A_premium_horizontal_lineup_of_202606170926.jpeg'),
   join(root, 'dist', 'A_premium_horizontal_lineup_of_202606170926.jpeg')
 );
+copyFileSync(
+  join(root, 'Aumente_a_qualidade_da_imagem_202606170954.jpeg'),
+  join(root, 'dist', 'Aumente_a_qualidade_da_imagem_202606170954.jpeg')
+);
 
 console.log('\n✓ Build completo! Pasta dist/ pronta para deploy.');
-console.log('  dist/index.html     → revizzi.html (loja)');
-console.log('  dist/admin/         → painel admin');
