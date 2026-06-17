@@ -100,6 +100,10 @@
 <span class="material-symbols-outlined mr-3 text-xl">insights</span>
 <span class="font-label-caps uppercase tracking-widest text-[11px]">Desempenho</span>
 </a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Depoimentos">
+<span class="material-symbols-outlined mr-3 text-xl">forum</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Depoimentos</span>
+</a>
 <a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Configurações">
 <span class="material-symbols-outlined mr-3 text-xl">settings</span>
 <span class="font-label-caps uppercase tracking-widest text-[11px]">Configurações</span>
@@ -248,6 +252,41 @@
       <div class="glass-panel p-6 text-center"><span class="material-symbols-outlined text-primary/40 text-4xl mb-3 block">trending_up</span><div class="text-[10px] font-label-caps text-white uppercase tracking-tighter mb-2">Crescimento Mensal</div><div class="font-display-lg text-2xl text-primary">+0%</div></div>
       <div class="glass-panel p-6 text-center"><span class="material-symbols-outlined text-primary/40 text-4xl mb-3 block">group</span><div class="text-[10px] font-label-caps text-white uppercase tracking-tighter mb-2">Novos Clientes</div><div class="font-display-lg text-2xl text-primary">0</div></div>
       <div class="glass-panel p-6 text-center"><span class="material-symbols-outlined text-primary/40 text-4xl mb-3 block">repeat</span><div class="text-[10px] font-label-caps text-white uppercase tracking-tighter mb-2">Taxa de Retorno</div><div class="font-display-lg text-2xl text-primary">0%</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ DEPOIMENTOS ══════════════════ -->
+  <div id="section-Depoimentos" class="section-view">
+    <div class="mb-8 flex items-center justify-between">
+      <div>
+        <h1 class="font-headline-xl text-primary uppercase">Depoimentos</h1>
+        <p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Gerencie os depoimentos exibidos no site</p>
+      </div>
+      <button onclick="openTestimonialModal()" class="bg-white text-black px-6 py-3 font-label-caps text-[11px] uppercase tracking-widest flex items-center gap-2 hover:bg-white/80 transition-colors">
+        <span class="material-symbols-outlined text-sm">add</span> Novo Depoimento
+      </button>
+    </div>
+    <div class="glass-panel overflow-hidden">
+      <div class="p-6 border-b border-border-subtle flex items-center justify-between">
+        <h2 class="font-headline-lg text-primary uppercase text-xl">Lista de Depoimentos</h2>
+        <span class="text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Conectado ao Supabase</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-surface-card">
+            <tr class="border-b border-border-subtle">
+              <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Cliente</th>
+              <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Conteúdo</th>
+              <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Nota</th>
+              <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Data</th>
+              <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Ação</th>
+            </tr>
+          </thead>
+          <tbody id="testimonials-tbody">
+            <tr><td colspan="5" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Carregando depoimentos...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -687,11 +726,155 @@ async function deleteProduct(id, name) {
     }
 }
 
+// ====== DEPOIMENTOS ======
+let currentEditingTestimonialId = null;
+
+async function fetchAdminTestimonials() {
+    const tbody = document.getElementById('testimonials-tbody');
+    if (!tbody) return;
+    try {
+        const { data, error } = await db.from('testimonials').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Nenhum depoimento encontrado.</td></tr>`;
+            return;
+        }
+        
+        tbody.innerHTML = data.map(t => {
+            const dateStr = new Date(t.created_at).toLocaleDateString('pt-BR');
+            const stars = Array(t.rating).fill('★').join('') + Array(5 - t.rating).fill('☆').join('');
+            return `
+            <tr class="border-b border-border-subtle hover:bg-white/5 transition-colors group">
+                <td class="px-6 py-4">
+                    <div class="text-[12px] font-headline-md uppercase tracking-widest text-primary mb-1">${t.name}</div>
+                    <div class="text-[10px] text-on-surface-variant font-label-caps tracking-widest">${t.role}</div>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="text-[12px] text-white/80 font-body-sm line-clamp-2" title="${t.content}">${t.content}</div>
+                </td>
+                <td class="px-6 py-4 font-label-caps text-[11px] text-primary tracking-widest">${stars}</td>
+                <td class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest">${dateStr}</td>
+                <td class="px-6 py-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onclick='openTestimonialModal(${JSON.stringify(t).replace(/'/g, "\\'")})' class="p-2 hover:bg-white/10 rounded mr-1"><span class="material-symbols-outlined text-sm">edit</span></button>
+                    <button onclick="deleteTestimonial('${t.id}', '${t.name}')" class="p-2 hover:bg-red-500/20 rounded text-red-400"><span class="material-symbols-outlined text-sm">delete</span></button>
+                </td>
+            </tr>`;
+        }).join('');
+    } catch(err) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-400 font-label-caps text-[10px] uppercase">Erro: ${err.message}</td></tr>`;
+    }
+}
+
+function openTestimonialModal(testimonial = null) {
+    const isEdit = !!testimonial;
+    currentEditingTestimonialId = isEdit ? testimonial.id : null;
+    
+    let modal = document.getElementById('testimonial-modal-overlay');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'testimonial-modal-overlay';
+        modal.style.cssText = 'position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:20px;';
+        document.body.appendChild(modal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeTestimonialModal(); });
+    }
+    
+    modal.innerHTML = `
+    <div style="background:#131313;border:1px solid rgba(255,255,255,0.1);width:100%;max-width:540px;font-family:Inter,sans-serif;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.05em;color:#fff;">${isEdit ? 'EDITAR DEPOIMENTO' : 'NOVO DEPOIMENTO'}</span>
+            <button onclick="closeTestimonialModal()" class="material-symbols-outlined" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:20px;">close</button>
+        </div>
+        <div style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div style="grid-column:span 2;">
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Nome do Cliente *</label>
+                    <input id="tm-name" type="text" value="${isEdit ? testimonial.name : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;outline:none;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Cargo / Perfil *</label>
+                    <input id="tm-role" type="text" value="${isEdit ? testimonial.role : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;outline:none;box-sizing:border-box;" placeholder="Ex: Cliente">
+                </div>
+                <div>
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Nota (1 a 5) *</label>
+                    <input id="tm-rating" type="number" min="1" max="5" value="${isEdit ? testimonial.rating : '5'}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;outline:none;box-sizing:border-box;">
+                </div>
+                <div style="grid-column:span 2;">
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Conteúdo *</label>
+                    <textarea id="tm-content" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;outline:none;box-sizing:border-box;resize:vertical;min-height:80px;">${isEdit ? testimonial.content : ''}</textarea>
+                </div>
+            </div>
+            <div id="tm-error" style="display:none;color:#f87171;font-size:11px;font-family:Inter;letter-spacing:0.05em;"></div>
+            <button onclick="saveTestimonial()" style="width:100%;background:#fff;color:#000;border:none;padding:13px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:4px;">
+                ${isEdit ? 'SALVAR ALTERAÇÕES' : 'CADASTRAR DEPOIMENTO'} →
+            </button>
+        </div>
+    </div>`;
+    modal.style.display = 'flex';
+}
+
+function closeTestimonialModal() {
+    const modal = document.getElementById('testimonial-modal-overlay');
+    if (modal) modal.style.display = 'none';
+}
+
+async function saveTestimonial() {
+    const name = document.getElementById('tm-name').value.trim();
+    const role = document.getElementById('tm-role').value.trim();
+    const rating = parseInt(document.getElementById('tm-rating').value);
+    const content = document.getElementById('tm-content').value.trim();
+    const errEl = document.getElementById('tm-error');
+
+    if (!name || !role || !content || isNaN(rating) || rating < 1 || rating > 5) {
+        errEl.style.display = 'block';
+        errEl.textContent = '⚠ Preencha todos os campos corretamente (Nota 1-5).';
+        return;
+    }
+    errEl.style.display = 'none';
+
+    const payload = { name, role, content, rating };
+    const btn = document.querySelector('#testimonial-modal-overlay button[onclick="saveTestimonial()"]');
+    const oldBtnText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'SALVANDO...';
+
+    try {
+        let result;
+        if (currentEditingTestimonialId) {
+            result = await db.from('testimonials').update(payload).eq('id', currentEditingTestimonialId);
+        } else {
+            result = await db.from('testimonials').insert([payload]);
+        }
+        if (result.error) throw result.error;
+        closeTestimonialModal();
+        showToast(currentEditingTestimonialId ? 'Depoimento atualizado!' : 'Depoimento cadastrado!', 'success');
+        fetchAdminTestimonials();
+    } catch(err) {
+        errEl.style.display = 'block';
+        errEl.textContent = '⚠ Erro: ' + (err.message || 'Tente novamente.');
+        btn.disabled = false;
+        btn.textContent = oldBtnText;
+    }
+}
+
+async function deleteTestimonial(id, name) {
+    if (!confirm(`Excluir depoimento de "${name}" permanentemente?`)) return;
+    try {
+        const { error } = await db.from('testimonials').delete().eq('id', id);
+        if (error) throw error;
+        showToast('Depoimento excluído.', 'success');
+        fetchAdminTestimonials();
+    } catch(err) {
+        showToast('Erro ao excluir: ' + err.message, 'error');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar(); initTopTabs(); initChartButtons();
     initNotifications(); initProfile(); initSearch(); initFooter(); initKPI();
     fetchOrders();
     fetchEstoqueProducts();
+    fetchAdminTestimonials();
     // Bind Estoque "Adicionar Item" button
     document.querySelector('#section-Estoque button[onclick]') && null;
     const addBtn = document.querySelector('#section-Estoque header button, #section-Estoque .flex.items-center.justify-between.mb-8 button');
