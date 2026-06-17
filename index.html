@@ -144,7 +144,8 @@
         }
         .bg-parallax-marquee {
             background-image: url('Aumente_a_qualidade_da_imagem_202606170954.jpeg');
-            background-size: auto 100%;
+            background-size: auto 250%;
+            background-position: center center;
             background-repeat: repeat-x;
             animation: pan-image 40s linear infinite;
         }
@@ -257,7 +258,9 @@
 <header class="fixed top-0 w-full z-50 bg-surface-main/80 backdrop-blur-md border-b border-border-subtle">
 <nav class="flex justify-between items-center px-margin-desktop py-4 w-full max-w-[1920px] mx-auto">
 <div class="flex items-center gap-4">
-<img alt="REVIZZI Logo" class="h-10 w-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFVfNAqAy_Lb73keTU8DYlsqKY_yKDSFMgkVQ87e97d1EsjgcSgjoUVz5SFA167pAyDlo3pnWc5ayOiOoJDdeqyMRP2OQxLSNGOQfZgOJ9zWQUaAzsbEeBTow9cufe_hzSSI1QX4tUSfLMubSQRwLHIjTF9max53UTGco16fFYsnnFaYwNwcRR9BKAeoavohB3dJPkcWoGIQllvcuOzgYoKWCj_sdxVlySRIhHZu9Lasd-4kpPoeJ9jJRn-0zLhM4r1LVfTrScIyrg"/>
+<a class="flex items-center space-x-3 shrink-0 group" href="#">
+<img alt="REVIZZI Logo" class="h-16 w-16 md:h-24 md:w-24 object-contain group-hover:scale-105 transition-transform" src="Logo Da Revizzi.jpeg"/>
+</a>
 <span class="font-headline-lg text-headline-lg text-primary tracking-widest">REVIZZI</span>
 </div>
 <div class="hidden md:flex items-center gap-8">
@@ -268,9 +271,10 @@
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase" href="revizzi_os_panel.html">Revizzi OS</a>
 </div>
 <div class="flex items-center gap-6">
-<button class="hover:opacity-80 transition-opacity">
-<span class="material-symbols-outlined text-primary">search</span>
-</button>
+<div class="relative flex items-center transition-all duration-300 w-8 focus-within:w-48 overflow-hidden group">
+<label for="header-search-input" class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 absolute z-10 left-1 p-0.5">search</label>
+<input type="text" id="header-search-input" placeholder="Buscar produto..." class="bg-transparent border-b border-transparent focus:border-white/50 outline-none text-[12px] font-label-caps tracking-widest uppercase text-primary placeholder:text-white/40 w-full pl-8 pr-2 py-1 focus:ring-0 cursor-pointer focus:cursor-text">
+</div>
 <button class="hover:opacity-80 transition-opacity">
 <span class="material-symbols-outlined text-primary">person</span>
 </button>
@@ -315,8 +319,8 @@ Performance, proteção e o brilho impecável que seu veículo merece. Engenhari
 </div>
 </section>
 
-<!-- Section 2.5: Parallax Image Carousel -->
-<section class="w-full h-[140px] md:h-[180px] border-b border-border-subtle bg-parallax-marquee relative shadow-[inset_0_0_80px_rgba(0,0,0,0.8)]">
+<!-- Section 2.5: Horizontal Brand Carousel -->
+<section class="w-full h-[180px] md:h-[220px] border-b border-border-subtle bg-parallax-marquee relative shadow-[inset_0_0_80px_rgba(0,0,0,0.8)]">
 </section>
 
 <!-- Section 3: Trust Strip -->
@@ -752,13 +756,12 @@ Performance, proteção e o brilho impecável que seu veículo merece. Engenhari
 <!-- Section 7: Footer -->
 <footer class="bg-surface-main border-t border-border-subtle w-full mt-section-padding">
 <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-section-padding w-full max-w-7xl mx-auto">
-<div class="flex flex-col gap-6">
-<div class="flex items-center gap-3">
-<img alt="REVIZZI Logo" class="h-8 w-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFVfNAqAy_Lb73keTU8DYlsqKY_yKDSFMgkVQ87e97d1EsjgcSgjoUVz5SFA167pAyDlo3pnWc5ayOiOoJDdeqyMRP2OQxLSNGOQfZgOJ9zWQUaAzsbEeBTow9cufe_hzSSI1QX4tUSfLMubSQRwLHIjTF9max53UTGco16fFYsnnFaYwNwcRR9BKAeoavohB3dJPkcWoGIQllvcuOzgYoKWCj_sdxVlySRIhHZu9Lasd-4kpPoeJ9jJRn-0zLhM4r1LVfTrScIyrg"/>
-<span class="font-headline-lg text-headline-lg text-primary uppercase">REVIZZI</span>
-</div>
+<div class="mb-8 md:mb-0 max-w-xs">
+<a class="flex items-center space-x-3 mb-6 group" href="#">
+<img alt="REVIZZI Logo" class="h-14 w-14 object-contain group-hover:scale-105 transition-transform" src="Logo Da Revizzi.jpeg"/>
+</a>
 <p class="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed">Elevando o padrão da estética automotiva brasileira através de engenharia e precisão.</p>
-<div class="flex gap-4">
+<div class="flex gap-4 mt-6">
 <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
 <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera_alt</span></a>
 <a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">play_circle</span></a>
@@ -992,11 +995,12 @@ function initProductModal() {
 // F. FILTERS
 // ═══════════════════════════════════
 const FilterState = {
+    sort: 'relevance',
     categories: new Set(),
     brands: new Set(),
     minPrice: 0,
     maxPrice: Infinity,
-    sort: 'relevance'
+    query: ''
 };
 
 function buildProductCard(p) {
@@ -1022,7 +1026,8 @@ function getFilteredProducts() {
         const catOk = FilterState.categories.size === 0 || FilterState.categories.has(p.category);
         const brandOk = FilterState.brands.size === 0 || FilterState.brands.has(p.brand);
         const priceOk = p.price >= FilterState.minPrice && p.price <= FilterState.maxPrice;
-        return catOk && brandOk && priceOk;
+        const queryOk = !FilterState.query || p.name.toLowerCase().includes(FilterState.query) || p.brand.toLowerCase().includes(FilterState.query);
+        return catOk && brandOk && priceOk && queryOk;
     });
     if (FilterState.sort === 'price-asc') result.sort((a, b) => a.price - b.price);
     if (FilterState.sort === 'price-desc') result.sort((a, b) => b.price - a.price);
@@ -1039,7 +1044,7 @@ function renderFilterGrid() {
 
 function buildFilterCheckboxes() {
     const categories = [...new Set(PRODUCTS.map(p => p.category))];
-    const brands = [...new Set(PRODUCTS.map(p => p.brand))];
+    const brands = ["Vintex", "Razux", "Zacs", "Soft 99", "Cadillac", "Magil Clean", "Jaça", "Little theee", "Nação Detail", "Auto América", "Kers", "Lincoln", "SGT Tools sigma", "Mothers", "Menzerna"];
     const cbHtml = (value, cls) =>
         `<label class="flex items-center gap-3 cursor-pointer group">
             <input type="checkbox" value="${value}" class="${cls} cursor-pointer"/>
@@ -1057,7 +1062,7 @@ function buildFilterCheckboxes() {
 
 function resetFilters() {
     FilterState.categories.clear(); FilterState.brands.clear();
-    FilterState.minPrice = 0; FilterState.maxPrice = Infinity; FilterState.sort = 'relevance';
+    FilterState.minPrice = 0; FilterState.maxPrice = Infinity; FilterState.sort = 'relevance'; FilterState.query = '';
     document.querySelectorAll('.filter-category, .filter-brand').forEach(cb => cb.checked = false);
     const pMin = document.getElementById('price-min-input');
     const pMax = document.getElementById('price-max-input');
@@ -1065,6 +1070,8 @@ function resetFilters() {
     if (pMax) pMax.value = '5000';
     const sortSel = document.getElementById('filter-sort-select');
     if (sortSel) sortSel.value = 'relevance';
+    const searchInput = document.getElementById('header-search-input');
+    if (searchInput) searchInput.value = '';
     renderFilterGrid();
 }
 
@@ -1104,6 +1111,17 @@ function initFilters() {
         e.target.checked ? FilterState.brands.add(e.target.value) : FilterState.brands.delete(e.target.value);
         renderFilterGrid();
     });
+
+    const searchInput = document.getElementById('header-search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            FilterState.query = e.target.value.toLowerCase();
+            renderFilterGrid();
+            if (FilterState.query.length > 1) {
+                smoothScrollTo('#section-catalogo');
+            }
+        });
+    }
     document.getElementById('filter-reset-btn').addEventListener('click', resetFilters);
 
     // Mobile sheet
