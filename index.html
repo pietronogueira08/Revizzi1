@@ -906,7 +906,7 @@ function initCart() {
         const btn = e.target.closest('[data-add-to-cart]');
         if (btn) {
             e.stopPropagation();
-            Cart.add(Number(btn.dataset.addToCart));
+            Cart.add(btn.dataset.addToCart);
         }
     });
     // Esc key closes overlays
@@ -951,7 +951,7 @@ function initProductModal() {
         }
     });
     document.getElementById('product-modal-add').addEventListener('click', function() {
-        Cart.add(Number(this.dataset.currentProductId));
+        Cart.add(this.dataset.currentProductId);
         closeProductModal();
         setTimeout(openCartDrawer, 300);
     });
@@ -959,7 +959,7 @@ function initProductModal() {
     document.addEventListener('click', function(e) {
         if (e.target.closest('[data-add-to-cart]')) return; // button handled above
         const card = e.target.closest('[data-product-id]');
-        if (card) openProductModal(Number(card.dataset.productId));
+        if (card) openProductModal(card.dataset.productId);
     });
 }
 
@@ -995,8 +995,8 @@ function buildProductCard(p) {
 
 function getFilteredProducts() {
     let result = PRODUCTS.filter(p => {
-        const catOk = FilterState.categories.size === 0 || FilterState.categories.has(p.category);
-        const brandOk = FilterState.brands.size === 0 || FilterState.brands.has(p.brand);
+        const catOk = FilterState.categories.size === 0 || Array.from(FilterState.categories).some(c => c.toLowerCase() === p.category.toLowerCase());
+        const brandOk = FilterState.brands.size === 0 || Array.from(FilterState.brands).some(b => b.toLowerCase() === p.brand.toLowerCase());
         const priceOk = p.price >= FilterState.minPrice && p.price <= FilterState.maxPrice;
         const queryOk = !FilterState.query || p.name.toLowerCase().includes(FilterState.query) || p.brand.toLowerCase().includes(FilterState.query);
         return catOk && brandOk && priceOk && queryOk;
