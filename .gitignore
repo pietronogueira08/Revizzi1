@@ -1,0 +1,9 @@
+dist/
+revizzi-os/node_modules/
+revizzi-os/dist/
+node_modules/
+.DS_Store
+Thumbs.db
+.claude/
+.mcp.json
+.gemini/

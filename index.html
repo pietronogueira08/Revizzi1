@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>REVIZZI | Centro Automotivo de Alta Performance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-tertiary-container": "#636565",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "surface-main": "#0C0C0C",
+                        "surface-card": "#131313",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-secondary": "#313030",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "background": "#131313",
+                        "tertiary": "#ffffff",
+                        "outline-variant": "#444748",
+                        "on-primary-fixed": "#1a1c1c",
+                        "tertiary-container": "#e2e2e2",
+                        "surface-bright": "#3a3939",
+                        "surface-container": "#201f1f",
+                        "on-primary-container": "#636565",
+                        "on-surface-variant": "#c4c7c8",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#c6c6c7",
+                        "on-tertiary": "#2f3131",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "secondary": "#c8c6c5",
+                        "primary-fixed": "#e2e2e2",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-secondary-container": "#bab8b7",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container-highest": "#353534",
+                        "surface": "#131313",
+                        "surface-tint": "#c6c6c7",
+                        "inverse-on-surface": "#313030",
+                        "primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#474646",
+                        "error-container": "#93000a",
+                        "on-surface": "#e5e2e1",
+                        "secondary-container": "#4a4949",
+                        "inverse-primary": "#5d5f5f",
+                        "on-primary-fixed-variant": "#454747",
+                        "on-background": "#e5e2e1",
+                        "primary-container": "#e2e2e2",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "outline": "#8e9192",
+                        "error": "#ffb4ab",
+                        "on-primary": "#2f3131",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0e0e0e",
+                        "text-muted": "#A1A1AA",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-variant": "#353534"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "2px",
+                        "lg": "2px",
+                        "xl": "2px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "base": "4px",
+                        "section-padding": "120px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Bebas Neue"],
+                        "display-lg": ["Bebas Neue"],
+                        "body-md": ["Inter"],
+                        "price-display": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-xl": ["Bebas Neue"],
+                        "headline-lg-mobile": ["Bebas Neue"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.04em", "fontWeight": "400"}],
+                        "display-lg": ["72px", {"lineHeight": "1.0", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "price-display": ["20px", {"lineHeight": "1.0", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "0.03em", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "0.04em", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0C0C0C;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+        .carbon-pattern {
+            background-image: linear-gradient(45deg, #111 25%, transparent 25%),
+                              linear-gradient(-45deg, #111 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #111 75%),
+                              linear-gradient(-45deg, transparent 75%, #111 75%);
+            background-size: 4px 4px;
+            background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-underline {
+            position: relative;
+        }
+        .active-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        @keyframes pan-image {
+            from { background-position: 0% center; }
+            to { background-position: -100vw center; }
+        }
+        .bg-parallax-marquee {
+            background-image: url('Aumente_a_qualidade_da_imagem_202606170954.jpeg');
+            background-size: auto 100%;
+            background-repeat: repeat-x;
+            animation: pan-image 40s linear infinite;
+        }
+
+        /* ── Section Entrance Animations ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-32px);
+            transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+        }
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1);
+        }
+        .reveal-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0C0C0C; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+        /* ── Cart Drawer ── */
+        #cart-drawer {
+            transform: translateX(100%);
+            transition: transform 300ms ease;
+        }
+        #cart-drawer.open { transform: translateX(0); }
+        #cart-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 300ms ease;
+        }
+        #cart-overlay.open { opacity: 1; pointer-events: auto; }
+
+        /* ── Product Modal ── */
+        #product-modal {
+            opacity: 0;
+            transition: opacity 250ms ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #131313;
+            color: #fff;
+            padding: 0;
+            max-width: 800px;
+            width: calc(100vw - 32px);
+            border-radius: 2px;
+        }
+        #product-modal[open] { opacity: 1; }
+        #product-modal::backdrop { background: rgba(0,0,0,0.85); }
+
+        /* ── Filter Section ── */
+        #filter-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 300ms ease;
+        }
+        #filter-overlay.open { opacity: 1; pointer-events: auto; }
+        #filter-sheet {
+            transform: translateY(100%);
+            transition: transform 350ms ease;
+        }
+        #filter-sheet.open { transform: translateY(0); }
+
+        /* ── Checkout ── */
+        #checkout-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 300ms ease;
+        }
+        #checkout-overlay.open { opacity: 1; pointer-events: auto; }
+        .checkout-step-panel { display: none; }
+        .checkout-step-panel.active { display: block; }
+
+        /* Remove number input spinners */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        /* Checkmark animation */
+        @keyframes checkDraw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+        .check-draw { stroke-dasharray: 100; stroke-dashoffset: 100; animation: checkDraw 0.5s ease-out 0.2s forwards; }
+
+        /* Filter checkbox accent */
+        input[type="checkbox"] { accent-color: #fff; }
+
+        /* Select arrow */
+        select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+    </style>
+</head>
+<body class="selection:bg-primary selection:text-surface-main">
+
+<!-- Tailwind CDN safeguard for dynamically generated classes -->
+<div class="hidden" aria-hidden="true">bg-error text-on-error bg-primary text-surface-main border-white/40 translate-x-0 opacity-0 opacity-100 step-circle bg-white/20 border-white/60</div>
+
+<!-- Section 1: Sticky TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-main/80 backdrop-blur-md border-b border-border-subtle">
+<nav class="flex justify-between items-center px-margin-desktop py-4 w-full max-w-[1920px] mx-auto">
+<div class="flex items-center gap-4">
+<img alt="REVIZZI Logo" class="h-10 w-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFVfNAqAy_Lb73keTU8DYlsqKY_yKDSFMgkVQ87e97d1EsjgcSgjoUVz5SFA167pAyDlo3pnWc5ayOiOoJDdeqyMRP2OQxLSNGOQfZgOJ9zWQUaAzsbEeBTow9cufe_hzSSI1QX4tUSfLMubSQRwLHIjTF9max53UTGco16fFYsnnFaYwNwcRR9BKAeoavohB3dJPkcWoGIQllvcuOzgYoKWCj_sdxVlySRIhHZu9Lasd-4kpPoeJ9jJRn-0zLhM4r1LVfTrScIyrg"/>
+<span class="font-headline-lg text-headline-lg text-primary tracking-widest">REVIZZI</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-destaque">Produtos</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-categorias">Estética</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-catalogo">Catálogo</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Contato</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase" href="revizzi_os_panel.html">Revizzi OS</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-primary">search</span>
+</button>
+<button class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-primary">person</span>
+</button>
+<button id="cart-btn" class="hover:opacity-80 transition-opacity relative">
+<span class="material-symbols-outlined text-primary">shopping_cart</span>
+<span id="cart-badge" class="absolute -top-2 -right-2 bg-primary text-surface-main text-[10px] font-bold px-1 min-w-[16px] h-4 flex items-center justify-center rounded-full hidden">0</span>
+</button>
+</div>
+</nav>
+</header>
+
+<main class="pt-[72px]">
+<!-- Section 2: Hero Section -->
+<section id="section-hero" class="relative h-[calc(100vh-72px)] w-full overflow-hidden flex items-center bg-surface-main">
+<div class="absolute inset-0 carbon-pattern opacity-20 pointer-events-none"></div>
+<div class="container mx-auto px-margin-desktop grid grid-cols-1 md:grid-cols-2 items-center relative z-10">
+<div class="max-w-2xl">
+<div class="animate-fade-up [animation-delay:0.1s]">
+<span class="inline-block font-body-md font-medium text-xs tracking-widest uppercase border border-white/20 bg-surface-main px-3 py-1 mb-6">[ NOVA COLEÇÃO 2025 ]</span>
+</div>
+<h1 class="animate-fade-up [animation-delay:0.2s] font-display-lg text-7xl md:text-8xl uppercase leading-[0.9] mb-6">
+ESTÉTICA AUTOMOTIVA DE <br/>
+<span style="color: #9A9A9A">ALTO NÍVEL</span>
+</h1>
+<p class="animate-fade-up [animation-delay:0.3s] font-body-lg text-lg mb-10 font-light max-w-[420px]" style="color: #9A9A9A">
+Performance, proteção e o brilho impecável que seu veículo merece. Engenharia de detalhamento para quem não aceita menos que a perfeição.
+</p>
+<div class="animate-fade-up [animation-delay:0.4s] flex flex-col sm:flex-row gap-4 mb-10">
+<button id="btn-explorar" class="bg-white text-black font-semibold text-xs tracking-[0.1em] px-7 py-3.5 uppercase rounded-[2px] hover:bg-white/90 transition-colors">EXPLORAR CATÁLOGO →</button>
+<button id="btn-polimentos" class="border border-white text-white font-semibold text-xs tracking-[0.1em] px-7 py-3.5 uppercase rounded-[2px] hover:bg-white/10 transition-colors">VER POLIMENTOS</button>
+</div>
+<div class="animate-fade-up [animation-delay:0.5s] flex flex-wrap items-center gap-6">
+<div class="flex items-center gap-2 text-xs font-normal" style="color: #9A9A9A"><span class="material-symbols-outlined text-[16px]">check_circle</span><span>Frete Grátis +R$199</span></div>
+<div class="flex items-center gap-2 text-xs font-normal" style="color: #9A9A9A"><span class="material-symbols-outlined text-[16px]">shield</span><span>Compra 100% Segura</span></div>
+<div class="flex items-center gap-2 text-xs font-normal" style="color: #9A9A9A"><span class="material-symbols-outlined text-[16px]">local_shipping</span><span>Despacho em 24h</span></div>
+</div>
+</div>
+</div>
+<div class="absolute right-0 top-0 h-full w-1/2 hidden md:block">
+<div class="absolute inset-0 bg-gradient-to-r from-surface-main via-transparent to-transparent z-10"></div>
+<img class="w-full h-full object-cover" src="Crie_a_vista_de_frente_202606171225.jpeg" alt="Frente da Estética Automotiva Revizzi"/>
+</div>
+</section>
+
+<!-- Section 2.5: Parallax Image Carousel -->
+<section class="w-full h-[140px] md:h-[180px] border-b border-border-subtle bg-parallax-marquee relative shadow-[inset_0_0_80px_rgba(0,0,0,0.8)]">
+</section>
+
+<!-- Section 3: Trust Strip -->
+<section class="bg-surface-card border-y border-border-subtle py-8">
+<div class="container mx-auto px-margin-desktop">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary text-3xl">local_shipping</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Frete Grátis</span></div>
+<div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary text-3xl">verified_user</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Produtos Originais</span></div>
+<div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary text-3xl">workspace_premium</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Garantia 30 Dias</span></div>
+<div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary text-3xl">support_agent</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Suporte Técnico</span></div>
+</div>
+</div>
+</section>
+
+<!-- Section 4: Categories Grid -->
+<section id="section-categorias" class="py-section-padding bg-surface-main">
+<div class="container mx-auto px-margin-desktop">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-8 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" data-cat="Polimento"><span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">auto_fix_high</span><span class="font-label-caps text-label-caps uppercase text-center">Polimento</span></div>
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-8 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.05s" data-cat="Lavagem"><span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">water_drop</span><span class="font-label-caps text-label-caps uppercase text-center">Lavagem</span></div>
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-8 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.1s" data-cat="Proteção"><span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">shield</span><span class="font-label-caps text-label-caps uppercase text-center">Proteção</span></div>
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-8 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.15s" data-cat="Vitrificação"><span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">diamond</span><span class="font-label-caps text-label-caps uppercase text-center">Vitrificação</span></div>
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-8 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.2s" data-cat="Detalhamento"><span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">precision_manufacturing</span><span class="font-label-caps text-label-caps uppercase text-center">Detalhamento</span></div>
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-8 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.25s" data-cat="Acessórios"><span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">settings_input_component</span><span class="font-label-caps text-label-caps uppercase text-center">Acessórios</span></div>
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-8 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.3s" data-cat="Ferramentas"><span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">build</span><span class="font-label-caps text-label-caps uppercase text-center">Ferramentas</span></div>
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-8 border border-white/5 hover:border-white/20 transition-all group cursor-pointer" style="transition-delay:0.35s"><span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">air</span><span class="font-label-caps text-label-caps uppercase text-center">Ar e Cabine</span></div>
+</div>
+</div>
+</section>
+
+<!-- Section 5: Featured Products Grid -->
+<section id="section-destaque" class="py-section-padding bg-surface-main">
+<div class="container mx-auto px-margin-desktop">
+<div class="flex justify-between items-end mb-12 reveal">
+<h2 class="font-headline-xl text-headline-xl uppercase">Em Destaque</h2>
+<a class="font-label-caps text-label-caps uppercase border-b border-white hover:opacity-70 transition-opacity" href="#section-catalogo">Ver Tudo</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Product Card 1 -->
+<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="1">
+<div class="aspect-square relative overflow-hidden bg-surface-main">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-uHtbhGN4Vxw8yTfNd2JiRXhExysEDip1gTu1FunWM0RtfRdXNGwAL6f2lnqphVCkScBuKNL1OLB2ABy5GO5Jqquv2r_P1vn3cuVHAVgTg4CLTV0qMKixCLXVrHVp1daEr9sgsGoHxqOitSSuo9307CEKh4x0V2f2saS7aEUKYLU9Mz-WBCUwNyIQjxctlPQMmZKwrbrp2buMRo-me6cDjNa9NYBJPEXDTwDizBOJP2IAKiz39dwcLXkquBht78x3JVfhNjAXrOfV" alt="Cquartz Ceramic Coating"/>
+<div class="absolute top-4 left-4 bg-primary text-surface-main font-label-caps text-[10px] px-2 py-1 uppercase font-bold">Lançamento</div>
+</div>
+<div class="p-6">
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">CarPro</p>
+<h3 class="font-body-md text-body-md mb-4 uppercase">Cquartz Ceramic Coating</h3>
+<p class="font-price-display text-price-display mb-6">R$ 299,90</p>
+<button class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors" data-add-to-cart="1">Adicionar ao Carrinho</button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="2">
+<div class="aspect-square relative overflow-hidden bg-surface-main">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3w1HudWUFTjACSwNCLZJ_qTvhet_LpyKDXABEu8M4N81To4XI9xbBZ2cPjsPZ-6XNEGM5pXFZKojuOGejYBOAbiR24xwDtAeSBkU3eH72vGg4wcSDbRkNZp8vrQEvve3i9JGHlKSff0EkUC2mi_aPGXWowtaEF94YvG1-ZdNQsYVMZW61637uVsIUJgmROFyi4hJQgYUprOaojCl17ZAnsUuZjLEP19iIk4IEsbFyD0Pj1_22R8uXE8fE9k0QFRdPh0DEBWlQVSne" alt="Polidora Orbital LHR21"/>
+</div>
+<div class="p-6">
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">Rupes</p>
+<h3 class="font-body-md text-body-md mb-4 uppercase">Polidora Orbital LHR21</h3>
+<p class="font-price-display text-price-display mb-6">R$ 4.250,00</p>
+<button class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors" data-add-to-cart="2">Adicionar ao Carrinho</button>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="3">
+<div class="aspect-square relative overflow-hidden bg-surface-main">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzBA_ozDsxKz1N22xRBfqgQLXLlk7fxvHaA4YtsmF9NVG4SGUFsZ58-O-iGHNoT6k6DLVsghBpGUFbiZVP1X8p5ABRPn4jHVP4aSe3Omv864CDteOrcOpx5nWAWevj4ciskDO_YD_VbiTCwkvuQi9PiKorHbvyQS_mOf0R3n7ryksKDGFRxqFmapYKRdz0KA7s1nuGvFug456qdg1BlBP7ZuqzVmZNrunm8jntPj1d0x2wn6h-Pz4ll9PszdQIjR_MpviIjnIja8vV" alt="Toalha de Secagem Ultra"/>
+</div>
+<div class="p-6">
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">Vonixx</p>
+<h3 class="font-body-md text-body-md mb-4 uppercase">Toalha de Secagem Ultra</h3>
+<p class="font-price-display text-price-display mb-6">R$ 89,90</p>
+<button class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors" data-add-to-cart="3">Adicionar ao Carrinho</button>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="4">
+<div class="aspect-square relative overflow-hidden bg-surface-main">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEKN-de5MhvMPUP374F6X15cnd0ku-hWaRY7kGwE0OkKpAYrekNCx4oyKHU5FPkk9JjlCV70m8Nh6_no2u6nJq2JAMk_TW8q3f4V4KJiCEk7nDxxLGbJCABOKH-AaeMNQkwa0Ndg6QZ4L-jfPuXzGLgWefZorW8yoePcXcbcAdWdKbMiyzA" alt="Iron Wheel Cleaner"/>
+<div class="absolute top-4 left-4 bg-error text-on-error font-label-caps text-[10px] px-2 py-1 uppercase font-bold">-15%</div>
+</div>
+<div class="p-6">
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">Gyeon</p>
+<h3 class="font-body-md text-body-md mb-4 uppercase">Iron Wheel Cleaner</h3>
+<p class="font-price-display text-price-display mb-6">R$ 145,00</p>
+<button class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors" data-add-to-cart="4">Adicionar ao Carrinho</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 5b: Catálogo com Filtros -->
+<section id="section-catalogo" class="py-section-padding bg-surface-main border-t border-border-subtle">
+<div class="container mx-auto px-margin-desktop">
+<div class="flex justify-between items-end mb-12">
+<h2 class="font-headline-xl text-headline-xl uppercase">Catálogo</h2>
+<button id="filter-mobile-btn" class="flex md:hidden items-center gap-2 border border-white/20 px-4 py-2 font-label-caps text-label-caps uppercase hover:border-white/60 transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>Filtros
+</button>
+</div>
+<div class="flex gap-10">
+<!-- Sidebar Filters (desktop) -->
+<aside class="hidden md:flex flex-col gap-8 w-[240px] flex-shrink-0">
+<div>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-3">Ordenar por</p>
+<select id="filter-sort-select" class="w-full bg-surface-container border border-white/10 text-primary text-sm py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40 cursor-pointer">
+<option value="relevance">Relevância</option>
+<option value="price-asc">Menor Preço</option>
+<option value="price-desc">Maior Preço</option>
+<option value="newest">Lançamentos</option>
+</select>
+</div>
+<div>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-3">Categorias</p>
+<div id="category-filters" class="flex flex-col gap-2"></div>
+</div>
+<div>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-3">Faixa de Preço</p>
+<div class="flex items-center gap-2">
+<input id="price-min-input" type="number" min="0" value="0" class="w-full bg-surface-container border border-white/10 text-primary text-sm py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40"/>
+<span class="text-on-surface-variant text-sm flex-shrink-0">–</span>
+<input id="price-max-input" type="number" min="0" value="5000" class="w-full bg-surface-container border border-white/10 text-primary text-sm py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+</div>
+<div>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-3">Marcas</p>
+<div id="brand-filters" class="flex flex-col gap-2"></div>
+</div>
+<button id="filter-reset-btn" class="w-full border border-white/20 font-label-caps text-label-caps uppercase py-3 hover:border-white/60 transition-colors text-on-surface-variant hover:text-primary">Limpar Filtros</button>
+</aside>
+<!-- Products Grid -->
+<div class="flex-1 min-w-0">
+<div id="filter-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter"></div>
+<div id="filter-empty" class="hidden py-24 text-center">
+<span class="material-symbols-outlined text-5xl opacity-30 mb-4 block">search_off</span>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant">Nenhum produto encontrado</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Section 6: Shipping Banner -->
+<section id="section-contato" class="py-20 bg-surface-card border-y border-border-subtle relative overflow-hidden">
+<div class="container mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-12 relative z-10">
+<div class="text-center md:text-left">
+<h2 class="font-headline-xl text-headline-xl uppercase mb-2">Frete Grátis</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant font-light">Em todas as compras acima de R$ 199,00 para todo o Brasil.</p>
+</div>
+<div class="flex items-center gap-16">
+<div class="text-center"><span class="block font-display-lg text-headline-xl leading-none">24H</span><span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">Expedição</span></div>
+<div class="h-16 w-px bg-white/10"></div>
+<div class="text-center"><span class="block font-display-lg text-headline-xl leading-none">12X</span><span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">No Cartão</span></div>
+<div class="h-16 w-px bg-white/10"></div>
+<div class="text-center"><span class="block font-display-lg text-headline-xl leading-none">PIX</span><span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">5% OFF</span></div>
+</div>
+</div>
+<div class="absolute left-0 top-0 h-full w-64 bg-gradient-to-r from-primary/5 to-transparent skew-x-[-20deg] -translate-x-32"></div>
+</section>
+
+<!-- ── CART OVERLAY ── -->
+<div id="cart-overlay" class="fixed inset-0 z-[60] bg-black/60"></div>
+
+<!-- ── CART DRAWER ── -->
+<div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-[420px] z-[70] bg-surface-card border-l border-white/10 flex flex-col">
+<div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
+<h2 class="font-headline-lg text-headline-lg uppercase">Carrinho</h2>
+<button id="cart-close-btn" class="hover:opacity-60 transition-opacity"><span class="material-symbols-outlined">close</span></button>
+</div>
+<ul id="cart-items-list" class="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-0 hidden"></ul>
+<div id="cart-empty-state" class="flex-1 flex flex-col items-center justify-center gap-4 opacity-30">
+<span class="material-symbols-outlined text-5xl">shopping_cart</span>
+<p class="font-label-caps text-label-caps uppercase">Carrinho vazio</p>
+</div>
+<div class="px-6 py-6 border-t border-white/10 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Total</span>
+<span id="cart-total-amount" class="font-price-display text-price-display">R$ 0,00</span>
+</div>
+<button id="checkout-btn" class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity">Ir para Checkout →</button>
+</div>
+</div>
+
+<!-- ── PRODUCT MODAL ── -->
+<dialog id="product-modal">
+<div class="grid grid-cols-1 md:grid-cols-2">
+<div class="aspect-square bg-surface-main relative">
+<img id="product-modal-img" class="w-full h-full object-cover" src="" alt=""/>
+</div>
+<div class="flex flex-col justify-between p-8">
+<div>
+<div class="flex justify-between items-start mb-4">
+<p id="product-modal-brand" class="font-label-caps text-[10px] text-on-surface-variant uppercase"></p>
+<button id="product-modal-close" class="hover:opacity-60 transition-opacity -mt-1"><span class="material-symbols-outlined">close</span></button>
+</div>
+<h2 id="product-modal-name" class="font-headline-xl text-headline-xl uppercase mb-3"></h2>
+<p id="product-modal-price" class="font-price-display text-price-display mb-5"></p>
+<p id="product-modal-desc" class="font-body-md text-body-md text-on-surface-variant leading-relaxed"></p>
+</div>
+<button id="product-modal-add" class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity mt-8">Adicionar ao Carrinho</button>
+</div>
+</div>
+</dialog>
+
+<!-- ── FILTER OVERLAY (mobile) ── -->
+<div id="filter-overlay" class="fixed inset-0 z-[60] bg-black/60 md:hidden"></div>
+
+<!-- ── FILTER SHEET (mobile) ── -->
+<div id="filter-sheet" class="fixed bottom-0 left-0 right-0 z-[70] bg-surface-card border-t border-white/10 md:hidden max-h-[85vh] overflow-y-auto">
+<div class="flex items-center justify-between px-6 py-4 border-b border-white/10 sticky top-0 bg-surface-card z-10">
+<h3 class="font-headline-lg text-headline-lg uppercase">Filtros</h3>
+<button id="filter-sheet-close" class="hover:opacity-60 transition-opacity"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="px-6 py-6 flex flex-col gap-8">
+<div>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-3">Ordenar por</p>
+<select id="filter-sort-select-mobile" class="w-full bg-surface-container border border-white/10 text-primary text-sm py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40 cursor-pointer">
+<option value="relevance">Relevância</option>
+<option value="price-asc">Menor Preço</option>
+<option value="price-desc">Maior Preço</option>
+<option value="newest">Lançamentos</option>
+</select>
+</div>
+<div>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-3">Categorias</p>
+<div id="category-filters-mobile" class="flex flex-col gap-2"></div>
+</div>
+<div>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-3">Faixa de Preço</p>
+<div class="flex items-center gap-2">
+<input id="price-min-input-mobile" type="number" min="0" value="0" class="w-full bg-surface-container border border-white/10 text-primary text-sm py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40"/>
+<span class="text-on-surface-variant text-sm flex-shrink-0">–</span>
+<input id="price-max-input-mobile" type="number" min="0" value="5000" class="w-full bg-surface-container border border-white/10 text-primary text-sm py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+</div>
+<div>
+<p class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-3">Marcas</p>
+<div id="brand-filters-mobile" class="flex flex-col gap-2"></div>
+</div>
+<div class="flex gap-3 pb-4">
+<button id="filter-apply-mobile" class="flex-1 bg-primary text-surface-main font-label-caps text-label-caps py-3 uppercase font-bold">Aplicar</button>
+<button id="filter-reset-mobile" class="flex-1 border border-white/20 font-label-caps text-label-caps py-3 uppercase hover:border-white/60 transition-colors">Limpar</button>
+</div>
+</div>
+</div>
+
+<!-- ── CHECKOUT OVERLAY ── -->
+<div id="checkout-overlay" class="fixed inset-0 z-[100] bg-surface-main overflow-y-auto">
+<!-- Topbar -->
+<div class="flex items-center justify-between px-6 md:px-margin-desktop py-5 border-b border-white/10 sticky top-0 bg-surface-main z-10">
+<span class="font-headline-lg text-headline-lg uppercase">Checkout</span>
+<button id="checkout-close-btn" class="hover:opacity-60 transition-opacity"><span class="material-symbols-outlined">close</span></button>
+</div>
+<!-- Stepper -->
+<div id="checkout-step-indicator" class="px-6 md:px-margin-desktop py-8">
+<div class="flex items-start max-w-2xl">
+<div class="flex flex-col items-center flex-1" data-step="1">
+<div class="step-circle w-8 h-8 rounded-full border-2 border-primary bg-primary text-surface-main flex items-center justify-center font-bold text-sm mb-2">1</div>
+<span class="font-label-caps text-[10px] uppercase text-center hidden sm:block text-primary">Identificação</span>
+</div>
+<div class="flex-1 h-px bg-white/20 mt-4"></div>
+<div class="flex flex-col items-center flex-1" data-step="2">
+<div class="step-circle w-8 h-8 rounded-full border-2 border-white/30 text-on-surface-variant flex items-center justify-center font-bold text-sm mb-2">2</div>
+<span class="font-label-caps text-[10px] uppercase text-center hidden sm:block text-on-surface-variant">Entrega</span>
+</div>
+<div class="flex-1 h-px bg-white/20 mt-4"></div>
+<div class="flex flex-col items-center flex-1" data-step="3">
+<div class="step-circle w-8 h-8 rounded-full border-2 border-white/30 text-on-surface-variant flex items-center justify-center font-bold text-sm mb-2">3</div>
+<span class="font-label-caps text-[10px] uppercase text-center hidden sm:block text-on-surface-variant">Pagamento</span>
+</div>
+<div class="flex-1 h-px bg-white/20 mt-4"></div>
+<div class="flex flex-col items-center flex-1" data-step="4">
+<div class="step-circle w-8 h-8 rounded-full border-2 border-white/30 text-on-surface-variant flex items-center justify-center font-bold text-sm mb-2">4</div>
+<span class="font-label-caps text-[10px] uppercase text-center hidden sm:block text-on-surface-variant">Confirmação</span>
+</div>
+</div>
+</div>
+<!-- Step Panels -->
+<div class="px-6 md:px-margin-desktop pb-16 max-w-2xl">
+
+<!-- Step 1: Identificação -->
+<div id="checkout-step-1" class="checkout-step-panel active">
+<h3 class="font-headline-xl text-headline-xl uppercase mb-8">Identificação</h3>
+<div class="flex flex-col gap-4">
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Nome Completo</label>
+<input id="ck-name" type="text" placeholder="João da Silva" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">E-mail</label>
+<input id="ck-email" type="email" placeholder="joao@email.com" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">CPF</label>
+<input id="ck-cpf" type="text" placeholder="000.000.000-00" maxlength="14" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Telefone</label>
+<input id="ck-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+</div>
+<button class="checkout-next-btn mt-8 w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity" data-next="2">Continuar →</button>
+</div>
+
+<!-- Step 2: Entrega -->
+<div id="checkout-step-2" class="checkout-step-panel">
+<h3 class="font-headline-xl text-headline-xl uppercase mb-8">Entrega</h3>
+<div class="flex flex-col gap-4">
+<div class="flex gap-3 items-end">
+<div class="flex-1">
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">CEP</label>
+<input id="ck-cep" type="text" placeholder="00000-000" maxlength="9" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<button id="ck-cep-search" class="border border-white/20 px-4 py-3 font-label-caps text-label-caps uppercase hover:border-white/60 transition-colors whitespace-nowrap text-sm">Buscar</button>
+</div>
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Endereço</label>
+<input id="ck-address" type="text" placeholder="Rua, Avenida..." class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div class="flex gap-3">
+<div class="w-28">
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Número</label>
+<input id="ck-number" type="text" placeholder="123" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div class="flex-1">
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Complemento</label>
+<input id="ck-complement" type="text" placeholder="Apto, Bloco..." class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Bairro</label>
+<input id="ck-district" type="text" placeholder="Centro" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div class="flex gap-3">
+<div class="flex-1">
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Cidade</label>
+<input id="ck-city" type="text" placeholder="São Paulo" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div class="w-20">
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">UF</label>
+<input id="ck-state" type="text" placeholder="SP" maxlength="2" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-8">
+<button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="1">← Voltar</button>
+<button class="checkout-next-btn flex-1 bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity" data-next="3">Continuar →</button>
+</div>
+</div>
+
+<!-- Step 3: Pagamento -->
+<div id="checkout-step-3" class="checkout-step-panel">
+<h3 class="font-headline-xl text-headline-xl uppercase mb-8">Pagamento</h3>
+<div class="flex gap-0 border border-white/10 mb-8">
+<button id="pay-card-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase bg-primary text-surface-main transition-colors">Cartão</button>
+<button id="pay-pix-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors">PIX</button>
+</div>
+<!-- Card Form -->
+<div id="pay-card-form" class="flex flex-col gap-4">
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Número do Cartão</label>
+<input id="ck-card-num" type="text" placeholder="0000 0000 0000 0000" maxlength="19" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div class="flex gap-3">
+<div class="flex-1">
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Validade</label>
+<input id="ck-card-expiry" type="text" placeholder="MM/AA" maxlength="5" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div class="w-28">
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">CVV</label>
+<input id="ck-card-cvv" type="text" placeholder="000" maxlength="4" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+</div>
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Nome no Cartão</label>
+<input id="ck-card-name" type="text" placeholder="JOÃO DA SILVA" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
+</div>
+<div>
+<label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Parcelas</label>
+<select id="ck-installments" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40 cursor-pointer"></select>
+</div>
+</div>
+<!-- PIX Form -->
+<div id="pay-pix-form" class="hidden flex flex-col items-center gap-6 py-4">
+<p class="font-body-md text-body-md text-on-surface-variant text-center">Escaneie o QR Code abaixo e ganhe <strong class="text-primary">5% de desconto</strong>.</p>
+<div class="p-4 bg-white">
+<svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+<rect width="160" height="160" fill="white"/>
+<rect x="10" y="10" width="40" height="40" fill="#000"/><rect x="16" y="16" width="28" height="28" fill="#fff"/><rect x="22" y="22" width="16" height="16" fill="#000"/>
+<rect x="110" y="10" width="40" height="40" fill="#000"/><rect x="116" y="16" width="28" height="28" fill="#fff"/><rect x="122" y="22" width="16" height="16" fill="#000"/>
+<rect x="10" y="110" width="40" height="40" fill="#000"/><rect x="16" y="116" width="28" height="28" fill="#fff"/><rect x="22" y="122" width="16" height="16" fill="#000"/>
+<rect x="58" y="10" width="4" height="4" fill="#000"/><rect x="66" y="10" width="4" height="4" fill="#000"/><rect x="74" y="10" width="4" height="4" fill="#000"/><rect x="82" y="10" width="4" height="4" fill="#000"/><rect x="90" y="10" width="4" height="4" fill="#000"/>
+<rect x="10" y="58" width="4" height="4" fill="#000"/><rect x="10" y="66" width="4" height="4" fill="#000"/><rect x="10" y="74" width="4" height="4" fill="#000"/><rect x="10" y="82" width="4" height="4" fill="#000"/>
+<rect x="58" y="58" width="44" height="44" fill="#000"/><rect x="62" y="62" width="8" height="8" fill="#fff"/><rect x="74" y="62" width="8" height="8" fill="#fff"/><rect x="86" y="62" width="8" height="8" fill="#fff"/><rect x="62" y="74" width="8" height="8" fill="#fff"/><rect x="86" y="74" width="8" height="8" fill="#fff"/><rect x="62" y="86" width="8" height="8" fill="#fff"/><rect x="74" y="86" width="8" height="8" fill="#fff"/>
+<rect x="58" y="110" width="4" height="4" fill="#000"/><rect x="66" y="118" width="4" height="4" fill="#000"/><rect x="74" y="110" width="4" height="4" fill="#000"/><rect x="82" y="118" width="4" height="4" fill="#000"/><rect x="90" y="110" width="4" height="4" fill="#000"/><rect x="106" y="110" width="4" height="4" fill="#000"/><rect x="58" y="126" width="4" height="4" fill="#000"/><rect x="74" y="126" width="4" height="4" fill="#000"/><rect x="90" y="126" width="4" height="4" fill="#000"/><rect x="58" y="142" width="4" height="4" fill="#000"/><rect x="82" y="142" width="4" height="4" fill="#000"/><rect x="106" y="142" width="4" height="4" fill="#000"/>
+<rect x="110" y="58" width="4" height="4" fill="#000"/><rect x="118" y="66" width="4" height="4" fill="#000"/><rect x="126" y="58" width="4" height="4" fill="#000"/><rect x="134" y="66" width="4" height="4" fill="#000"/><rect x="142" y="58" width="4" height="4" fill="#000"/><rect x="110" y="74" width="4" height="4" fill="#000"/><rect x="126" y="74" width="4" height="4" fill="#000"/><rect x="142" y="82" width="4" height="4" fill="#000"/><rect x="110" y="90" width="4" height="4" fill="#000"/><rect x="118" y="90" width="4" height="4" fill="#000"/><rect x="134" y="90" width="4" height="4" fill="#000"/>
+</svg>
+</div>
+<p class="font-label-caps text-[10px] uppercase text-on-surface-variant">Válido por 15 minutos</p>
+<div class="w-full border border-white/10 bg-surface-container px-4 py-3 font-body-md text-xs text-on-surface-variant break-all select-all">00020126580014BR.GOV.BCB.PIX0136revizzi@revizzi.com.br5204000053039865802BR5913REVIZZI STORE6009SAO PAULO62070503***6304ABCD</div>
+</div>
+<div class="flex gap-3 mt-8">
+<button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="2">← Voltar</button>
+<button class="checkout-next-btn flex-1 bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity" data-next="4">Continuar →</button>
+</div>
+</div>
+
+<!-- Step 4: Confirmação -->
+<div id="checkout-step-4" class="checkout-step-panel">
+<h3 class="font-headline-xl text-headline-xl uppercase mb-8">Resumo do Pedido</h3>
+<div class="border border-white/10 bg-surface-card p-6 mb-8">
+<ul id="checkout-summary-list" class="flex flex-col gap-3 mb-6"></ul>
+<div class="border-t border-white/10 pt-4 flex justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Total</span>
+<span id="checkout-summary-total" class="font-price-display text-price-display"></span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="3">← Voltar</button>
+<button id="checkout-confirm-btn" class="flex-1 bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-3">
+<span id="confirm-btn-text">Confirmar Pedido</span>
+<svg id="confirm-checkmark" class="hidden w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline class="check-draw" points="20 6 9 17 4 12"/></svg>
+</button>
+</div>
+</div>
+
+</div><!-- end step panels -->
+</div><!-- end checkout-overlay -->
+
+</main>
+
+<!-- Section 7: Footer -->
+<footer class="bg-surface-main border-t border-border-subtle w-full mt-section-padding">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-section-padding w-full max-w-7xl mx-auto">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<img alt="REVIZZI Logo" class="h-8 w-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFVfNAqAy_Lb73keTU8DYlsqKY_yKDSFMgkVQ87e97d1EsjgcSgjoUVz5SFA167pAyDlo3pnWc5ayOiOoJDdeqyMRP2OQxLSNGOQfZgOJ9zWQUaAzsbEeBTow9cufe_hzSSI1QX4tUSfLMubSQRwLHIjTF9max53UTGco16fFYsnnFaYwNwcRR9BKAeoavohB3dJPkcWoGIQllvcuOzgYoKWCj_sdxVlySRIhHZu9Lasd-4kpPoeJ9jJRn-0zLhM4r1LVfTrScIyrg"/>
+<span class="font-headline-lg text-headline-lg text-primary uppercase">REVIZZI</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed">Elevando o padrão da estética automotiva brasileira através de engenharia e precisão.</p>
+<div class="flex gap-4">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera_alt</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">play_circle</span></a>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<h4 class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Navegação</h4>
+<div class="flex flex-col gap-3">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-destaque">Produtos</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-categorias">Estética</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-catalogo">Catálogo</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-contato">Contato</a>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<h4 class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Categorias</h4>
+<div class="flex flex-col gap-3">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Polimento</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Vitrificação</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Detalhamento</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Proteção PPF</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Ferramentas</a>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<h4 class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Contato</h4>
+<div class="flex flex-col gap-4">
+<div class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-sm">location_on</span><p class="font-body-md text-body-md text-on-surface-variant">Av. Performance, 1000<br/>Paddock Industrial, SP</p></div>
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-sm">call</span><p class="font-body-md text-body-md text-on-surface-variant">+55 11 9999-9999</p></div>
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-sm">mail</span><p class="font-body-md text-body-md text-on-surface-variant">contato@revizzi.com.br</p></div>
+</div>
+</div>
+</div>
+<div class="border-t border-border-subtle py-8 px-margin-desktop">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase">© 2025 Revizzi Centro Automotivo. Engineered for Performance.</p>
+<div class="flex gap-6">
+<a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary uppercase" href="#">Políticas de Privacidade</a>
+<a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary uppercase" href="#">Termos de Uso</a>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+// ═══════════════════════════════════
+// A. PRODUCT DATA
+// ═══════════════════════════════════
+const IMG1 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-uHtbhGN4Vxw8yTfNd2JiRXhExysEDip1gTu1FunWM0RtfRdXNGwAL6f2lnqphVCkScBuKNL1OLB2ABy5GO5Jqquv2r_P1vn3cuVHAVgTg4CLTV0qMKixCLXVrHVp1daEr9sgsGoHxqOitSSuo9307CEKh4x0V2f2saS7aEUKYLU9Mz-WBCUwNyIQjxctlPQMmZKwrbrp2buMRo-me6cDjNa9NYBJPEXDTwDizBOJP2IAKiz39dwcLXkquBht78x3JVfhNjAXrOfV';
+const IMG2 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuA3w1HudWUFTjACSwNCLZJ_qTvhet_LpyKDXABEu8M4N81To4XI9xbBZ2cPjsPZ-6XNEGM5pXFZKojuOGejYBOAbiR24xwDtAeSBkU3eH72vGg4wcSDbRkNZp8vrQEvve3i9JGHlKSff0EkUC2mi_aPGXWowtaEF94YvG1-ZdNQsYVMZW61637uVsIUJgmROFyi4hJQgYUprOaojCl17ZAnsUuZjLEP19iIk4IEsbFyD0Pj1_22R8uXE8fE9k0QFRdPh0DEBWlQVSne';
+const IMG3 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCzBA_ozDsxKz1N22xRBfqgQLXLlk7fxvHaA4YtsmF9NVG4SGUFsZ58-O-iGHNoT6k6DLVsghBpGUFbiZVP1X8p5ABRPn4jHVP4aSe3Omv864CDteOrcOpx5nWAWevj4ciskDO_YD_VbiTCwkvuQi9PiKorHbvyQS_mOf0R3n7ryksKDGFRxqFmapYKRdz0KA7s1nuGvFug456qdg1BlBP7ZuqzVmZNrunm8jntPj1d0x2wn6h-Pz4ll9PszdQIjR_MpviIjnIja8vV';
+const IMG4 = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCEKN-de5MhvMPUP374F6X15cnd0ku-hWaRY7kGwE0OkKpAYrekNCx4oyKHU5FPkk9JjlCV70m8Nh6_no2u6nJq2JAMk_TW8q3f4V4KJiCEk7nDxxLGbJCABOKH-AaeMNQkwa0Ndg6QZ4L-jfPuXzGLgWefZorW8yoePcXcbcAdWdKbMiyzA';
+
+window.PRODUCTS = [
+    { id: 1, brand: 'CarPro', name: 'Cquartz Ceramic Coating', price: 299.90, priceFormatted: 'R$ 299,90', category: 'Proteção', badge: { text: 'Lançamento', style: 'bg-primary text-surface-main' }, img: IMG1, description: 'Revestimento cerâmico profissional com proteção UV, hidrofobicidade extrema e durabilidade de até 3 anos. Tecnologia SiO2 concentrada a 50%.' },
+    { id: 2, brand: 'Rupes', name: 'Polidora Orbital LHR21', price: 4250.00, priceFormatted: 'R$ 4.250,00', category: 'Ferramentas', badge: null, img: IMG2, description: 'Polidora orbital de dupla ação com curso de 21mm. Motor de 500W, vibração reduzida, ideal para correção de pintura em todos os painéis.' },
+    { id: 3, brand: 'Vonixx', name: 'Toalha de Secagem Ultra', price: 89.90, priceFormatted: 'R$ 89,90', category: 'Detalhamento', badge: null, img: IMG3, description: 'Microfibra de alta absorção 70×100cm, 1200gsm. Borda sem costura para evitar riscos. Remove toda a água em uma única passada.' },
+    { id: 4, brand: 'Gyeon', name: 'Iron Wheel Cleaner', price: 145.00, priceFormatted: 'R$ 145,00', category: 'Lavagem', badge: { text: '-15%', style: 'bg-error text-on-error' }, img: IMG4, description: 'Limpador de ferro e pó de freio com indicador de cor. Reação química visível que dissolve contaminantes ferrosos. 500ml.' },
+    { id: 5, brand: "Meguiar's", name: 'Ultimate Liquid Wax', price: 189.90, priceFormatted: 'R$ 189,90', category: 'Proteção', badge: null, img: IMG1, description: 'Cera líquida sintética com tecnologia ThinFilm que proporciona brilho profundo e proteção por até 12 meses.' },
+    { id: 6, brand: 'Koch Chemie', name: 'Nano Magic Shampoo', price: 79.90, priceFormatted: 'R$ 79,90', category: 'Lavagem', badge: { text: 'Oferta', style: 'bg-primary text-surface-main' }, img: IMG2, description: 'Shampoo com partículas de sílica que limpam e protegem o verniz simultaneamente. Alta concentração, rende 200 lavagens.' },
+    { id: 7, brand: 'Angelwax', name: 'Compound H.D.', price: 320.00, priceFormatted: 'R$ 320,00', category: 'Polimento', badge: null, img: IMG3, description: 'Compound de corte pesado com abrasivos não-diminuídos. Remove riscos profundos, oxidação e defeitos de pintura severos.' },
+    { id: 8, brand: 'Sonax', name: 'PROFILINE Ceramic Spray', price: 219.00, priceFormatted: 'R$ 219,00', category: 'Proteção', badge: { text: 'Novo', style: 'bg-primary text-surface-main' }, img: IMG4, description: 'Spray cerâmico de aplicação rápida. Proteção SiO2 instantânea, efeito espelho, duração de 6 meses. Ideal para manutenção.' },
+];
+
+// ═══════════════════════════════════
+// B. INPUT MASK
+// ═══════════════════════════════════
+function applyMask(input, pattern) {
+    if (!input) return;
+    input.addEventListener('input', function(e) {
+        const digits = e.target.value.replace(/\D/g, '');
+        let result = '';
+        let di = 0;
+        for (let pi = 0; pi < pattern.length && di < digits.length; pi++) {
+            if (pattern[pi] === '#') { result += digits[di++]; }
+            else { result += pattern[pi]; }
+        }
+        e.target.value = result;
+    });
+}
+
+// ═══════════════════════════════════
+// C. CART STATE
+// ═══════════════════════════════════
+window.Cart = {
+    items: [],
+    add(id) {
+        const product = PRODUCTS.find(p => p.id === id);
+        if (!product) return;
+        const existing = this.items.find(i => i.product.id === id);
+        if (existing) { existing.qty += 1; }
+        else { this.items.push({ product, qty: 1 }); }
+        this._onChange();
+    },
+    remove(id) {
+        this.items = this.items.filter(i => i.product.id !== id);
+        this._onChange();
+    },
+    total() { return this.items.reduce((s, i) => s + i.product.price * i.qty, 0); },
+    count() { return this.items.reduce((s, i) => s + i.qty, 0); },
+    totalFormatted() {
+        return 'R$ ' + this.total().toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    },
+    _onChange() { updateCartBadge(); renderCartDrawer(); }
+};
+
+// ═══════════════════════════════════
+// D. CART UI
+// ═══════════════════════════════════
+function updateCartBadge() {
+    const badge = document.getElementById('cart-badge');
+    const n = Cart.count();
+    if (n > 0) { badge.textContent = n > 99 ? '99+' : n; badge.classList.remove('hidden'); }
+    else { badge.classList.add('hidden'); }
+}
+
+function renderCartDrawer() {
+    const list = document.getElementById('cart-items-list');
+    const empty = document.getElementById('cart-empty-state');
+    const totalEl = document.getElementById('cart-total-amount');
+    list.innerHTML = '';
+    if (Cart.items.length === 0) {
+        list.classList.add('hidden'); empty.classList.remove('hidden');
+    } else {
+        list.classList.remove('hidden'); empty.classList.add('hidden');
+        Cart.items.forEach(({ product, qty }) => {
+            const li = document.createElement('li');
+            li.className = 'flex items-center gap-4 py-4 border-b border-white/5';
+            li.innerHTML = `
+                <img src="${product.img}" alt="${product.name}" class="w-16 h-16 object-cover bg-surface-main flex-shrink-0 rounded-[2px]"/>
+                <div class="flex-1 min-w-0">
+                    <p class="font-label-caps text-[10px] text-on-surface-variant uppercase">${product.brand}</p>
+                    <p class="text-sm uppercase truncate mt-0.5">${product.name}</p>
+                    <p class="text-sm font-bold mt-1">${product.priceFormatted}</p>
+                </div>
+                <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                    <button class="hover:opacity-60 transition-opacity" data-remove-id="${product.id}">
+                        <span class="material-symbols-outlined text-[18px] text-on-surface-variant">delete</span>
+                    </button>
+                    <span class="font-label-caps text-[10px] text-on-surface-variant">×${qty}</span>
+                </div>`;
+            list.appendChild(li);
+        });
+        list.querySelectorAll('[data-remove-id]').forEach(btn => {
+            btn.addEventListener('click', () => Cart.remove(Number(btn.dataset.removeId)));
+        });
+    }
+    totalEl.textContent = Cart.totalFormatted();
+}
+
+function openCartDrawer() {
+    renderCartDrawer();
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCartDrawer() {
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function initCart() {
+    document.getElementById('cart-btn').addEventListener('click', openCartDrawer);
+    document.getElementById('cart-close-btn').addEventListener('click', closeCartDrawer);
+    document.getElementById('cart-overlay').addEventListener('click', closeCartDrawer);
+    // Global delegated add-to-cart
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('[data-add-to-cart]');
+        if (btn) {
+            e.stopPropagation();
+            Cart.add(Number(btn.dataset.addToCart));
+        }
+    });
+    // Esc key closes overlays
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') { closeCartDrawer(); closeProductModal(); }
+    });
+}
+
+// ═══════════════════════════════════
+// E. PRODUCT MODAL
+// ═══════════════════════════════════
+function openProductModal(id) {
+    const product = PRODUCTS.find(p => p.id === id);
+    if (!product) return;
+    document.getElementById('product-modal-img').src = product.img;
+    document.getElementById('product-modal-img').alt = product.name;
+    document.getElementById('product-modal-brand').textContent = product.brand;
+    document.getElementById('product-modal-name').textContent = product.name;
+    document.getElementById('product-modal-price').textContent = product.priceFormatted;
+    document.getElementById('product-modal-desc').textContent = product.description;
+    const addBtn = document.getElementById('product-modal-add');
+    addBtn.dataset.currentProductId = id;
+    const modal = document.getElementById('product-modal');
+    modal.showModal();
+    requestAnimationFrame(() => { modal.style.opacity = '1'; });
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('product-modal');
+    if (!modal.open) return;
+    modal.style.opacity = '0';
+    setTimeout(() => { if (modal.open) modal.close(); }, 250);
+}
+
+function initProductModal() {
+    document.getElementById('product-modal-close').addEventListener('click', closeProductModal);
+    const modal = document.getElementById('product-modal');
+    modal.addEventListener('click', function(e) {
+        const rect = modal.getBoundingClientRect();
+        if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+            closeProductModal();
+        }
+    });
+    document.getElementById('product-modal-add').addEventListener('click', function() {
+        Cart.add(Number(this.dataset.currentProductId));
+        closeProductModal();
+        setTimeout(openCartDrawer, 300);
+    });
+    // Card click → open modal (delegated)
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('[data-add-to-cart]')) return; // button handled above
+        const card = e.target.closest('[data-product-id]');
+        if (card) openProductModal(Number(card.dataset.productId));
+    });
+}
+
+// ═══════════════════════════════════
+// F. FILTERS
+// ═══════════════════════════════════
+const FilterState = {
+    categories: new Set(),
+    brands: new Set(),
+    minPrice: 0,
+    maxPrice: Infinity,
+    sort: 'relevance'
+};
+
+function buildProductCard(p) {
+    const badge = p.badge
+        ? `<div class="absolute top-4 left-4 ${p.badge.style} font-label-caps text-[10px] px-2 py-1 uppercase font-bold">${p.badge.text}</div>`
+        : '';
+    return `<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="${p.id}">
+        <div class="aspect-square relative overflow-hidden bg-surface-main">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${p.img}" alt="${p.name}"/>
+            ${badge}
+        </div>
+        <div class="p-6">
+            <p class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">${p.brand}</p>
+            <h3 class="font-body-md text-body-md mb-4 uppercase">${p.name}</h3>
+            <p class="font-price-display text-price-display mb-6">${p.priceFormatted}</p>
+            <button class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors" data-add-to-cart="${p.id}">Adicionar ao Carrinho</button>
+        </div>
+    </div>`;
+}
+
+function getFilteredProducts() {
+    let result = PRODUCTS.filter(p => {
+        const catOk = FilterState.categories.size === 0 || FilterState.categories.has(p.category);
+        const brandOk = FilterState.brands.size === 0 || FilterState.brands.has(p.brand);
+        const priceOk = p.price >= FilterState.minPrice && p.price <= FilterState.maxPrice;
+        return catOk && brandOk && priceOk;
+    });
+    if (FilterState.sort === 'price-asc') result.sort((a, b) => a.price - b.price);
+    if (FilterState.sort === 'price-desc') result.sort((a, b) => b.price - a.price);
+    return result;
+}
+
+function renderFilterGrid() {
+    const grid = document.getElementById('filter-products-grid');
+    const empty = document.getElementById('filter-empty');
+    const products = getFilteredProducts();
+    if (products.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); }
+    else { empty.classList.add('hidden'); grid.innerHTML = products.map(buildProductCard).join(''); }
+}
+
+function buildFilterCheckboxes() {
+    const categories = [...new Set(PRODUCTS.map(p => p.category))];
+    const brands = [...new Set(PRODUCTS.map(p => p.brand))];
+    const cbHtml = (value, cls) =>
+        `<label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" value="${value}" class="${cls} cursor-pointer"/>
+            <span class="text-sm text-on-surface-variant group-hover:text-primary transition-colors">${value}</span>
+        </label>`;
+    ['category-filters', 'category-filters-mobile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = categories.map(c => cbHtml(c, 'filter-category')).join('');
+    });
+    ['brand-filters', 'brand-filters-mobile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = brands.map(b => cbHtml(b, 'filter-brand')).join('');
+    });
+}
+
+function resetFilters() {
+    FilterState.categories.clear(); FilterState.brands.clear();
+    FilterState.minPrice = 0; FilterState.maxPrice = Infinity; FilterState.sort = 'relevance';
+    document.querySelectorAll('.filter-category, .filter-brand').forEach(cb => cb.checked = false);
+    const pMin = document.getElementById('price-min-input');
+    const pMax = document.getElementById('price-max-input');
+    if (pMin) pMin.value = '0';
+    if (pMax) pMax.value = '5000';
+    const sortSel = document.getElementById('filter-sort-select');
+    if (sortSel) sortSel.value = 'relevance';
+    renderFilterGrid();
+}
+
+function openFilterSheet() {
+    document.getElementById('filter-sheet').classList.add('open');
+    document.getElementById('filter-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeFilterSheet() {
+    document.getElementById('filter-sheet').classList.remove('open');
+    document.getElementById('filter-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function initFilters() {
+    buildFilterCheckboxes();
+    renderFilterGrid();
+
+    // Desktop live filtering
+    document.getElementById('filter-sort-select').addEventListener('change', function() {
+        FilterState.sort = this.value; renderFilterGrid();
+    });
+    document.getElementById('price-min-input').addEventListener('change', function() {
+        FilterState.minPrice = parseFloat(this.value) || 0; renderFilterGrid();
+    });
+    document.getElementById('price-max-input').addEventListener('change', function() {
+        FilterState.maxPrice = parseFloat(this.value) || Infinity; renderFilterGrid();
+    });
+    document.getElementById('category-filters').addEventListener('change', function(e) {
+        if (!e.target.classList.contains('filter-category')) return;
+        e.target.checked ? FilterState.categories.add(e.target.value) : FilterState.categories.delete(e.target.value);
+        renderFilterGrid();
+    });
+    document.getElementById('brand-filters').addEventListener('change', function(e) {
+        if (!e.target.classList.contains('filter-brand')) return;
+        e.target.checked ? FilterState.brands.add(e.target.value) : FilterState.brands.delete(e.target.value);
+        renderFilterGrid();
+    });
+    document.getElementById('filter-reset-btn').addEventListener('click', resetFilters);
+
+    // Mobile sheet
+    document.getElementById('filter-mobile-btn').addEventListener('click', openFilterSheet);
+    document.getElementById('filter-sheet-close').addEventListener('click', closeFilterSheet);
+    document.getElementById('filter-overlay').addEventListener('click', closeFilterSheet);
+    document.getElementById('filter-apply-mobile').addEventListener('click', function() {
+        FilterState.sort = document.getElementById('filter-sort-select-mobile').value;
+        FilterState.minPrice = parseFloat(document.getElementById('price-min-input-mobile').value) || 0;
+        FilterState.maxPrice = parseFloat(document.getElementById('price-max-input-mobile').value) || Infinity;
+        FilterState.categories.clear(); FilterState.brands.clear();
+        document.querySelectorAll('#filter-sheet .filter-category:checked').forEach(cb => FilterState.categories.add(cb.value));
+        document.querySelectorAll('#filter-sheet .filter-brand:checked').forEach(cb => FilterState.brands.add(cb.value));
+        renderFilterGrid(); closeFilterSheet();
+    });
+    document.getElementById('filter-reset-mobile').addEventListener('click', function() {
+        resetFilters(); closeFilterSheet();
+    });
+}
+
+// ═══════════════════════════════════
+// G. CHECKOUT
+// ═══════════════════════════════════
+let currentCheckoutStep = 1;
+
+function openCheckout() {
+    if (Cart.items.length === 0) return;
+    populateInstallments();
+    renderCheckoutSummary();
+    goToCheckoutStep(1);
+    document.getElementById('checkout-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    closeCartDrawer();
+}
+
+function closeCheckout() {
+    document.getElementById('checkout-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function goToCheckoutStep(step) {
+    currentCheckoutStep = step;
+    document.querySelectorAll('.checkout-step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('checkout-step-' + step).classList.add('active');
+    updateStepperUI(step);
+    document.getElementById('checkout-overlay').scrollTo(0, 0);
+}
+
+function updateStepperUI(activeStep) {
+    document.querySelectorAll('#checkout-step-indicator [data-step]').forEach(function(el) {
+        const s = Number(el.dataset.step);
+        const circle = el.querySelector('.step-circle');
+        const label = el.querySelector('span:not(.step-circle)');
+        if (s < activeStep) {
+            circle.classList.remove('border-white/30', 'text-on-surface-variant', 'bg-primary', 'text-surface-main', 'border-primary');
+            circle.classList.add('border-white/60', 'bg-white/20', 'text-primary');
+            circle.innerHTML = '<span class="material-symbols-outlined text-[14px]">check</span>';
+        } else if (s === activeStep) {
+            circle.classList.remove('border-white/30', 'text-on-surface-variant', 'border-white/60', 'bg-white/20');
+            circle.classList.add('bg-primary', 'border-primary', 'text-surface-main');
+            circle.textContent = s;
+        } else {
+            circle.classList.remove('bg-primary', 'border-primary', 'text-surface-main', 'border-white/60', 'bg-white/20');
+            circle.classList.add('border-white/30', 'text-on-surface-variant');
+            circle.textContent = s;
+        }
+        if (label) {
+            label.className = s <= activeStep
+                ? 'font-label-caps text-[10px] uppercase text-center hidden sm:block text-primary'
+                : 'font-label-caps text-[10px] uppercase text-center hidden sm:block text-on-surface-variant';
+        }
+    });
+}
+
+function populateInstallments() {
+    const select = document.getElementById('ck-installments');
+    select.innerHTML = '';
+    const total = Cart.total();
+    for (let i = 1; i <= 12; i++) {
+        const val = (total / i).toFixed(2).replace('.', ',');
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = i === 1 ? `À vista — R$ ${val}` : `${i}× de R$ ${val} sem juros`;
+        select.appendChild(opt);
+    }
+}
+
+function renderCheckoutSummary() {
+    const list = document.getElementById('checkout-summary-list');
+    const totalEl = document.getElementById('checkout-summary-total');
+    list.innerHTML = Cart.items.map(({ product, qty }) =>
+        `<li class="flex justify-between items-start gap-4">
+            <span class="text-sm text-on-surface-variant flex-1">${product.name} × ${qty}</span>
+            <span class="text-sm font-semibold flex-shrink-0">${product.priceFormatted}</span>
+        </li>`
+    ).join('');
+    totalEl.textContent = Cart.totalFormatted();
+}
+
+function handleConfirmOrder() {
+    const btn = document.getElementById('checkout-confirm-btn');
+    const text = document.getElementById('confirm-btn-text');
+    const check = document.getElementById('confirm-checkmark');
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    text.textContent = 'Processando...';
+    setTimeout(function() {
+        text.textContent = 'Pedido Confirmado!';
+        check.classList.remove('hidden');
+        Cart.items = [];
+        updateCartBadge();
+        setTimeout(closeCheckout, 2500);
+    }, 1500);
+}
+
+function initCheckout() {
+    applyMask(document.getElementById('ck-cpf'),         '###.###.###-##');
+    applyMask(document.getElementById('ck-phone'),       '(##) #####-####');
+    applyMask(document.getElementById('ck-cep'),         '#####-###');
+    applyMask(document.getElementById('ck-card-num'),    '#### #### #### ####');
+    applyMask(document.getElementById('ck-card-expiry'), '##/##');
+
+    // CEP mock auto-fill
+    document.getElementById('ck-cep-search').addEventListener('click', function() {
+        const raw = document.getElementById('ck-cep').value.replace(/\D/g, '');
+        if (raw.length === 8) {
+            document.getElementById('ck-address').value = 'Av. Performance';
+            document.getElementById('ck-district').value = 'Paddock Industrial';
+            document.getElementById('ck-city').value = 'São Paulo';
+            document.getElementById('ck-state').value = 'SP';
+        }
+    });
+
+    // Payment toggle
+    document.getElementById('pay-card-btn').addEventListener('click', function() {
+        document.getElementById('pay-card-form').classList.remove('hidden');
+        document.getElementById('pay-pix-form').classList.add('hidden');
+        this.classList.add('bg-primary', 'text-surface-main');
+        this.classList.remove('text-on-surface-variant');
+        const pix = document.getElementById('pay-pix-btn');
+        pix.classList.remove('bg-primary', 'text-surface-main');
+        pix.classList.add('text-on-surface-variant');
+    });
+    document.getElementById('pay-pix-btn').addEventListener('click', function() {
+        document.getElementById('pay-pix-form').classList.remove('hidden');
+        document.getElementById('pay-card-form').classList.add('hidden');
+        this.classList.add('bg-primary', 'text-surface-main');
+        this.classList.remove('text-on-surface-variant');
+        const card = document.getElementById('pay-card-btn');
+        card.classList.remove('bg-primary', 'text-surface-main');
+        card.classList.add('text-on-surface-variant');
+    });
+
+    // Next/Back navigation (delegated on overlay)
+    document.getElementById('checkout-overlay').addEventListener('click', function(e) {
+        const next = e.target.closest('.checkout-next-btn');
+        const back = e.target.closest('.checkout-back-btn');
+        if (next) goToCheckoutStep(Number(next.dataset.next));
+        if (back) goToCheckoutStep(Number(back.dataset.back));
+    });
+
+    document.getElementById('checkout-confirm-btn').addEventListener('click', handleConfirmOrder);
+    document.getElementById('checkout-close-btn').addEventListener('click', closeCheckout);
+    document.getElementById('checkout-btn').addEventListener('click', openCheckout);
+}
+
+// ═══════════════════════════════════
+// H. SMOOTH SCROLL
+// ═══════════════════════════════════
+function smoothScrollTo(targetId) {
+    const el = document.querySelector(targetId);
+    if (!el) return;
+    const headerH = document.querySelector('header').offsetHeight;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerH;
+    window.scrollTo({ top, behavior: 'smooth' });
+}
+
+function initNavLinks() {
+    // Nav anchor links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                smoothScrollTo(href);
+            }
+        });
+    });
+
+    // Hero CTA buttons
+    const btnExplorar = document.getElementById('btn-explorar');
+    const btnPolimentos = document.getElementById('btn-polimentos');
+    if (btnExplorar) btnExplorar.addEventListener('click', () => smoothScrollTo('#section-catalogo'));
+    if (btnPolimentos) btnPolimentos.addEventListener('click', () => smoothScrollTo('#section-categorias'));
+
+    // Category cards → filter + scroll to catalog
+    document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const cat = this.dataset.cat;
+            if (!cat) return;
+            // Apply filter
+            FilterState.categories.clear();
+            FilterState.categories.add(cat);
+            document.querySelectorAll('.filter-category').forEach(cb => {
+                cb.checked = cb.value === cat;
+            });
+            renderFilterGrid();
+            // Scroll to catalog
+            smoothScrollTo('#section-catalogo');
+        });
+    });
+
+    // Active nav highlight on scroll
+    const sections = [
+        { id: 'section-hero', nav: null },
+        { id: 'section-destaque', nav: '[href="#section-destaque"]' },
+        { id: 'section-categorias', nav: '[href="#section-categorias"]' },
+        { id: 'section-catalogo', nav: '[href="#section-catalogo"]' },
+        { id: 'section-contato', nav: '[href="#section-contato"]' },
+    ];
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const sec = sections.find(s => s.id === entry.target.id);
+            document.querySelectorAll('.nav-link').forEach(l => {
+                l.classList.remove('text-primary', 'active-underline');
+                l.classList.add('text-on-surface-variant');
+            });
+            if (sec && sec.nav) {
+                const active = document.querySelector('.nav-link' + sec.nav);
+                if (active) {
+                    active.classList.add('text-primary', 'active-underline');
+                    active.classList.remove('text-on-surface-variant');
+                }
+            }
+        });
+    }, { threshold: 0.3 });
+    sections.forEach(s => { const el = document.getElementById(s.id); if (el) observer.observe(el); });
+}
+
+// ═══════════════════════════════════
+// I. SCROLL REVEAL ANIMATIONS
+// ═══════════════════════════════════
+function initScrollReveal() {
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => {
+        revealObserver.observe(el);
+    });
+
+    // Also add reveal to product cards when rendered
+    const origRender = window.renderFilterGrid;
+    window.renderFilterGrid = function() {
+        origRender();
+        document.querySelectorAll('#filter-products-grid .reveal, #filter-products-grid .reveal-scale').forEach(el => {
+            revealObserver.observe(el);
+        });
+    };
+}
+
+// ═══════════════════════════════════
+// H. INIT
+// ═══════════════════════════════════
+function init() {
+    initCart();
+    initProductModal();
+    initFilters();
+    initCheckout();
+    initNavLinks();
+    initScrollReveal();
+}
+
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); }
+else { init(); }
+
+// ═══════════════════════════════════
+// ORIGINAL — scroll + hover
+// ═══════════════════════════════════
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    if (window.scrollY > 50) { header.classList.add('shadow-lg'); }
+    else { header.classList.remove('shadow-lg'); }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-product-id]').forEach(card => {
+        card.addEventListener('mouseenter', () => card.classList.add('border-white/40'));
+        card.addEventListener('mouseleave', () => card.classList.remove('border-white/40'));
+    });
+});
+</script>
+</body></html>

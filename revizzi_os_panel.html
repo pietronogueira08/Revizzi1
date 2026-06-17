@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>REVIZZI OS | Paddock Edition</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0C0C0C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .glass-panel {
+            background: #131313;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-fixed": "#1a1c1c",
+                        "on-background": "#e5e2e1",
+                        "on-surface-variant": "#c4c7c8",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "surface-main": "#0C0C0C",
+                        "surface-card": "#131313",
+                        "primary": "#ffffff",
+                        "background": "#0C0C0C"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "2px",
+                        "lg": "2px",
+                        "xl": "2px",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Bebas Neue"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Bebas Neue"],
+                        "headline-xl": ["Bebas Neue"]
+                    },
+                    fontSize: {
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-lg": ["72px", {"lineHeight": "1.0", "letterSpacing": "0.02em"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.04em"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "0.03em"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-main text-on-surface font-body-md overflow-hidden">
+<!-- SIDE NAVIGATION -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] border-r border-border-subtle bg-surface-main z-[60] flex flex-col py-4">
+<div class="px-6 mb-12">
+<h1 class="font-display-lg text-headline-lg text-primary tracking-tighter">REVIZZI OS</h1>
+<p class="font-label-caps text-[10px] text-on-surface-variant tracking-[0.2em] opacity-60">V2.0 PADDOCK EDITION</p>
+</div>
+<nav id="sidebar-nav" class="flex-1 flex flex-col space-y-1">
+<a class="flex items-center px-6 py-3 text-primary border-r-2 border-primary bg-surface-container-high font-bold transition-all" href="#" data-section="Painel">
+<span class="material-symbols-outlined mr-3 text-xl">speed</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Painel</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Telemetria">
+<span class="material-symbols-outlined mr-3 text-xl">analytics</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Telemetria</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Diagnósticos">
+<span class="material-symbols-outlined mr-3 text-xl">build</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Diagnósticos</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Estoque">
+<span class="material-symbols-outlined mr-3 text-xl">precision_manufacturing</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Estoque</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Desempenho">
+<span class="material-symbols-outlined mr-3 text-xl">insights</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Desempenho</span>
+</a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Configurações">
+<span class="material-symbols-outlined mr-3 text-xl">settings</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Configurações</span>
+</a>
+</nav>
+<div class="mt-auto px-6 pt-4 border-t border-border-subtle">
+<div class="flex items-center space-x-2 text-[10px] font-label-caps text-primary/40">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span>STATUS DO SISTEMA: EXCELENTE</span>
+</div>
+</div>
+</aside>
+<!-- TOP NAVIGATION -->
+<header class="fixed top-0 right-0 left-[240px] h-16 z-50 border-b border-border-subtle bg-surface-main/80 backdrop-blur-md flex justify-between items-center px-8">
+<div class="flex items-center space-x-8">
+<nav id="top-tabs" class="flex items-center space-x-6">
+<a class="font-label-caps text-primary border-b-2 border-primary pb-1" href="#" data-section="Transmissão">TRANSMISSÃO AO VIVO</a>
+<a class="font-label-caps text-on-surface-variant hover:text-primary transition-all" href="#" data-section="Pit Wall">PIT WALL</a>
+<a class="font-label-caps text-on-surface-variant hover:text-primary transition-all" href="#" data-section="Relatórios">RELATÓRIOS</a>
+</nav>
+</div>
+<div class="flex items-center space-x-6">
+<div class="relative flex items-center bg-white/5 border border-border-subtle px-3 py-1.5">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input id="vin-search" class="bg-transparent border-none p-0 text-[10px] font-label-caps focus:ring-0 w-32 uppercase tracking-widest text-primary placeholder:text-on-surface-variant/40" placeholder="VIN / ID DO PEDIDO" type="text"/>
+</div>
+<div class="flex items-center space-x-4">
+<button id="btn-notifications" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all">notifications_active</button>
+<div id="btn-profile" class="w-8 h-8 glass-panel border border-border-subtle flex items-center justify-center cursor-pointer hover:border-white/30 transition-all">
+<span class="material-symbols-outlined text-primary">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT -->
+<main class="ml-[240px] mt-16 p-8 h-[calc(100vh-64px-36px)] overflow-y-auto">
+<!-- KPI SECTION -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<div class="glass-panel p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant/60 uppercase tracking-tighter">Receita Bruta (Mês)</span>
+<span class="material-symbols-outlined text-primary/40 text-lg">payments</span>
+</div>
+<div class="font-display-lg text-headline-xl text-primary mb-1">R$ 45.2K</div>
+<div class="flex items-center text-[10px] font-semibold text-green-400">
+<span class="material-symbols-outlined text-xs mr-1">trending_up</span>
+                +12.4% VS. PERÍODO ANTERIOR
+            </div>
+</div>
+<div class="glass-panel p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant/60 uppercase tracking-tighter">Serviços de Box Ativos</span>
+<span class="material-symbols-outlined text-primary/40 text-lg">precision_manufacturing</span>
+</div>
+<div class="font-display-lg text-headline-xl text-primary mb-1">1.284</div>
+<div class="flex items-center text-[10px] font-semibold text-on-surface-variant/40">
+<span class="material-symbols-outlined text-xs mr-1">remove</span>
+                DESEMPENHO ESTÁVEL
+            </div>
+</div>
+<div class="glass-panel p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant/60 uppercase tracking-tighter">Diagnósticos Concluídos</span>
+<span class="material-symbols-outlined text-primary/40 text-lg">query_stats</span>
+</div>
+<div class="font-display-lg text-headline-xl text-primary mb-1">856</div>
+<div class="flex items-center text-[10px] font-semibold text-green-400">
+<span class="material-symbols-outlined text-xs mr-1">trending_up</span>
+                +8.1% OTIMIZAÇÃO
+            </div>
+</div>
+<div class="glass-panel p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant/60 uppercase tracking-tighter">Ticket Médio</span>
+<span class="material-symbols-outlined text-primary/40 text-lg">receipt_long</span>
+</div>
+<div class="font-display-lg text-headline-xl text-primary mb-1">R$ 352</div>
+<div class="flex items-center text-[10px] font-semibold text-red-400">
+<span class="material-symbols-outlined text-xs mr-1">trending_down</span>
+                -2.3% QUEDA DE MARGEM
+            </div>
+</div>
+</div>
+<div class="bento-grid h-auto">
+<!-- MAIN TELEMETRY CHART AREA -->
+<div class="col-span-12 lg:col-span-8 glass-panel p-8 relative">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-lg text-primary uppercase">Telemetria de Desempenho</h2>
+<p class="font-label-caps text-[11px] text-on-surface-variant">Mapeamento de capacidade e fluxo em tempo real</p>
+</div>
+<div class="flex space-x-2">
+<button id="btn-24h" class="px-3 py-1 border border-primary text-[10px] font-label-caps text-primary">24H</button>
+<button id="btn-7d" class="px-3 py-1 border border-border-subtle text-[10px] font-label-caps text-on-surface-variant hover:border-primary/40">7D</button>
+</div>
+</div>
+<div id="chart-bars" class="w-full h-64 bg-surface-main relative flex items-end justify-between px-2 overflow-hidden">
+<div class="absolute inset-0 grid grid-cols-12 grid-rows-4 pointer-events-none">
+<div class="border-t border-white/[0.03] col-span-12"></div>
+<div class="border-t border-white/[0.03] col-span-12"></div>
+<div class="border-t border-white/[0.03] col-span-12"></div>
+<div class="border-t border-white/[0.03] col-span-12"></div>
+</div>
+<!-- Simulation Bars -->
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[40%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[65%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[55%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[85%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[70%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[92%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[60%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[45%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[75%]"></div>
+<div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[80%]"></div>
+</div>
+<div class="mt-6 flex justify-between">
+<div class="flex space-x-12">
+<div>
+<div class="text-[10px] font-label-caps text-on-surface-variant/60">CARGA MÁXIMA</div>
+<div class="font-display-lg text-2xl text-primary">98.2%</div>
+</div>
+<div>
+<div class="text-[10px] font-label-caps text-on-surface-variant/60">TEMPO OCIOSO</div>
+<div class="font-display-lg text-2xl text-primary">12:04:12</div>
+</div>
+</div>
+<div id="chart-label" class="text-[10px] font-label-caps text-on-surface-variant/40 self-end">Últimas 24 horas</div>
+</div>
+</div>
+<!-- RECENT ORDERS TABLE -->
+<div class="col-span-12 lg:col-span-4 glass-panel p-0 overflow-hidden flex flex-col">
+<div class="p-6 border-b border-border-subtle">
+<h2 class="font-headline-lg text-primary uppercase text-2xl">Pedidos Recentes</h2>
+</div>
+<div class="flex-1 overflow-y-auto">
+<table id="orders-table" class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-card z-10">
+<tr class="border-b border-border-subtle">
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">ID</th>
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Cliente</th>
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Total</th>
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/[0.04]">
+<tr class="hover:bg-[#171717] transition-colors group cursor-pointer">
+<td class="px-6 py-4 text-[11px] font-mono text-primary/80">#RX-2941</td>
+<td class="px-6 py-4 text-[11px] text-primary">M. Schumacher</td>
+<td class="px-6 py-4 text-[11px] font-bold text-primary">R$ 1.250</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-block px-2 py-1 text-[9px] font-bold tracking-tighter bg-green-400/10 text-green-400">CONCLUÍDO</span>
+</td>
+</tr>
+<tr class="hover:bg-[#171717] transition-colors group cursor-pointer">
+<td class="px-6 py-4 text-[11px] font-mono text-primary/80">#RX-2938</td>
+<td class="px-6 py-4 text-[11px] text-primary">L. Hamilton</td>
+<td class="px-6 py-4 text-[11px] font-bold text-primary">R$ 840</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-block px-2 py-1 text-[9px] font-bold tracking-tighter bg-blue-400/10 text-blue-400">EM ANDAMENTO</span>
+</td>
+</tr>
+<tr class="hover:bg-[#171717] transition-colors group cursor-pointer">
+<td class="px-6 py-4 text-[11px] font-mono text-primary/80">#RX-2935</td>
+<td class="px-6 py-4 text-[11px] text-primary">A. Senna</td>
+<td class="px-6 py-4 text-[11px] font-bold text-primary">R$ 4.520</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-block px-2 py-1 text-[9px] font-bold tracking-tighter bg-yellow-400/10 text-yellow-400">DIAGNÓSTICOS</span>
+</td>
+</tr>
+<tr class="hover:bg-[#171717] transition-colors group cursor-pointer">
+<td class="px-6 py-4 text-[11px] font-mono text-primary/80">#RX-2932</td>
+<td class="px-6 py-4 text-[11px] text-primary">S. Vettel</td>
+<td class="px-6 py-4 text-[11px] font-bold text-primary">R$ 210</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-block px-2 py-1 text-[9px] font-bold tracking-tighter bg-green-400/10 text-green-400">CONCLUÍDO</span>
+</td>
+</tr>
+<tr class="hover:bg-[#171717] transition-colors group cursor-pointer">
+<td class="px-6 py-4 text-[11px] font-mono text-primary/80">#RX-2931</td>
+<td class="px-6 py-4 text-[11px] text-primary">M. Verstappen</td>
+<td class="px-6 py-4 text-[11px] font-bold text-primary">R$ 1.950</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-block px-2 py-1 text-[9px] font-bold tracking-tighter bg-red-400/10 text-red-400">EM ESPERA</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- INVENTORY STATUS CARD -->
+<div class="col-span-12 glass-panel p-8 grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="relative overflow-hidden group aspect-video lg:aspect-auto">
+<img alt="Estoque de peças industriais" class="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" data-alt="A hyper-realistic, low-key photograph of a high-performance automotive component warehouse. The scene is dominated by metallic racks and carbon fiber parts, lit by cold, surgical LED lights that create sharp highlights and deep shadows. The aesthetic is industrial and monochromatic, emphasizing precision and technical engineering in a dark, high-contrast paddock-style setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhKw2Kk9RmR3w24bY1lT5c05VXA6wEa1VvNhDveDJzk6UzYrwmuw7bUgMhlfnGVmhskW79Ow5ZHsoXsw_i1Q07uQ3e18dL1v2ldQG02khFYTqivRUo5HHXrpNBml6hH9-06A2z6dMoAMdD47-UfSWxHbnRrvaVoYJEKy-Wi5hHoeH5ieLb8s-UxLVdnkiR5bRfaeqWNI14dkrvThZVcZthXl8MIJk8IeBO6SKS7igJ523lqMyeVmXyIpxyeC65JxvSoJt5b7oinjMM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<div class="font-label-caps text-[10px] text-primary tracking-[0.3em]">ESTOQUE DE COMPONENTES</div>
+<div class="font-display-lg text-4xl text-primary">94% NOMINAL</div>
+</div>
+</div>
+<div class="flex flex-col justify-center space-y-6">
+<div class="flex items-center justify-between border-b border-white/5 pb-2">
+<span class="font-label-caps text-[11px] text-on-surface-variant">RESERVAS DE LUBRIFICANTES</span>
+<span class="font-mono text-primary">12.400L</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/5 pb-2">
+<span class="font-label-caps text-[11px] text-on-surface-variant">ESTOQUE DE PNEUS</span>
+<span class="font-mono text-primary">84 JOGOS</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/5 pb-2">
+<span class="font-label-caps text-[11px] text-on-surface-variant">CONJUNTOS DE FREIO</span>
+<span class="font-mono text-primary">32 UNIDADES</span>
+</div>
+</div>
+<div class="flex flex-col justify-center items-center glass-panel border-white/10 p-6 bg-white/[0.02]">
+<div class="text-[10px] font-label-caps text-on-surface-variant tracking-[0.2em] mb-4">PONTUAÇÃO DE OTIMIZAÇÃO</div>
+<div class="relative w-32 h-32">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 36 36">
+<path class="text-white/10" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-display-lg text-4xl">88</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FOOTER BAR -->
+<footer class="fixed bottom-0 right-0 left-[240px] border-t border-border-subtle bg-surface-main flex justify-between items-center px-8 h-9 z-50">
+<div class="flex items-center space-x-6">
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-tight">© 2024 REVIZZI CENTRO AUTOMOTIVO | NÚCLEO DE DESEMPENHO INDUSTRIAL</span>
+</div>
+<div id="footer-links" class="flex items-center space-x-6">
+<a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary transition-all" href="#">LOGS DO SISTEMA</a>
+<a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary transition-all" href="#">DOCS DA API</a>
+<a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary transition-all" href="#">SUPORTE</a>
+</div>
+</footer>
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const ORDERS = [
+    { id: '#RX-2941', client: 'M. Schumacher', total: 'R$ 1.250', status: 'CONCLUÍDO',    statusCls: 'bg-green-400/10 text-green-400',  services: ['Polimento Completo', 'Vitrificação'], date: '17/06/2025' },
+    { id: '#RX-2938', client: 'L. Hamilton',   total: 'R$ 840',   status: 'EM ANDAMENTO', statusCls: 'bg-blue-400/10 text-blue-400',    services: ['Lavagem Premium', 'Revisão de Fluidos'], date: '17/06/2025' },
+    { id: '#RX-2935', client: 'A. Senna',      total: 'R$ 4.520', status: 'DIAGNÓSTICOS', statusCls: 'bg-yellow-400/10 text-yellow-400', services: ['Diagnóstico Eletrônico', 'Alinhamento', 'Balanceamento'], date: '16/06/2025' },
+    { id: '#RX-2932', client: 'S. Vettel',     total: 'R$ 210',   status: 'CONCLUÍDO',    statusCls: 'bg-green-400/10 text-green-400',  services: ['Troca de Óleo'], date: '16/06/2025' },
+    { id: '#RX-2931', client: 'M. Verstappen', total: 'R$ 1.950', status: 'EM ESPERA',    statusCls: 'bg-red-400/10 text-red-400',      services: ['PPF Frontal', 'Polimento Faróis'], date: '15/06/2025' },
+];
+
+const CHART_DATA = {
+    '24H': [40, 65, 55, 85, 70, 92, 60, 45, 75, 80],
+    '7D':  [30, 50, 80, 45, 90, 60, 75, 88, 40, 65],
+};
+
+const NOTIFICATIONS = [
+    { icon: 'warning', color: 'text-yellow-400', title: 'Estoque Crítico', msg: 'Lubrificante 5W30 abaixo de 10%' },
+    { icon: 'check_circle', color: 'text-green-400', title: 'Pedido Concluído', msg: '#RX-2941 — M. Schumacher' },
+    { icon: 'schedule', color: 'text-blue-400', title: 'Agendamento', msg: 'A. Senna — 18/06 às 09:00' },
+];
+
+// ═══════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════
+function showToast(msg) {
+    let t = document.getElementById('os-toast');
+    if (!t) {
+        t = document.createElement('div');
+        t.id = 'os-toast';
+        t.style.cssText = 'position:fixed;bottom:56px;right:24px;z-index:9999;background:#222;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:12px 20px;font-size:11px;font-family:Inter,sans-serif;letter-spacing:0.08em;text-transform:uppercase;transition:opacity 0.3s;pointer-events:none;';
+        document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = '1';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.style.opacity = '0', 2500);
+}
+
+// ═══════════════════════════════════════════════════
+// SIDEBAR NAV
+// ═══════════════════════════════════════════════════
+function initSidebar() {
+    const links = document.querySelectorAll('#sidebar-nav a');
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            links.forEach(l => {
+                l.classList.remove('text-primary', 'border-r-2', 'border-primary', 'bg-surface-container-high', 'font-bold');
+                l.classList.add('text-on-surface-variant');
+            });
+            this.classList.add('text-primary', 'border-r-2', 'border-primary', 'bg-surface-container-high', 'font-bold');
+            this.classList.remove('text-on-surface-variant');
+            const section = this.dataset.section;
+            showToast('Módulo: ' + section);
+        });
+    });
+}
+
+// ═══════════════════════════════════════════════════
+// TOP TABS (Transmissão / Pit Wall / Relatórios)
+// ═══════════════════════════════════════════════════
+function initTopTabs() {
+    const tabs = document.querySelectorAll('#top-tabs a');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            tabs.forEach(t => {
+                t.classList.remove('text-primary', 'border-b-2', 'border-primary');
+                t.classList.add('text-on-surface-variant');
+            });
+            this.classList.add('text-primary', 'border-b-2', 'border-primary');
+            this.classList.remove('text-on-surface-variant');
+            showToast('Vista: ' + this.textContent.trim());
+        });
+    });
+}
+
+// ═══════════════════════════════════════════════════
+// CHART PERIOD TOGGLE
+// ═══════════════════════════════════════════════════
+function renderChart(period) {
+    const bars = document.querySelectorAll('#chart-bars > div');
+    const data = CHART_DATA[period];
+    bars.forEach((bar, i) => {
+        bar.style.transition = 'height 0.5s cubic-bezier(0.22,1,0.36,1)';
+        bar.style.height = data[i] + '%';
+    });
+    document.getElementById('chart-label').textContent = period === '24H' ? 'Últimas 24 horas' : 'Últimos 7 dias';
+}
+
+function initChartButtons() {
+    const btn24 = document.getElementById('btn-24h');
+    const btn7d = document.getElementById('btn-7d');
+
+    function setActive(active, inactive) {
+        active.classList.add('border-primary', 'text-primary');
+        active.classList.remove('border-border-subtle', 'text-on-surface-variant');
+        inactive.classList.add('border-border-subtle', 'text-on-surface-variant');
+        inactive.classList.remove('border-primary', 'text-primary');
+    }
+
+    btn24.addEventListener('click', () => { setActive(btn24, btn7d); renderChart('24H'); });
+    btn7d.addEventListener('click', () => { setActive(btn7d, btn24); renderChart('7D'); });
+}
+
+// ═══════════════════════════════════════════════════
+// ORDER MODAL
+// ═══════════════════════════════════════════════════
+function openOrderModal(order) {
+    let overlay = document.getElementById('order-modal-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'order-modal-overlay';
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;';
+        overlay.innerHTML = `
+        <div id="order-modal" style="background:#131313;border:1px solid rgba(255,255,255,0.1);min-width:380px;max-width:480px;width:90%;padding:0;font-family:Inter,sans-serif;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                <span id="modal-id" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.05em;color:#fff;"></span>
+                <button id="modal-close" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:20px;line-height:1;" class="material-symbols-outlined">close</button>
+            </div>
+            <div style="padding:24px;" id="modal-body"></div>
+        </div>`;
+        document.body.appendChild(overlay);
+        document.getElementById('modal-close').addEventListener('click', () => overlay.style.display = 'none');
+        overlay.addEventListener('click', e => { if (e.target === overlay) overlay.style.display = 'none'; });
+    }
+
+    document.getElementById('modal-id').textContent = order.id;
+    document.getElementById('modal-body').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div>
+                <div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Cliente</div>
+                <div style="color:#fff;font-size:14px;font-weight:600;">${order.client}</div>
+            </div>
+            <div>
+                <div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Data</div>
+                <div style="color:#fff;font-size:14px;">${order.date}</div>
+            </div>
+            <div>
+                <div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Total</div>
+                <div style="color:#fff;font-size:18px;font-weight:700;">${order.total}</div>
+            </div>
+            <div>
+                <div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Status</div>
+                <span style="display:inline-block;padding:4px 8px;font-size:9px;font-weight:700;letter-spacing:0.05em;" class="${order.statusCls}">${order.status}</span>
+            </div>
+        </div>
+        <div>
+            <div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:10px;">Serviços</div>
+            ${order.services.map(s => `<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:rgba(255,255,255,0.8);">— ${s}</div>`).join('')}
+        </div>
+        <button onclick="document.getElementById('order-modal-overlay').style.display='none';showToast('Pedido ${order.id} atualizado!')"
+            style="margin-top:20px;width:100%;background:#fff;color:#000;border:none;padding:12px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">
+            MARCAR COMO CONCLUÍDO →
+        </button>`;
+
+    overlay.style.display = 'flex';
+}
+
+function initOrderTable() {
+    document.querySelectorAll('#orders-table tbody tr').forEach((row, i) => {
+        row.addEventListener('click', () => openOrderModal(ORDERS[i]));
+    });
+}
+
+// ═══════════════════════════════════════════════════
+// NOTIFICATIONS PANEL
+// ═══════════════════════════════════════════════════
+function initNotifications() {
+    const btn = document.getElementById('btn-notifications');
+    let panel = null;
+
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (panel && panel.isConnected) { panel.remove(); panel = null; return; }
+        panel = document.createElement('div');
+        panel.style.cssText = 'position:fixed;top:64px;right:24px;z-index:300;background:#131313;border:1px solid rgba(255,255,255,0.1);width:300px;font-family:Inter,sans-serif;';
+        panel.innerHTML = `
+            <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.08);font-size:10px;letter-spacing:0.15em;color:rgba(255,255,255,0.5);text-transform:uppercase;">Alertas do Sistema</div>
+            ${NOTIFICATIONS.map(n => `
+            <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;gap:12px;align-items:flex-start;cursor:pointer;" class="notif-item">
+                <span class="material-symbols-outlined ${n.color}" style="font-size:18px;flex-shrink:0;">${n.icon}</span>
+                <div>
+                    <div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">${n.title}</div>
+                    <div style="font-size:10px;color:rgba(255,255,255,0.4);">${n.msg}</div>
+                </div>
+            </div>`).join('')}
+            <div style="padding:10px 16px;text-align:center;">
+                <span style="font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.3);text-transform:uppercase;cursor:pointer;" id="clear-notifs">Limpar todos</span>
+            </div>`;
+        document.body.appendChild(panel);
+        panel.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', () => { item.style.opacity='0.3'; });
+        });
+        document.getElementById('clear-notifs').addEventListener('click', () => { panel.remove(); panel = null; showToast('Alertas limpos'); });
+        document.addEventListener('click', function handler(e) {
+            if (panel && !panel.contains(e.target) && e.target !== btn) { panel.remove(); panel = null; document.removeEventListener('click', handler); }
+        });
+    });
+}
+
+// ═══════════════════════════════════════════════════
+// PROFILE DROPDOWN
+// ═══════════════════════════════════════════════════
+function initProfile() {
+    const btn = document.getElementById('btn-profile');
+    let menu = null;
+
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (menu && menu.isConnected) { menu.remove(); menu = null; return; }
+        menu = document.createElement('div');
+        menu.style.cssText = 'position:fixed;top:64px;right:24px;z-index:300;background:#131313;border:1px solid rgba(255,255,255,0.1);width:200px;font-family:Inter,sans-serif;';
+        const items = [
+            { icon: 'person', label: 'Meu Perfil' },
+            { icon: 'settings', label: 'Configurações' },
+            { icon: 'help', label: 'Suporte' },
+            { icon: 'logout', label: 'Sair', action: () => { showToast('Sessão encerrada'); } },
+        ];
+        menu.innerHTML = `
+            <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                <div style="font-size:12px;font-weight:600;color:#fff;">Administrador</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.4);">admin@revizzi.com.br</div>
+            </div>
+            ${items.map((item, i) => `
+            <div data-menu-idx="${i}" style="padding:12px 16px;display:flex;gap:10px;align-items:center;cursor:pointer;font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.05em;text-transform:uppercase;transition:background 0.15s;" 
+                onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background=''">
+                <span class="material-symbols-outlined" style="font-size:16px;">${item.icon}</span>${item.label}
+            </div>`).join('')}`;
+        document.body.appendChild(menu);
+        menu.querySelectorAll('[data-menu-idx]').forEach(el => {
+            el.addEventListener('click', () => {
+                const item = items[el.dataset.menuIdx];
+                if (item.action) item.action();
+                else showToast(item.label);
+                menu.remove(); menu = null;
+            });
+        });
+        document.addEventListener('click', function handler(e) {
+            if (menu && !menu.contains(e.target) && e.target !== btn) { menu.remove(); menu = null; document.removeEventListener('click', handler); }
+        });
+    });
+}
+
+// ═══════════════════════════════════════════════════
+// VIN SEARCH
+// ═══════════════════════════════════════════════════
+function initSearch() {
+    const input = document.getElementById('vin-search');
+    input.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter') return;
+        const q = this.value.trim().toUpperCase();
+        if (!q) return;
+        const found = ORDERS.find(o => o.id.includes(q) || o.client.toUpperCase().includes(q));
+        if (found) openOrderModal(found);
+        else showToast('Nenhum resultado: ' + q);
+    });
+}
+
+// ═══════════════════════════════════════════════════
+// FOOTER LINKS
+// ═══════════════════════════════════════════════════
+function initFooter() {
+    document.querySelectorAll('#footer-links a').forEach(link => {
+        link.addEventListener('click', e => { e.preventDefault(); showToast(link.textContent.trim()); });
+    });
+}
+
+// ═══════════════════════════════════════════════════
+// KPI CARD HOVER + CLICK
+// ═══════════════════════════════════════════════════
+function initKPI() {
+    document.querySelectorAll('.glass-panel').forEach(card => {
+        card.addEventListener('mouseenter', () => card.style.borderColor = 'rgba(255,255,255,0.25)');
+        card.addEventListener('mouseleave', () => card.style.borderColor = 'rgba(255,255,255,0.08)');
+    });
+    document.querySelectorAll('.kpi-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => showToast(card.dataset.kpi));
+    });
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    initSidebar();
+    initTopTabs();
+    initChartButtons();
+    initOrderTable();
+    initNotifications();
+    initProfile();
+    initSearch();
+    initFooter();
+    initKPI();
+});
+</script>
+</body></html>
