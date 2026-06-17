@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "node server.mjs",
-    "build": "node build.mjs",
+    "dev": "node local-dev-server.mjs",
+    
     "build:admin": "cd revizzi-os && npm run build",
     "dev:admin": "cd revizzi-os && npm run dev"
   }
