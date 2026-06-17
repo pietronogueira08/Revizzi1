@@ -519,7 +519,7 @@ async function fetchOrders() {
 }
 
 function printCorreiosLabel(orderId) {
-    const order = ORDERS.find(o => o.id === orderId);
+    const order = window._OS_ORDERS.find(o => o.id === orderId);
     if (!order) return;
 
     let printArea = document.getElementById('correios-print-area');
