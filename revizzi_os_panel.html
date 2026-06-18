@@ -349,11 +349,14 @@
         <h2 class="font-headline-lg text-primary uppercase text-xl mb-6">Hero Section</h2>
         <div class="space-y-5">
           <div>
-            <label class="text-[10px] font-label-caps text-white uppercase tracking-widest block mb-2">URL da Imagem da Hero Section</label>
-            <input id="hero-img-url" type="text" placeholder="Ex: Um_carro_gol_g6_preto_202606181209.jpeg" class="w-full bg-surface-main border border-white/10 px-4 py-3 text-[11px] font-label-caps text-primary placeholder:text-on-surface-variant/30 focus:border-white/40 focus:outline-none tracking-widest">
-            <p class="text-[10px] text-on-surface-variant mt-2">Dica: Você pode usar uma URL da web ou o nome de um arquivo local na pasta do projeto.</p>
+            <label class="text-[10px] font-label-caps text-white uppercase tracking-widest block mb-2">Upload Múltiplo de Imagens (Hero Section)</label>
+            <input id="hero-img-upload" type="file" multiple accept="image/*" class="w-full bg-surface-main border border-white/10 px-4 py-3 text-[11px] font-label-caps text-primary placeholder:text-on-surface-variant/30 focus:border-white/40 focus:outline-none tracking-widest cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-primary/20 file:text-primary hover:file:bg-primary/30">
+            <p class="text-[10px] text-on-surface-variant mt-2">Dica: Selecione várias imagens (máx 20MB cada) para criar um carrossel dinâmico.</p>
           </div>
-          <button onclick="saveHeroImage()" class="w-full bg-white text-black font-label-caps text-[11px] uppercase tracking-widest py-3 hover:bg-white/80 transition-colors">Salvar Imagem</button>
+          <div class="flex gap-4">
+            <button onclick="saveHeroImage()" id="btn-save-hero" class="flex-1 bg-white text-black font-label-caps text-[11px] uppercase tracking-widest py-3 hover:bg-white/80 transition-colors">Salvar Imagens</button>
+            <button onclick="removeHeroImage()" class="bg-red-500/20 text-red-500 hover:bg-red-500/30 border border-red-500/30 px-6 font-label-caps text-[11px] uppercase tracking-widest transition-colors">Remover Tudo</button>
+          </div>
         </div>
       </div>
     </div>
@@ -361,16 +364,59 @@
 
   <script>
     async function saveHeroImage() {
-        const url = document.getElementById('hero-img-url').value;
-        if (url) {
-            const { error } = await db.from('site_settings').upsert({ id: 'custom_hero_image', value: url });
-            if (error) showToast('Erro ao salvar no banco!');
-            else showToast('Imagem da Hero Section salva!');
+        const fileInput = document.getElementById('hero-img-upload');
+        const files = fileInput.files;
+        const btn = document.getElementById('btn-save-hero');
+        
+        if (files.length > 0) {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin inline-block align-middle mr-2">refresh</span>Enviando...';
+            btn.disabled = true;
+            
+            showToast('Fazendo upload das imagens... Aguarde.');
+            const imageUrls = [];
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.size > 20 * 1024 * 1024) {
+                    showToast(`Erro: Arquivo ${file.name} maior que 20MB`);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+                
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}_${i}.${fileExt}`;
+                const { data, error } = await supabaseClient.storage.from('hero-images').upload(fileName, file);
+                
+                if (error) {
+                    console.error(error);
+                    showToast(`Erro ao enviar ${file.name}`);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+                
+                const { data: { publicUrl } } = supabaseClient.storage.from('hero-images').getPublicUrl(fileName);
+                imageUrls.push(publicUrl);
+            }
+            
+            const { error: dbError } = await db.from('site_settings').upsert({ id: 'custom_hero_image', value: JSON.stringify(imageUrls) });
+            if (dbError) showToast('Erro ao salvar URLs no banco!');
+            else showToast('Hero Section atualizada com sucesso!');
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            fileInput.value = ''; // clear input
         } else {
-            const { error } = await db.from('site_settings').delete().eq('id', 'custom_hero_image');
-            if (error) showToast('Erro ao remover no banco!');
-            else showToast('Imagem da Hero Section removida. Usando padrão.');
+            showToast('Nenhuma imagem selecionada.');
         }
+    }
+    
+    async function removeHeroImage() {
+        const { error } = await db.from('site_settings').delete().eq('id', 'custom_hero_image');
+        if (error) showToast('Erro ao remover no banco!');
+        else showToast('Imagens removidas. Usando o padrão da loja.');
     }
     
     document.addEventListener('DOMContentLoaded', async () => {
