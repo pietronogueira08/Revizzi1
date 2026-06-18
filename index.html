@@ -344,6 +344,13 @@
             button, select, input { min-height: 44px !important; }
             .material-symbols-outlined { font-size: 24px !important; }
         }
+        /* Instagram Hover */
+        .hover-insta:hover svg { fill: url(#ig-grad); }
+        .hover-insta:hover span {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
 <body class="selection:bg-primary selection:text-surface-main">
@@ -367,7 +374,7 @@
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-destaque">Produtos</a>
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-catalogo">Catálogo</a>
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Localização</a>
-<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Rede Social</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="https://www.instagram.com/revizzisjb/" target="_blank">Rede Social</a>
 </div>
 <div class="flex items-center gap-6">
 <div class="relative flex items-center transition-all duration-300 w-8 focus-within:w-48 overflow-hidden group">
@@ -428,7 +435,7 @@
 <div class="reveal flex-1 flex flex-col items-center gap-4 p-6 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.05s" data-cat="Equipamentos"><span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">hardware</span><span class="font-label-caps text-[10px] uppercase text-center">Equipamentos</span></div>
 <div class="reveal flex-1 flex flex-col items-center gap-4 p-6 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.1s" data-cat="Acessórios"><span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">settings_input_component</span><span class="font-label-caps text-[10px] uppercase text-center">Acessórios</span></div>
 <div class="reveal flex-1 flex flex-col items-center gap-4 p-6 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.15s" data-cat="Motos"><span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">two_wheeler</span><span class="font-label-caps text-[10px] uppercase text-center">Motos</span></div>
-<div class="reveal flex-1 flex flex-col items-center gap-4 p-6 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.2s" data-cat="Desengraxantes e desencrustrantes"><span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">cleaning_services</span><span class="font-label-caps text-[10px] uppercase text-center">Desengraxantes e desencrustrantes</span></div>
+<div class="reveal flex-1 flex flex-col items-center gap-4 p-6 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.2s" data-cat="Desengraxantes e desincrustantes"><span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">cleaning_services</span><span class="font-label-caps text-[10px] uppercase text-center">Desengraxantes e desincrustantes</span></div>
 <div class="reveal flex-1 flex flex-col items-center gap-4 p-6 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.25s" data-cat="Aplicadores"><span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">back_hand</span><span class="font-label-caps text-[10px] uppercase text-center">Aplicadores</span></div>
 <div class="reveal flex-1 flex flex-col items-center gap-4 p-6 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.3s" data-cat="Escovas e pincéis"><span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">brush</span><span class="font-label-caps text-[10px] uppercase text-center">Escovas e pincéis</span></div>
 <div class="reveal flex-1 flex flex-col items-center gap-4 p-6 border border-white/5 hover:border-white/20 transition-all group cursor-pointer cat-filter-btn" style="transition-delay:0.35s" data-cat="Toalhas"><span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">dry_cleaning</span><span class="font-label-caps text-[10px] uppercase text-center">Toalhas</span></div>
@@ -847,9 +854,20 @@
 </a>
 <p class="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed">O arsenal de alta performance para quem exige a perfeição em cada detalhe.</p>
 <div class="flex gap-4 mt-6">
-<a class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors" href="https://www.instagram.com/revizzisjb/" target="_blank">
-  <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-  <span class="font-label-caps uppercase text-sm">Siga-nos</span>
+<a class="flex items-center gap-2 text-on-surface-variant transition-colors hover-insta" href="https://www.instagram.com/revizzisjb/" target="_blank">
+  <svg class="w-6 h-6 fill-current transition-all" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#f09433" />
+        <stop offset="25%" stop-color="#e6683c" />
+        <stop offset="50%" stop-color="#dc2743" />
+        <stop offset="75%" stop-color="#cc2366" />
+        <stop offset="100%" stop-color="#bc1888" />
+      </linearGradient>
+    </defs>
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+  </svg>
+  <span class="font-label-caps uppercase text-sm transition-all">Siga-nos</span>
 </a>
 </div>
 </div>
@@ -859,7 +877,7 @@
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-destaque">Produtos</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-catalogo">Catálogo</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-contato">Localização</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-contato">Rede Social</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="https://www.instagram.com/revizzisjb/" target="_blank">Rede Social</a>
 </div>
 </div>
 <div class="flex flex-col gap-6">
@@ -869,7 +887,7 @@
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cat-filter-btn" data-cat="Equipamentos" href="#section-categorias">Equipamentos</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cat-filter-btn" data-cat="Acessórios" href="#section-categorias">Acessórios</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cat-filter-btn" data-cat="Motos" href="#section-categorias">Motos</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cat-filter-btn" data-cat="Desengraxantes" href="#section-categorias">Desengraxantes</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cat-filter-btn" data-cat="Desengraxantes e desincrustantes" href="#section-categorias">Desengraxantes e desincrustantes</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cat-filter-btn" data-cat="Aplicadores" href="#section-categorias">Aplicadores</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cat-filter-btn" data-cat="Escovas e pincéis" href="#section-categorias">Escovas e pincéis</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors cat-filter-btn" data-cat="Toalhas" href="#section-categorias">Toalhas</a>
@@ -1243,7 +1261,7 @@ function renderFilterGrid() {
 
 function buildFilterCheckboxes() {
     const dynamicCategories = PRODUCTS.map(p => p.category);
-    const standardCategories = ["Polimento", "Equipamentos", "Acessórios", "Motos", "Desengraxantes e desencrustrantes", "Aplicadores", "Escovas e pincéis", "Toalhas", "Ceras", "Pneus e rodas", "Couro", "Lava auto", "Plásticos", "Específicos", "Vidros", "Aromatizantes"];
+    const standardCategories = ["Polimento", "Equipamentos", "Acessórios", "Motos", "Desengraxantes e desincrustantes", "Aplicadores", "Escovas e pincéis", "Toalhas", "Ceras", "Pneus e rodas", "Couro", "Lava auto", "Plásticos", "Específicos", "Vidros", "Aromatizantes"];
     const categories = [...new Set([...standardCategories, ...dynamicCategories])];
     const brands = ["Vintex", "Razux", "Zacs", "Soft 99", "Cadillac", "Magil Clean", "Jaça", "Little theee", "Nação Detail", "Auto América", "Kers", "Lincoln", "SGT Tools sigma", "Mothers", "Menzerna"];
     const cbHtml = (value, cls) =>
