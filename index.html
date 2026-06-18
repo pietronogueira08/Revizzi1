@@ -249,6 +249,87 @@
 
         /* Select arrow */
         select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+        
+        /* ── MOBILE RESPONSIVENESS OVERHAUL ── */
+        @media (max-width: 768px) {
+            /* 1. Tipografia e Espaçamentos globais */
+            section { padding: 60px 20px !important; }
+            .py-section-padding { padding-top: 60px !important; padding-bottom: 60px !important; }
+            .px-margin-desktop { padding-left: 20px !important; padding-right: 20px !important; }
+            .font-headline-display { font-size: 2.5rem !important; line-height: 1.1 !important; }
+            .font-headline-xl { font-size: 1.8rem !important; }
+            
+            /* 2. Header e Navegação */
+            .custom-mobile-nav { padding-top: 12px !important; padding-bottom: 12px !important; }
+            .mobile-hamburger { display: block !important; }
+            .nav-link-container { display: none !important; }
+            .custom-mobile-logo-wrap { position: absolute; left: 50%; transform: translateX(-50%); }
+            .custom-mobile-logo-wrap img { height: 48px !important; width: 48px !important; }
+            .custom-mobile-brand { font-size: 1.25rem !important; }
+            
+            /* 3. Hero Section */
+            #inicio { 
+                padding: 100px 20px 60px !important; 
+                align-items: center !important; 
+                text-align: center !important; 
+            }
+            #inicio h1 { width: 100% !important; }
+            #inicio .flex-row { flex-direction: column !important; width: 100%; gap: 16px !important; }
+            #inicio .flex-row a, #inicio .flex-row button { 
+                width: 100% !important; 
+                min-height: 48px !important; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center; 
+            }
+
+            /* 4. Grids (Categorias e Produtos) */
+            /* Categorias: Horizontal Swipe */
+            #section-categorias .grid { 
+                display: flex !important; 
+                flex-wrap: nowrap !important; 
+                overflow-x: auto !important; 
+                scroll-snap-type: x mandatory !important; 
+                gap: 16px !important;
+                padding-bottom: 24px !important;
+            }
+            #section-categorias .grid::-webkit-scrollbar { display: none; }
+            #section-categorias .grid > div {
+                flex: 0 0 75% !important;
+                scroll-snap-align: start;
+            }
+            
+            /* Produtos: 2 colunas compactas */
+            #featured-grid, #filter-products-grid, .related-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+            #featured-grid > div, #filter-products-grid > div, .related-grid > div {
+                min-width: 0;
+            }
+            /* Ajuste de espaçamento interno nos cards para 2 colunas */
+            #featured-grid .p-6, #filter-products-grid .p-6, .related-grid .p-6 {
+                padding: 12px !important;
+            }
+            
+            /* Ajuste de tipografia nos cards para 2 colunas */
+            #featured-grid h3, #filter-products-grid h3, .related-grid h3 {
+                font-size: 11px !important;
+                margin-bottom: 8px !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
+                overflow: hidden !important;
+            }
+            #featured-grid .text-price-display, #filter-products-grid .text-price-display, .related-grid .text-price-display {
+                font-size: 16px !important;
+                margin-bottom: 12px !important;
+            }
+            
+            /* 5. Área de Toque */
+            button, select, input { min-height: 44px !important; }
+            .material-symbols-outlined { font-size: 24px !important; }
+        }
     </style>
 </head>
 <body class="selection:bg-primary selection:text-surface-main">
@@ -257,15 +338,16 @@
 <div class="hidden" aria-hidden="true">bg-error text-on-error bg-primary text-surface-main border-white/40 translate-x-0 opacity-0 opacity-100 step-circle bg-white/20 border-white/60</div>
 
 <!-- Section 1: Sticky TopNavBar -->
-<header class="fixed top-0 w-full z-50 bg-surface-main/80 backdrop-blur-md border-b border-border-subtle">
-<nav class="flex justify-between items-center px-margin-desktop py-4 w-full max-w-[1920px] mx-auto">
-<div class="flex items-center gap-4">
+<header class="fixed top-0 w-full z-50 bg-surface-main/80 backdrop-blur-md border-b border-border-subtle custom-mobile-header">
+<nav class="flex justify-between items-center px-margin-desktop py-4 w-full max-w-[1920px] mx-auto custom-mobile-nav">
+<button class="mobile-hamburger hidden material-symbols-outlined text-primary hover:opacity-80 transition-opacity">menu</button>
+<div class="flex items-center gap-4 custom-mobile-logo-wrap">
 <a class="flex items-center space-x-3 shrink-0 group" href="#">
 <img alt="REVIZZI Logo" class="h-16 w-16 md:h-24 md:w-24 object-contain group-hover:scale-105 transition-transform" src="imagem_2026-06-17_163850035-removebg-preview.png"/>
 </a>
-<span class="font-headline-lg text-headline-lg text-primary tracking-widest">REVIZZI</span>
+<span class="font-headline-lg text-headline-lg text-primary tracking-widest custom-mobile-brand">REVIZZI</span>
 </div>
-<div class="hidden md:flex items-center gap-8">
+<div class="hidden md:flex items-center gap-8 nav-link-container">
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-destaque">Produtos</a>
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-categorias">Estética</a>
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-catalogo">Catálogo</a>
