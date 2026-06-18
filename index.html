@@ -1665,18 +1665,20 @@ async function fetchTestimonialsFromSupabase() {
 let currentHeroSlide = 0;
 let heroSlideInterval;
 
-function initHeroCarousel() {
-    const customHeroImage = localStorage.getItem('custom_hero_image');
-    if (customHeroImage) {
-        const carousel = document.getElementById('hero-carousel');
-        if (carousel) {
-            carousel.innerHTML = `
-              <div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100">
-                <img class="w-full h-full object-cover object-center" src="${customHeroImage}" alt="Hero"/>
-              </div>
-            `;
+async function initHeroCarousel() {
+    try {
+        const { data, error } = await supabaseClient.from('site_settings').select('value').eq('id', 'custom_hero_image').single();
+        if (data && data.value) {
+            const carousel = document.getElementById('hero-carousel');
+            if (carousel) {
+                carousel.innerHTML = `
+                  <div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100">
+                    <img class="w-full h-full object-cover object-center" src="${data.value}" alt="Hero"/>
+                  </div>
+                `;
+            }
         }
-    }
+    } catch (e) { console.error("Erro carregando hero customizada", e); }
 
     const slides = document.querySelectorAll('.carousel-item');
     if (slides.length === 0) return;

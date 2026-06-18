@@ -343,23 +343,27 @@
   </div>
 
   <script>
-    function saveHeroImage() {
+    async function saveHeroImage() {
         const url = document.getElementById('hero-img-url').value;
         if (url) {
-            localStorage.setItem('custom_hero_image', url);
-            showToast('Imagem da Hero Section salva!');
+            const { error } = await db.from('site_settings').upsert({ id: 'custom_hero_image', value: url });
+            if (error) showToast('Erro ao salvar no banco!');
+            else showToast('Imagem da Hero Section salva!');
         } else {
-            localStorage.removeItem('custom_hero_image');
-            showToast('Imagem da Hero Section removida. Usando padrão.');
+            const { error } = await db.from('site_settings').delete().eq('id', 'custom_hero_image');
+            if (error) showToast('Erro ao remover no banco!');
+            else showToast('Imagem da Hero Section removida. Usando padrão.');
         }
     }
     
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedImg = localStorage.getItem('custom_hero_image');
-        if (savedImg) {
-            const input = document.getElementById('hero-img-url');
-            if (input) input.value = savedImg;
-        }
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const { data } = await db.from('site_settings').select('value').eq('id', 'custom_hero_image').single();
+            if (data && data.value) {
+                const input = document.getElementById('hero-img-url');
+                if (input) input.value = data.value;
+            }
+        } catch(e) {}
     });
   </script>
 
