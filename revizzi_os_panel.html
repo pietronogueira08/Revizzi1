@@ -108,6 +108,10 @@
 <span class="material-symbols-outlined mr-3 text-xl">settings</span>
 <span class="font-label-caps uppercase tracking-widest text-[11px]">Configurações</span>
 </a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Customização">
+<span class="material-symbols-outlined mr-3 text-xl">palette</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Customização</span>
+</a>
 </nav>
 <div class="mt-auto px-6 pt-4 border-t border-border-subtle">
 <div class="flex items-center space-x-2 text-[10px] font-label-caps text-primary/40">
@@ -316,6 +320,48 @@
       </div>
     </div>
   </div>
+
+  <!-- ══════════════════ CUSTOMIZAÇÃO ══════════════════ -->
+  <div id="section-Customização" class="section-view">
+    <div class="mb-8">
+      <h1 class="font-headline-xl text-primary uppercase">Customização do Site</h1>
+      <p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Gerencie as imagens e a aparência da vitrine (Hero Section)</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="glass-panel p-8">
+        <h2 class="font-headline-lg text-primary uppercase text-xl mb-6">Hero Section</h2>
+        <div class="space-y-5">
+          <div>
+            <label class="text-[10px] font-label-caps text-white uppercase tracking-widest block mb-2">URL da Imagem da Hero Section</label>
+            <input id="hero-img-url" type="text" placeholder="Ex: Um_carro_gol_g6_preto_202606181209.jpeg" class="w-full bg-surface-main border border-white/10 px-4 py-3 text-[11px] font-label-caps text-primary placeholder:text-on-surface-variant/30 focus:border-white/40 focus:outline-none tracking-widest">
+            <p class="text-[10px] text-on-surface-variant mt-2">Dica: Você pode usar uma URL da web ou o nome de um arquivo local na pasta do projeto.</p>
+          </div>
+          <button onclick="saveHeroImage()" class="w-full bg-white text-black font-label-caps text-[11px] uppercase tracking-widest py-3 hover:bg-white/80 transition-colors">Salvar Imagem</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function saveHeroImage() {
+        const url = document.getElementById('hero-img-url').value;
+        if (url) {
+            localStorage.setItem('custom_hero_image', url);
+            showToast('Imagem da Hero Section salva!');
+        } else {
+            localStorage.removeItem('custom_hero_image');
+            showToast('Imagem da Hero Section removida. Usando padrão.');
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedImg = localStorage.getItem('custom_hero_image');
+        if (savedImg) {
+            const input = document.getElementById('hero-img-url');
+            if (input) input.value = savedImg;
+        }
+    });
+  </script>
 
 </main>
 <!-- FOOTER BAR -->
