@@ -395,7 +395,7 @@
 <!-- Hero Carousel Background -->
 <div id="hero-carousel" class="absolute inset-0 w-full h-full z-0">
   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100">
-    <img class="w-full h-full object-cover object-center" src="Coloque_uma_mercedez_amg_gt_202606181411.jpeg" alt="Hero"/>
+    <img class="w-full h-full object-cover object-[center_10%]" src="Coloque_uma_mercedez_amg_gt_202606181411.jpeg" alt="Hero"/>
   </div>
 </div>
 
@@ -1811,7 +1811,7 @@ async function initHeroCarousel() {
             if (carousel && urls.length > 0) {
                 carousel.innerHTML = urls.map((url, index) => `
                   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}">
-                    <img class="w-full h-full object-cover object-center" src="${url}" alt="Hero ${index}"/>
+                    <img class="w-full h-full object-cover object-[center_10%]" src="${url}" alt="Hero ${index}"/>
                   </div>
                 `).join('');
             }
