@@ -7,6 +7,7 @@
 <link rel="icon" type="image/jpeg" href="/imagem_2026-06-17_163850035-removebg-preview.png"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
@@ -236,9 +237,13 @@
 
   <!-- ══════════════════ ESTOQUE ══════════════════ -->
   <div id="section-Estoque" class="section-view">
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
       <div><h1 class="font-headline-xl text-primary uppercase">Estoque</h1><p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Gestão de inventário e produtos automotivos</p></div>
-      <button onclick="openProductModal()" class="flex items-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">add</span>Adicionar Item</button>
+      <div class="flex gap-4">
+        <input type="file" id="import-excel-input" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleExcelImport(event)">
+        <button id="btn-import-excel" onclick="document.getElementById('import-excel-input').click()" class="flex items-center justify-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all text-primary"><span class="material-symbols-outlined text-sm">upload_file</span>Importar Planilha</button>
+        <button onclick="openProductModal()" class="flex items-center justify-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">add</span>Adicionar Item</button>
+      </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       <div class="glass-panel p-6"><div class="text-[10px] font-label-caps text-white uppercase tracking-tighter mb-2">Total de SKUs</div><div class="font-display-lg text-3xl text-primary">0</div><div class="text-[10px] text-white/70 font-label-caps uppercase mt-1">— Aguardando cadastro</div></div>
@@ -1087,5 +1092,93 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#section-Estoque button[onclick]') && null;
     const addBtn = document.querySelector('#section-Estoque header button, #section-Estoque .flex.items-center.justify-between.mb-8 button');
 });
+
+async function handleExcelImport(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    event.target.value = ''; // reset
+
+    const btn = document.getElementById('btn-import-excel');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span>Importando...';
+    btn.disabled = true;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+            let currentCategory = 'Sem Categoria';
+            const productsToInsert = [];
+
+            for (let i = 0; i < json.length; i++) {
+                const row = json[i];
+                if (!row || row.length === 0) continue;
+
+                const col0 = row[0] ? String(row[0]).trim() : '';
+                const col1 = row[1] ? String(row[1]).trim() : '';
+
+                if (col0.toLowerCase().includes('referência') && col1.toLowerCase().includes('produto')) {
+                    continue;
+                }
+
+                if (col0 && !col1 && !row[2] && !row[3] && !row[4]) {
+                    currentCategory = col0;
+                    continue;
+                }
+
+                if (col0 && col1) {
+                    const reference = col0;
+                    const title = col1;
+                    const brand = row[2] ? String(row[2]).trim() : '';
+                    
+                    let priceRaw = row[3] ? String(row[3]) : '0';
+                    priceRaw = priceRaw.replace('R$', '').replace(' ', '');
+                    if (priceRaw.includes(',')) {
+                        priceRaw = priceRaw.replace(/\./g, '').replace(',', '.');
+                    }
+                    const price = parseFloat(priceRaw) || 0;
+
+                    const description = row[4] ? String(row[4]).trim() : '';
+                    const image = row[5] ? String(row[5]).trim() : '';
+
+                    const finalTitle = brand ? `[${brand}] ${title}` : title;
+                    const finalDesc = description ? `Ref: ${reference}\n${description}` : `Ref: ${reference}`;
+
+                    productsToInsert.push({
+                        title: finalTitle,
+                        description: finalDesc,
+                        price: price,
+                        category: currentCategory,
+                        image: image
+                    });
+                }
+            }
+
+            if (productsToInsert.length > 0) {
+                const { error } = await supabaseClient.from('products').insert(productsToInsert);
+                if (error) throw error;
+                
+                alert(`${productsToInsert.length} produtos importados com sucesso!`);
+                await fetchEstoqueProducts();
+            } else {
+                alert("Nenhum produto encontrado na planilha.");
+            }
+        } catch (error) {
+            console.error("Erro importando excel:", error);
+            alert("Erro ao importar a planilha. Verifique o formato do arquivo.");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    };
+    reader.readAsArrayBuffer(file);
+}
+
 </script>
 </body></html>
