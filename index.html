@@ -365,9 +365,9 @@
 </div>
 <div class="hidden md:flex items-center gap-8 nav-link-container">
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-destaque">Produtos</a>
-<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-categorias">Estética</a>
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-catalogo">Catálogo</a>
-<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Contato</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Localização</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Rede Social</a>
 </div>
 <div class="flex items-center gap-6">
 <div class="relative flex items-center transition-all duration-300 w-8 focus-within:w-48 overflow-hidden group">
@@ -391,11 +391,11 @@
 </section>
 
 <!-- Section 2: Hero Section -->
-<section id="section-hero" class="relative aspect-[4/3] md:aspect-auto md:h-[calc(100vh-156px)] w-full overflow-hidden flex items-center bg-surface-main group/hero">
+<section id="section-hero" class="relative w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden flex items-center bg-surface-main group/hero">
 <!-- Hero Carousel Background -->
 <div id="hero-carousel" class="absolute inset-0 w-full h-full z-0">
   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100">
-    <img class="w-full h-full object-cover object-[center_10%]" src="Coloque_uma_mercedez_amg_gt_202606181411.jpeg" alt="Hero"/>
+    <img class="w-full h-full object-cover object-center" src="Coloque_uma_mercedez_amg_gt_202606181411.jpeg" alt="Hero"/>
   </div>
 </div>
 
@@ -857,9 +857,9 @@
 <h4 class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Navegação</h4>
 <div class="flex flex-col gap-3">
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-destaque">Produtos</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-categorias">Estética</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-catalogo">Catálogo</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-contato">Contato</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-contato">Localização</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-contato">Rede Social</a>
 </div>
 </div>
 <div class="flex flex-col gap-6">
@@ -1811,7 +1811,7 @@ async function initHeroCarousel() {
             if (carousel && urls.length > 0) {
                 carousel.innerHTML = urls.map((url, index) => `
                   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}">
-                    <img class="w-full h-full object-cover object-[center_10%]" src="${url}" alt="Hero ${index}"/>
+                    <img class="w-full h-full object-cover object-center" src="${url}" alt="Hero ${index}"/>
                   </div>
                 `).join('');
             }
