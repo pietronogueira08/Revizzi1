@@ -277,7 +277,7 @@
                 align-items: flex-start !important;
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
             }
-            .custom-mobile-logo-wrap { position: absolute; left: 50%; transform: translateX(-50%); }
+            /* Removed absolute centering to keep logo near hamburger */
             .custom-mobile-logo-wrap img { height: 48px !important; width: 48px !important; }
             .custom-mobile-brand { font-size: 1.25rem !important; }
             
@@ -354,12 +354,14 @@
 <!-- Section 1: Sticky TopNavBar -->
 <header class="fixed top-0 w-full z-50 bg-surface-main/80 backdrop-blur-md border-b border-border-subtle custom-mobile-header">
 <nav class="flex justify-between items-center px-margin-desktop py-2 w-full max-w-[1920px] mx-auto custom-mobile-nav">
+<div class="flex items-center gap-4">
 <button class="mobile-hamburger hidden material-symbols-outlined text-primary hover:opacity-80 transition-opacity">menu</button>
 <div class="flex items-center gap-4 custom-mobile-logo-wrap">
 <a class="flex items-center space-x-3 shrink-0 group" href="#">
 <img alt="REVIZZI Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain group-hover:scale-105 transition-transform" src="imagem_2026-06-17_163850035-removebg-preview.png"/>
 </a>
 <span class="font-headline-lg text-headline-lg text-primary tracking-widest custom-mobile-brand">REVIZZI</span>
+</div>
 </div>
 <div class="hidden md:flex items-center gap-8 nav-link-container">
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-destaque">Produtos</a>
@@ -389,11 +391,11 @@
 </section>
 
 <!-- Section 2: Hero Section -->
-<section id="section-hero" class="relative h-[calc(100vh-116px)] md:h-[calc(100vh-156px)] w-full overflow-hidden flex items-center bg-surface-main group/hero">
+<section id="section-hero" class="relative h-[45vh] md:h-[calc(100vh-156px)] w-full overflow-hidden flex items-center bg-surface-main group/hero">
 <!-- Hero Carousel Background -->
 <div id="hero-carousel" class="absolute inset-0 w-full h-full z-0">
   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100">
-    <img class="w-full h-full object-cover object-center" src="Um_carro_gol_g6_preto_202606181209.jpeg" alt="Hero"/>
+    <img class="w-full h-full object-contain md:object-cover object-center" src="Coloque_uma_mercedez_amg_gt_202606181411.jpeg" alt="Hero"/>
   </div>
 </div>
 
@@ -1782,7 +1784,7 @@ async function initHeroCarousel() {
             if (carousel) {
                 carousel.innerHTML = `
                   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100">
-                    <img class="w-full h-full object-cover object-center" src="${data.value}" alt="Hero"/>
+                    <img class="w-full h-full object-contain md:object-cover object-center" src="${data.value}" alt="Hero"/>
                   </div>
                 `;
             }
