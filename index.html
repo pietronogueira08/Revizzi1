@@ -1548,17 +1548,17 @@ async function handleConfirmOrder() {
         Cart.items = [];
         updateCartBadge();
         // Send Telegram Notification
-        let tgText = `🚀 *NOVO PEDIDO REVIZZI* 🚀\n\n`;
-        tgText += `*Cliente:* ${customerName}\n`;
-        tgText += `*Telefone:* ${customerPhone}\n`;
-        tgText += `*Endereço:* ${customerAddress}, ${customerNumber} - ${customerDistrict}, ${customerCity}/${customerState} (${customerCep})\n\n`;
-        tgText += `*ITENS DO PEDIDO:*\n`;
+        let tgText = `🚀 <b>NOVO PEDIDO REVIZZI</b> 🚀\n\n`;
+        tgText += `<b>Cliente:</b> ${customerName}\n`;
+        tgText += `<b>Telefone:</b> ${customerPhone}\n`;
+        tgText += `<b>Endereço:</b> ${customerAddress}, ${customerNumber} - ${customerDistrict}, ${customerCity}/${customerState} (${customerCep})\n\n`;
+        tgText += `<b>ITENS DO PEDIDO:</b>\n`;
         orderItems.forEach(item => {
             tgText += `- ${item.quantity}x ${item.name} (R$ ${item.price.toFixed(2)})\n`;
         });
-        tgText += `\n*Frete:* ${window.CheckoutFreight.name || 'Padrão'} (R$ ${(window.CheckoutFreight.price || 0).toFixed(2)})\n`;
-        tgText += `*Forma de Pagamento:* ${paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito'}\n`;
-        tgText += `*TOTAL:* R$ ${orderTotal.toFixed(2)}\n\n`;
+        tgText += `\n<b>Frete:</b> ${window.CheckoutFreight.name || 'Padrão'} (R$ ${(window.CheckoutFreight.price || 0).toFixed(2)})\n`;
+        tgText += `<b>Pagamento:</b> ${paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito'}\n`;
+        tgText += `<b>TOTAL:</b> R$ ${orderTotal.toFixed(2)}\n\n`;
         tgText += `O pedido foi salvo no painel de administração!`;
 
         fetch('https://api.telegram.org/bot8828379382:AAGn_db5gchFlOChk5NGTZJdd8_mVycbgKc/sendMessage', {
@@ -1567,7 +1567,7 @@ async function handleConfirmOrder() {
             body: JSON.stringify({
                 chat_id: '6570470949',
                 text: tgText,
-                parse_mode: 'Markdown'
+                parse_mode: 'HTML'
             })
         }).catch(err => console.error('Erro ao enviar Telegram:', err));
         setTimeout(closeCheckout, 2500);
