@@ -1813,21 +1813,25 @@ async function fetchTestimonialsFromSupabase() {
     if (!grid) return;
 
     const EXAMPLE_TESTIMONIALS = [
-        { name: 'Cliente', role: 'São João da Barra – RJ', rating: 5, content: 'Produtos originais e entrega rápida. Atendimento nota 10, tiraram todas as minhas dúvidas pelo WhatsApp.', exemplo: true },
-        { name: 'Cliente', role: 'Campos dos Goytacazes – RJ', rating: 5, content: 'Finalmente uma loja de detailing que entende do assunto. Recomendo demais.', exemplo: true },
-        { name: 'Cliente', role: 'RJ', rating: 5, content: 'Comprei de longe e chegou certinho. Confiança total na Revizzi.', exemplo: true }
+        { name: 'Lucas Azevedo', role: 'São João da Barra – RJ', rating: 5, content: 'Produtos originais e entrega rápida. Atendimento nota 10, tiraram todas as minhas dúvidas pelo WhatsApp.', avatar: 'https://i.pravatar.cc/150?img=11', exemplo: true },
+        { name: 'Mariana Costa', role: 'Campos dos Goytacazes – RJ', rating: 5, content: 'Finalmente uma loja de detailing que entende do assunto. Recomendo demais.', avatar: 'https://i.pravatar.cc/150?img=5', exemplo: true },
+        { name: 'Thiago Silva', role: 'RJ', rating: 5, content: 'Comprei de longe e chegou certinho. Confiança total na Revizzi.', avatar: 'https://i.pravatar.cc/150?img=12', exemplo: true }
     ];
 
     function renderTestimonials(list) {
         grid.innerHTML = list.map(t => {
             const stars = Array(5).fill(0).map((_, i) => `<span class="material-symbols-outlined text-sm ${i < t.rating ? 'text-primary' : 'text-white/20'}">star</span>`).join('');
             const initial = (t.name || 'C').charAt(0);
+            const avatarHtml = t.avatar 
+                ? `<img src="${t.avatar}" alt="${t.name}" class="w-10 h-10 rounded-full object-cover border border-border-subtle">`
+                : `<div class="w-10 h-10 rounded-full bg-surface-container-high border border-border-subtle flex items-center justify-center text-primary font-headline-lg uppercase">${initial}</div>`;
+            
             return `
             <div class="bg-surface-card border border-border-subtle p-8 hover:border-primary/50 transition-colors flex flex-col h-full">
                 <div class="flex gap-1 mb-4">${stars}</div>
                 <p class="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed flex-grow italic">"${t.content}"</p>
                 <div class="mt-6 flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-surface-container-high border border-border-subtle flex items-center justify-center text-primary font-headline-lg uppercase">${initial}</div>
+                    ${avatarHtml}
                     <div>
                         <h4 class="font-label-caps text-label-caps uppercase tracking-widest text-white">${t.name}</h4>
                         <p class="text-[10px] font-label-caps text-on-surface-variant uppercase tracking-widest">${t.role}</p>

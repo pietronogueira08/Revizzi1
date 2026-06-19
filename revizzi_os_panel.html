@@ -368,8 +368,8 @@
         <!-- Add form -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
           <div class="md:col-span-2">
-            <label class="text-[10px] font-label-caps text-white/60 uppercase tracking-widest block mb-1">URL da Imagem *</label>
-            <input id="ig-url-input" type="url" placeholder="https://..." class="w-full bg-surface-main border border-white/10 px-3 py-2 text-[11px] font-label-caps text-white placeholder:text-on-surface-variant/40 focus:border-white/40 focus:outline-none tracking-widest">
+            <label class="text-[10px] font-label-caps text-white/60 uppercase tracking-widest block mb-1">Upload da Imagem *</label>
+            <input id="ig-file-input" type="file" accept="image/*" class="w-full bg-surface-main border border-white/10 px-3 py-2 text-[11px] font-label-caps text-white focus:border-white/40 focus:outline-none tracking-widest file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-primary/20 file:text-primary hover:file:bg-primary/30">
           </div>
           <div>
             <label class="text-[10px] font-label-caps text-white/60 uppercase tracking-widest block mb-1">Link do Post (opcional)</label>
@@ -1281,17 +1281,43 @@ function renderInstagramList() {
     `).join('');
 }
 
-function addInstagramItem() {
-    const urlInput = document.getElementById('ig-url-input');
+async function addInstagramItem() {
+    const fileInput = document.getElementById('ig-file-input');
     const linkInput = document.getElementById('ig-link-input');
-    const url = (urlInput?.value || '').trim();
+    const files = fileInput.files;
     const link = (linkInput?.value || '').trim();
-    if (!url) { showToast('Informe a URL da imagem.', 'error'); return; }
-    instagramItems.push({ url, link });
-    urlInput.value = '';
-    linkInput.value = '';
-    renderInstagramList();
-    showToast('Imagem adicionada. Clique em Salvar Lista para confirmar.', 'success');
+    
+    if (!files || files.length === 0) { showToast('Selecione uma imagem.', 'error'); return; }
+    
+    const file = files[0];
+    if (file.size > 20 * 1024 * 1024) { showToast('Erro: Arquivo maior que 20MB', 'error'); return; }
+
+    const btn = document.querySelector('button[onclick="addInstagramItem()"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin inline-block align-middle mr-2">refresh</span>Enviando...';
+    btn.disabled = true;
+
+    try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `ig_${Date.now()}.${fileExt}`;
+        const { data, error } = await supabaseClient.storage.from('hero-images').upload(fileName, file);
+        
+        if (error) throw error;
+        
+        const { data: { publicUrl } } = supabaseClient.storage.from('hero-images').getPublicUrl(fileName);
+        
+        instagramItems.push({ url: publicUrl, link });
+        fileInput.value = '';
+        if (linkInput) linkInput.value = '';
+        renderInstagramList();
+        showToast('Imagem adicionada. Clique em Salvar Lista para confirmar.', 'success');
+    } catch (err) {
+        console.error('Erro no upload IG:', err);
+        showToast('Erro ao fazer upload da imagem.', 'error');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
 }
 
 function removeInstagramItem(index) {
