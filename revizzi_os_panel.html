@@ -465,6 +465,12 @@ function switchSection(name) {
     document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active'));
     const target = document.getElementById('section-' + name);
     if (target) { target.classList.add('active'); }
+    
+    const searchInput = document.getElementById('vin-search');
+    if (searchInput) {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+    }
 }
 
 function initSidebar() {
@@ -575,11 +581,22 @@ function initProfile() {
 
 function initSearch() {
     const input = document.getElementById('vin-search');
-    input.addEventListener('keydown', function(e) {
-        if (e.key !== 'Enter') return;
-        const q = this.value.trim().toUpperCase(); if (!q) return;
-        const found = ORDERS.find(o => o.id.includes(q) || o.client.toUpperCase().includes(q));
-        if (found) openOrderModal(found); else showToast('Nenhum resultado: ' + q);
+    input.addEventListener('input', function(e) {
+        const q = this.value.trim().toUpperCase();
+        
+        if (document.getElementById('section-Painel').classList.contains('active')) {
+            if (!window._OS_ORDERS) return;
+            if (!q) { renderOrderTable(window._OS_ORDERS); return; }
+            const filtered = window._OS_ORDERS.filter(o => o.id.toUpperCase().includes(q) || o.client.toUpperCase().includes(q));
+            renderOrderTable(filtered);
+        }
+        
+        if (document.getElementById('section-Estoque').classList.contains('active')) {
+            if (!window._OS_PRODUCTS) return;
+            if (!q) { renderEstoqueTable(window._OS_PRODUCTS); return; }
+            const filtered = window._OS_PRODUCTS.filter(p => p.name.toUpperCase().includes(q) || (p.brand && p.brand.toUpperCase().includes(q)));
+            renderEstoqueTable(filtered);
+        }
     });
 }
 
@@ -776,8 +793,9 @@ async function fetchEstoqueProducts() {
     try {
         const { data, error } = await db.from('products').select('*').order('name');
         if (error) throw error;
-        renderEstoqueTable(data || []);
-        updateEstoqueKPIs(data || []);
+        window._OS_PRODUCTS = data || [];
+        renderEstoqueTable(window._OS_PRODUCTS);
+        updateEstoqueKPIs(window._OS_PRODUCTS);
     } catch(err) { console.error('Error fetching products:', err); }
 }
 
