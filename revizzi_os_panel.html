@@ -416,7 +416,7 @@
                 
                 const fileExt = file.name.split('.').pop();
                 const fileName = `${Date.now()}_${i}.${fileExt}`;
-                const { data, error } = await supabaseClient.storage.from('hero-images').upload(fileName, file);
+                const { data, error } = await db.storage.from('hero-images').upload(fileName, file);
                 
                 if (error) {
                     console.error(error);
@@ -426,7 +426,7 @@
                     return;
                 }
                 
-                const { data: { publicUrl } } = supabaseClient.storage.from('hero-images').getPublicUrl(fileName);
+                const { data: { publicUrl } } = db.storage.from('hero-images').getPublicUrl(fileName);
                 imageUrls.push(publicUrl);
             }
             
@@ -1237,7 +1237,7 @@ async function handleExcelImport(event) {
             }
 
             if (productsToInsert.length > 0) {
-                const { error } = await supabaseClient.from('products').insert(productsToInsert);
+                const { error } = await db.from('products').insert(productsToInsert);
                 if (error) throw error;
                 
                 alert(`${productsToInsert.length} produtos importados com sucesso!`);
@@ -1300,11 +1300,11 @@ async function addInstagramItem() {
     try {
         const fileExt = file.name.split('.').pop();
         const fileName = `ig_${Date.now()}.${fileExt}`;
-        const { data, error } = await supabaseClient.storage.from('hero-images').upload(fileName, file);
+        const { data, error } = await db.storage.from('hero-images').upload(fileName, file);
         
         if (error) throw error;
         
-        const { data: { publicUrl } } = supabaseClient.storage.from('hero-images').getPublicUrl(fileName);
+        const { data: { publicUrl } } = db.storage.from('hero-images').getPublicUrl(fileName);
         
         instagramItems.push({ url: publicUrl, link });
         fileInput.value = '';
