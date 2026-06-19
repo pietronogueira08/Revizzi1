@@ -507,6 +507,7 @@ function renderChart(period) {
 
 function initChartButtons() {
     const btn24 = document.getElementById('btn-24h'), btn7d = document.getElementById('btn-7d');
+    if (!btn24 || !btn7d) return;
     function setActive(a, b) { a.classList.add('border-primary','text-primary'); a.classList.remove('border-border-subtle','text-on-surface-variant'); b.classList.add('border-border-subtle','text-on-surface-variant'); b.classList.remove('border-primary','text-primary'); }
     btn24.addEventListener('click', () => { setActive(btn24, btn7d); renderChart('24H'); });
     btn7d.addEventListener('click', () => { setActive(btn7d, btn24); renderChart('7D'); });
