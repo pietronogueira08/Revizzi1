@@ -827,8 +827,8 @@ function renderEstoqueTable(products) {
             <td class="px-6 py-4 text-[11px] font-label-caps text-primary">${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(p.price || 0)}</td>
             <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-                    <button onclick="openProductModal(${JSON.stringify(p).replace(/"/g, '&quot;')})" class="text-[9px] font-label-caps uppercase border border-white/20 px-3 py-1.5 hover:border-white/50 transition-all">Editar</button>
-                    <button onclick="deleteProduct('${p.id}', '${p.name.replace(/'/g, "\\'")}}')" class="text-[9px] font-label-caps uppercase border border-red-500/30 text-red-400 px-3 py-1.5 hover:bg-red-500/10 transition-all">Excluir</button>
+                    <button onclick="openProductModalById('${p.id}')" class="text-[9px] font-label-caps uppercase border border-white/20 px-3 py-1.5 hover:border-white/50 transition-all">Editar</button>
+                    <button onclick="deleteProductById('${p.id}')" class="text-[9px] font-label-caps uppercase border border-red-500/30 text-red-400 px-3 py-1.5 hover:bg-red-500/10 transition-all">Excluir</button>
                 </div>
             </td>
         </tr>`).join('');
