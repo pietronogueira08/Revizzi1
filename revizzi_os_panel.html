@@ -164,7 +164,7 @@
     <div class="bento-grid">
       <div class="col-span-12 glass-panel p-0 overflow-hidden flex flex-col min-h-[400px]">
         <div class="p-6 border-b border-border-subtle"><h2 class="font-headline-lg text-primary uppercase text-2xl">Pedidos Recentes</h2></div>
-        <div class="flex-1 overflow-y-auto">
+        <div class="flex-1 overflow-auto">
           <table id="orders-table" class="w-full text-left border-collapse">
             <thead class="sticky top-0 bg-surface-card z-10"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">ID</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Cliente</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Total</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Status</th></tr></thead>
             <tbody id="orders-tbody" class="divide-y divide-white/[0.04]"></tbody>
@@ -227,10 +227,12 @@
     </div>
     <div class="glass-panel p-0 overflow-hidden">
       <div class="p-6 border-b border-border-subtle flex items-center justify-between"><h2 class="font-headline-lg text-primary uppercase text-xl">Inventário de Produtos</h2><span class="text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Conectado ao Supabase</span></div>
-      <table class="w-full text-left">
-        <thead class="bg-surface-card"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Produto</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Marca</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Categoria</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Preço</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Ação</th></tr></thead>
-        <tbody id="estoque-tbody"><tr><td colspan="5" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Nenhum produto cadastrado no Supabase ainda.</td></tr></tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-surface-card"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Produto</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Marca</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Categoria</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Preço</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Ação</th></tr></thead>
+          <tbody id="estoque-tbody"><tr><td colspan="5" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Nenhum produto cadastrado no Supabase ainda.</td></tr></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
