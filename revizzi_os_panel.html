@@ -538,7 +538,10 @@ function openOrderModal(order) {
         </div>
         <div style="display:flex;gap:12px;margin-bottom:12px;">
             <button onclick="printCorreiosLabel('${order.id}')" style="flex:1;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:12px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-                <span class="material-symbols-outlined" style="font-size:16px;">print</span> IMPRIMIR ETIQUETA
+                <span class="material-symbols-outlined" style="font-size:16px;">print</span> ETIQUETA / DECLARAÇÃO
+            </button>
+            <button onclick="printNFe('${order.id}')" style="flex:1;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:12px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <span class="material-symbols-outlined" style="font-size:16px;">receipt_long</span> GERAR NFE (RECIBO)
             </button>
         </div>
         <button onclick="document.getElementById('order-modal-overlay').style.display='none';showToast('Pedido ${order.id} atualizado!')" style="width:100%;background:#fff;color:#000;border:none;padding:12px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">MARCAR COMO CONCLUÍDO →</button>
@@ -745,6 +748,167 @@ function printCorreiosLabel(orderId) {
 
     setTimeout(() => {
         window.print();
+        document.body.removeChild(printArea);
+    }, 500);
+}
+
+function printNFe(orderId) {
+    const order = window._OS_ORDERS.find(o => o.id === orderId);
+    if (!order) return;
+
+    let printArea = document.getElementById('nfe-print-area');
+    if (!printArea) {
+        printArea = document.createElement('div');
+        printArea.id = 'nfe-print-area';
+        document.body.appendChild(printArea);
+    }
+    
+    let itemsRows = '';
+    let totalQtd = 0;
+    let totalValor = 0;
+    (order.items || []).forEach((item, idx) => {
+        const itemTotal = (parseFloat(item.price.toString().replace(',','.')) * item.quantity) || 0;
+        itemsRows += `<tr><td style="border:1px solid #000;padding:2px 4px;font-size:10px;text-align:center;">${idx+1}</td><td style="border:1px solid #000;padding:2px 4px;font-size:10px;">${item.name}</td><td style="border:1px solid #000;padding:2px 4px;font-size:10px;text-align:center;">UN</td><td style="border:1px solid #000;padding:2px 4px;font-size:10px;text-align:center;">${item.quantity}</td><td style="border:1px solid #000;padding:2px 4px;font-size:10px;text-align:right;">${item.price}</td><td style="border:1px solid #000;padding:2px 4px;font-size:10px;text-align:right;">${itemTotal.toFixed(2)}</td><td style="border:1px solid #000;padding:2px 4px;font-size:10px;text-align:right;">0,00</td><td style="border:1px solid #000;padding:2px 4px;font-size:10px;text-align:right;">0,00</td></tr>`;
+        totalQtd += item.quantity;
+        totalValor += itemTotal;
+    });
+
+    const now = new Date();
+    const dataEmissao = now.toLocaleDateString('pt-BR');
+    const horaEmissao = now.toLocaleTimeString('pt-BR');
+    const accessKey = '0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000'; // Fictitious access key
+    
+    const html = `
+    <div style="font-family:Arial,sans-serif;color:#000;background:#fff;width:100%;max-width:800px;margin:0 auto;padding:10px;box-sizing:border-box;">
+        <div style="border:1px solid #000;padding:2px;display:flex;">
+            <div style="width:50%;padding:10px;border-right:1px solid #000;display:flex;align-items:center;">
+                <div style="flex:1;">
+                    <h2 style="margin:0 0 5px 0;font-size:18px;text-transform:uppercase;">Revizzi Store</h2>
+                    <p style="margin:2px 0;font-size:10px;">Avenida Genecy Mendonca, 10</p>
+                    <p style="margin:2px 0;font-size:10px;">Bairro de Fátima - São João da Barra, RJ</p>
+                    <p style="margin:2px 0;font-size:10px;">CEP: 28200-000</p>
+                </div>
+            </div>
+            <div style="width:15%;padding:5px;border-right:1px solid #000;text-align:center;">
+                <h1 style="margin:0;font-size:24px;">DANFE</h1>
+                <p style="margin:2px 0;font-size:10px;">Documento Auxiliar da<br>Nota Fiscal Eletrônica</p>
+                <div style="border:1px solid #000;margin:5px 0;padding:2px;">
+                    <span style="font-size:10px;">0-ENTRADA<br>1-SAÍDA</span>
+                    <strong style="font-size:14px;float:right;margin-right:5px;">1</strong>
+                </div>
+                <p style="margin:2px 0;font-size:10px;">Nº <strong>${order.id.toString().padStart(9, '0')}</strong><br>SÉRIE <strong>1</strong><br>FOLHA <strong>1/1</strong></p>
+            </div>
+            <div style="width:35%;padding:5px;">
+                <div style="font-size:10px;margin-bottom:2px;">CHAVE DE ACESSO (SEM VALIDADE FISCAL)</div>
+                <div style="font-size:12px;font-weight:bold;letter-spacing:1px;">${accessKey}</div>
+                <div style="font-size:10px;margin-top:10px;text-align:center;border:1px solid #000;padding:2px;">Consulta de autenticidade no portal nacional da NF-e<br>www.nfe.fazenda.gov.br/portal</div>
+            </div>
+        </div>
+        
+        <div style="border:1px solid #000;border-top:none;padding:5px;display:flex;">
+            <div style="width:65%;border-right:1px solid #000;padding-right:5px;">
+                <div style="font-size:8px;">NATUREZA DA OPERAÇÃO</div>
+                <div style="font-size:12px;font-weight:bold;">Venda de Mercadorias (RECIBO)</div>
+            </div>
+            <div style="width:35%;padding-left:5px;">
+                <div style="font-size:8px;">PROTOCOLO DE AUTORIZAÇÃO DE USO</div>
+                <div style="font-size:12px;">--</div>
+            </div>
+        </div>
+        
+        <h3 style="font-size:12px;margin:10px 0 2px 0;">DESTINATÁRIO/REMETENTE</h3>
+        <div style="border:1px solid #000;display:flex;flex-wrap:wrap;">
+            <div style="width:60%;padding:2px 5px;border-right:1px solid #000;border-bottom:1px solid #000;"><div style="font-size:8px;">NOME/RAZÃO SOCIAL</div><div style="font-size:11px;font-weight:bold;">${order.client}</div></div>
+            <div style="width:25%;padding:2px 5px;border-right:1px solid #000;border-bottom:1px solid #000;"><div style="font-size:8px;">CNPJ/CPF</div><div style="font-size:11px;">000.000.000-00</div></div>
+            <div style="width:15%;padding:2px 5px;border-bottom:1px solid #000;"><div style="font-size:8px;">DATA DA EMISSÃO</div><div style="font-size:11px;">${dataEmissao}</div></div>
+            <div style="width:45%;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">ENDEREÇO</div><div style="font-size:11px;">${order.address}, ${order.number} ${order.complement}</div></div>
+            <div style="width:25%;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">BAIRRO/DISTRITO</div><div style="font-size:11px;">${order.district}</div></div>
+            <div style="width:15%;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">CEP</div><div style="font-size:11px;">${order.cep}</div></div>
+            <div style="width:15%;padding:2px 5px;"><div style="font-size:8px;">DATA SAÍDA</div><div style="font-size:11px;">${dataEmissao}</div></div>
+            <div style="width:45%;padding:2px 5px;border-top:1px solid #000;border-right:1px solid #000;"><div style="font-size:8px;">MUNICÍPIO</div><div style="font-size:11px;">${order.city}</div></div>
+            <div style="width:10%;padding:2px 5px;border-top:1px solid #000;border-right:1px solid #000;"><div style="font-size:8px;">UF</div><div style="font-size:11px;">${order.state}</div></div>
+            <div style="width:30%;padding:2px 5px;border-top:1px solid #000;border-right:1px solid #000;"><div style="font-size:8px;">FONE/FAX</div><div style="font-size:11px;">${order.phone || ''}</div></div>
+            <div style="width:15%;padding:2px 5px;border-top:1px solid #000;"><div style="font-size:8px;">HORA SAÍDA</div><div style="font-size:11px;">${horaEmissao}</div></div>
+        </div>
+        
+        <h3 style="font-size:12px;margin:10px 0 2px 0;">CÁLCULO DO IMPOSTO</h3>
+        <div style="border:1px solid #000;display:flex;">
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">BASE DE CÁLCULO DO ICMS</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">VALOR DO ICMS</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">BASE DE CÁLC. ICMS S.T.</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">VALOR DO ICMS S.T.</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;"><div style="font-size:8px;">VALOR TOTAL DOS PRODUTOS</div><div style="font-size:11px;text-align:right;font-weight:bold;">${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(totalValor)}</div></div>
+        </div>
+        <div style="border:1px solid #000;border-top:none;display:flex;">
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">VALOR DO FRETE</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">VALOR DO SEGURO</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">DESCONTO</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">OUTRAS DESP. ACESSÓRIAS</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">VALOR DO IPI</div><div style="font-size:11px;text-align:right;">0,00</div></div>
+            <div style="flex:1;padding:2px 5px;"><div style="font-size:8px;">VALOR TOTAL DA NOTA</div><div style="font-size:11px;text-align:right;font-weight:bold;">${order.total}</div></div>
+        </div>
+        
+        <h3 style="font-size:12px;margin:10px 0 2px 0;">DADOS DOS PRODUTOS/SERVIÇOS</h3>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:10px;">
+            <thead>
+                <tr>
+                    <th style="border:1px solid #000;padding:2px;font-size:8px;">ITEM</th>
+                    <th style="border:1px solid #000;padding:2px;font-size:8px;">DESCRIÇÃO DO PRODUTO/SERVIÇO</th>
+                    <th style="border:1px solid #000;padding:2px;font-size:8px;">UNID</th>
+                    <th style="border:1px solid #000;padding:2px;font-size:8px;">QTD.</th>
+                    <th style="border:1px solid #000;padding:2px;font-size:8px;">VLR. UNIT.</th>
+                    <th style="border:1px solid #000;padding:2px;font-size:8px;">VLR. TOTAL</th>
+                    <th style="border:1px solid #000;padding:2px;font-size:8px;">BC ICMS</th>
+                    <th style="border:1px solid #000;padding:2px;font-size:8px;">VLR. ICMS</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${itemsRows}
+            </tbody>
+        </table>
+        
+        <h3 style="font-size:12px;margin:10px 0 2px 0;">DADOS ADICIONAIS</h3>
+        <div style="border:1px solid #000;padding:5px;height:80px;font-size:10px;">
+            INFORMAÇÕES COMPLEMENTARES<br><br>
+            DOCUMENTO EMITIDO APENAS PARA FINS DE CONTROLE INTERNO / RECIBO DE ENTREGA.<br>
+            ESTE DOCUMENTO NÃO SUBSTITUI UMA NOTA FISCAL ELETRÔNICA OFICIAL.
+        </div>
+    </div>
+    `;
+
+    printArea.innerHTML = html;
+    
+    let style = document.getElementById('print-style');
+    if (!style) {
+        style = document.createElement('style');
+        style.id = 'print-style';
+        style.innerHTML = `
+            @media print {
+                body > *:not(#correios-print-area):not(#nfe-print-area) { display: none !important; }
+                body { background: white; margin: 0; padding: 0; }
+                #correios-print-area, #nfe-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+            }
+        `;
+        document.head.appendChild(style);
+    } else {
+        style.innerHTML = `
+            @media print {
+                body > *:not(#correios-print-area):not(#nfe-print-area) { display: none !important; }
+                body { background: white; margin: 0; padding: 0; }
+                #correios-print-area, #nfe-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+            }
+        `;
+    }
+
+    // Hide Correios area if it exists so only NFe is printed
+    const correios = document.getElementById('correios-print-area');
+    if (correios) correios.style.display = 'none';
+    printArea.style.display = 'block';
+
+    setTimeout(() => {
+        window.print();
+        document.body.removeChild(printArea);
+        if (correios) correios.style.display = 'block'; // restore
     }, 500);
 }
 
