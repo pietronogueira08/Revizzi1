@@ -2,7 +2,7 @@
 <html class="dark" lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>REVIZZI | Centro Automotivo de Alta Performance</title>
+<title>REVIZZI | Loja de Produtos para Estética Automotiva</title>
 <link rel="icon" type="image/jpeg" href="/imagem_2026-06-17_163850035-removebg-preview.png"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -370,6 +370,7 @@
 </div>
 </div>
 <div class="hidden md:flex items-center gap-8 nav-link-container">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="quem-somos.html">Quem Somos</a>
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-destaque">Produtos</a>
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Contato</a>
 <a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-localizacao">Localização</a>
@@ -405,6 +406,12 @@
   </div>
 </div>
 
+<!-- Hero Slogan Overlay -->
+<div class="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" style="padding:40px 64px 40px;">
+  <p class="font-label-caps text-[10px] uppercase tracking-[0.3em] text-white/50 mb-3 animate-fade-up" style="animation-delay:0.1s">Estética Automotiva Premium</p>
+  <h2 class="font-display-lg uppercase text-white leading-none animate-fade-up" style="font-size:clamp(32px,6vw,72px);animation-delay:0.25s">Fale com quem<br>entende de carro</h2>
+</div>
+
 <!-- Carousel Controls -->
 <button onclick="prevHeroSlide()" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-black/40 hover:bg-white/10 border border-white/10 text-white backdrop-blur-md transition-all group opacity-0 group-hover/hero:opacity-100 focus:opacity-100">
   <span class="material-symbols-outlined text-2xl md:text-3xl group-hover:-translate-x-1 transition-transform">chevron_left</span>
@@ -416,12 +423,28 @@
 
 
 
-<!-- Section 3: Trust Strip -->
-<section class="bg-surface-card border-y border-border-subtle py-8">
+<!-- Section 2.5: Quem é a Revizzi -->
+<section class="bg-surface-card border-b border-border-subtle py-6 md:py-8 reveal">
 <div class="container mx-auto px-margin-desktop">
-<div class="flex justify-center md:gap-16 gap-8 flex-wrap">
-<div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary text-3xl">local_shipping</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Frete Grátis</span></div>
-<div class="flex items-center gap-4"><span class="material-symbols-outlined text-primary text-3xl">verified_user</span><span class="font-label-caps text-label-caps uppercase tracking-wider">Produtos Originais</span></div>
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg uppercase text-primary tracking-widest">Revizzi Centro Automotivo</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-xl">Loja especializada em produtos, equipamentos e acessórios para estética automotiva. Enviamos para todo o Brasil.</p>
+</div>
+<p class="font-label-caps text-[11px] uppercase tracking-[0.2em] text-white/40 italic shrink-0">"Cuidado que faz diferença"</p>
+</div>
+</div>
+</section>
+
+<!-- Section 3: Trust Strip -->
+<section class="bg-surface-card border-y border-border-subtle py-6">
+<div class="container mx-auto px-margin-desktop">
+<div class="flex justify-center md:gap-10 gap-5 flex-wrap items-center">
+<div class="flex items-center gap-2"><span class="text-green-400 text-lg font-bold">✔</span><span class="font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant">Loja física em São João da Barra</span></div>
+<div class="flex items-center gap-2"><span class="text-green-400 text-lg font-bold">✔</span><span class="font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant">Produtos originais</span></div>
+<div class="flex items-center gap-2"><span class="text-green-400 text-lg font-bold">✔</span><span class="font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant">Atendimento especializado</span></div>
+<a href="https://wa.me/5522998633809?text=Ol%C3%A1%2C%20estava%20navegando%20pelo%20site%20e%20fiquei%20com%20uma%20d%C3%BAvida." target="_blank" rel="noopener" class="flex items-center gap-2 hover:opacity-80 transition-opacity"><span class="text-green-400 text-lg font-bold">✔</span><span class="font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors">Suporte via WhatsApp</span></a>
+<div class="flex items-center gap-2"><span class="text-green-400 text-lg font-bold">✔</span><span class="font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant">Envio para todo o Brasil</span></div>
 </div>
 </div>
 </section>
@@ -825,13 +848,25 @@
 <h2 class="font-headline-xl text-headline-xl uppercase tracking-widest text-primary mb-2">Depoimentos</h2>
 <p class="font-body-lg text-body-lg text-on-surface-variant font-light">O que nossos clientes dizem sobre nós.</p>
 </div>
-<div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="col-span-1 md:col-span-3 text-center py-10 opacity-50">
-        <span class="material-symbols-outlined text-4xl mb-2 block animate-spin">refresh</span>
-        <p class="font-label-caps uppercase tracking-widest text-xs">Carregando depoimentos...</p>
+<div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+</div>
+</section>
+
+<!-- Section 7.5: Instagram Carousel -->
+<section id="section-instagram" class="py-16 bg-surface-card border-y border-border-subtle" style="display:none;">
+  <div class="container mx-auto px-margin-desktop">
+    <div class="flex flex-col md:flex-row items-center justify-between mb-10 gap-4">
+      <div>
+        <h2 class="font-headline-xl text-headline-xl uppercase tracking-widest text-primary">Instagram</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-1">Nos acompanhe nas redes sociais.</p>
+      </div>
+      <a href="https://www.instagram.com/revizzisjb/" target="_blank" rel="noopener" class="flex items-center gap-3 border border-white/20 px-6 py-3 font-label-caps text-[11px] uppercase tracking-widest hover:border-white/60 transition-all text-on-surface-variant hover-insta">
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Siga @revizzisjb
+      </a>
     </div>
-</div>
-</div>
+    <div id="instagram-carousel-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+  </div>
 </section>
 
 <!-- Section 8: Footer -->
@@ -873,6 +908,7 @@
 <div class="flex flex-col gap-6">
 <h4 class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Navegação</h4>
 <div class="flex flex-col gap-3">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="quem-somos.html">Quem Somos</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-destaque">Produtos</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-contato">Contato</a>
 <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors nav-link" href="#section-localizacao">Localização</a>
@@ -911,7 +947,7 @@
 </div>
 <div class="border-t border-border-subtle py-8 px-margin-desktop">
 <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-<p class="font-label-caps text-[10px] text-on-surface-variant uppercase">© 2025 Revizzi Centro Automotivo. Engineered for Performance.</p>
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase">© 2026 REVIZZI CENTRO AUTOMOTIVO. Fale com quem entende de carro.</p>
 <div class="flex gap-6">
 <a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary uppercase" href="#">Políticas de Privacidade</a>
 <a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary uppercase" href="#">Termos de Uso</a>
@@ -1775,23 +1811,23 @@ function populateFeatured() {
 async function fetchTestimonialsFromSupabase() {
     const grid = document.getElementById('testimonials-grid');
     if (!grid) return;
-    try {
-        const { data, error } = await db.from('testimonials').select('*').order('created_at', { ascending: false });
-        if (error) throw error;
-        
-        if (!data || data.length === 0) {
-            grid.innerHTML = '<p class="text-on-surface-variant font-label-caps uppercase text-sm col-span-full text-center">Nenhum depoimento encontrado.</p>';
-            return;
-        }
-        
-        grid.innerHTML = data.map(t => {
+
+    const EXAMPLE_TESTIMONIALS = [
+        { name: 'Cliente', role: 'São João da Barra – RJ', rating: 5, content: 'Produtos originais e entrega rápida. Atendimento nota 10, tiraram todas as minhas dúvidas pelo WhatsApp.', exemplo: true },
+        { name: 'Cliente', role: 'Campos dos Goytacazes – RJ', rating: 5, content: 'Finalmente uma loja de detailing que entende do assunto. Recomendo demais.', exemplo: true },
+        { name: 'Cliente', role: 'RJ', rating: 5, content: 'Comprei de longe e chegou certinho. Confiança total na Revizzi.', exemplo: true }
+    ];
+
+    function renderTestimonials(list) {
+        grid.innerHTML = list.map(t => {
             const stars = Array(5).fill(0).map((_, i) => `<span class="material-symbols-outlined text-sm ${i < t.rating ? 'text-primary' : 'text-white/20'}">star</span>`).join('');
+            const initial = (t.name || 'C').charAt(0);
             return `
             <div class="bg-surface-card border border-border-subtle p-8 hover:border-primary/50 transition-colors flex flex-col h-full">
                 <div class="flex gap-1 mb-4">${stars}</div>
                 <p class="font-body-md text-body-md text-on-surface-variant font-light leading-relaxed flex-grow italic">"${t.content}"</p>
                 <div class="mt-6 flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-surface-container-high border border-border-subtle flex items-center justify-center text-primary font-headline-lg uppercase">${t.name.charAt(0)}</div>
+                    <div class="w-10 h-10 rounded-full bg-surface-container-high border border-border-subtle flex items-center justify-center text-primary font-headline-lg uppercase">${initial}</div>
                     <div>
                         <h4 class="font-label-caps text-label-caps uppercase tracking-widest text-white">${t.name}</h4>
                         <p class="text-[10px] font-label-caps text-on-surface-variant uppercase tracking-widest">${t.role}</p>
@@ -1799,9 +1835,19 @@ async function fetchTestimonialsFromSupabase() {
                 </div>
             </div>`;
         }).join('');
+    }
+
+    try {
+        const { data, error } = await supabaseClient.from('testimonials').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        if (data && data.length > 0) {
+            renderTestimonials(data);
+        } else {
+            renderTestimonials(EXAMPLE_TESTIMONIALS);
+        }
     } catch (err) {
         console.error('Erro ao buscar depoimentos:', err);
-        grid.innerHTML = '<p class="text-on-surface-variant font-label-caps uppercase text-sm col-span-full text-center text-red-400">Erro ao carregar depoimentos.</p>';
+        renderTestimonials(EXAMPLE_TESTIMONIALS);
     }
 }
 
@@ -1883,6 +1929,7 @@ async function init() {
     initScrollReveal();
     initHeroCarousel();
     initMobileMenu();
+    initInstagramCarousel();
 }
 
 function initMobileMenu() {
@@ -1920,5 +1967,44 @@ document.addEventListener('DOMContentLoaded', function() {
         card.addEventListener('mouseleave', () => card.classList.remove('border-white/40'));
     });
 });
+
+// ═══════════════════════════════════
+// J. INSTAGRAM CAROUSEL (manual)
+// ═══════════════════════════════════
+async function initInstagramCarousel() {
+    try {
+        const { data, error } = await supabaseClient.from('site_settings').select('value').eq('id', 'instagram_carousel').single();
+        if (error || !data || !data.value) return;
+        let items = [];
+        try { items = JSON.parse(data.value); } catch(e) { return; }
+        if (!Array.isArray(items) || items.length === 0) return;
+        const section = document.getElementById('section-instagram');
+        const container = document.getElementById('instagram-carousel-container');
+        if (!section || !container) return;
+        container.innerHTML = items.map(item => {
+            const img = `<img src="${item.url}" alt="Instagram @revizzisjb" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">`;
+            if (item.link) {
+                return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-square overflow-hidden bg-surface-main group block border border-border-subtle hover:border-white/30 transition-colors">${img}</a>`;
+            }
+            return `<div class="aspect-square overflow-hidden bg-surface-main group border border-border-subtle">${img}</div>`;
+        }).join('');
+        section.style.display = '';
+    } catch(e) {
+        console.error('Erro no carrossel Instagram:', e);
+    }
+}
 </script>
+
+<!-- ── WhatsApp Floating Button ── -->
+<a id="whatsapp-float"
+   href="https://wa.me/5522998633809?text=Ol%C3%A1%2C%20estava%20navegando%20pelo%20site%20e%20fiquei%20com%20uma%20d%C3%BAvida."
+   target="_blank" rel="noopener"
+   aria-label="Fale conosco pelo WhatsApp"
+   style="position:fixed;bottom:28px;right:24px;z-index:900;background:#25D366;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.45);transition:transform 0.2s ease,box-shadow 0.2s ease;"
+   onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(37,211,102,0.65)'"
+   onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.45)'">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="white">
+    <path d="M16 0C7.163 0 0 7.163 0 16c0 2.826.737 5.48 2.026 7.785L0 32l8.424-2.004A15.938 15.938 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.3 13.3 0 01-6.788-1.858l-.487-.289-5.002 1.19 1.238-4.859-.317-.499A13.263 13.263 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.273-9.91c-.399-.2-2.36-1.164-2.727-1.297-.367-.133-.633-.2-.9.2-.266.4-1.033 1.297-1.266 1.563-.233.267-.467.3-.866.1-.4-.2-1.688-.622-3.215-1.983-1.188-1.059-1.99-2.366-2.223-2.766-.233-.4-.025-.616.175-.815.18-.178.4-.467.6-.7.2-.233.267-.4.4-.666.133-.267.067-.5-.033-.7-.1-.2-.9-2.166-1.233-2.966-.325-.78-.655-.673-.9-.686-.233-.013-.5-.016-.767-.016-.267 0-.7.1-1.066.5-.367.4-1.4 1.367-1.4 3.333s1.433 3.867 1.633 4.133c.2.267 2.82 4.306 6.833 6.034.955.413 1.7.66 2.28.845.958.306 1.83.263 2.52.16.769-.114 2.36-.965 2.693-1.897.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.766-.467z"/>
+  </svg>
+</a>
 </body></html>

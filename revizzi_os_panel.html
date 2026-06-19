@@ -359,6 +359,35 @@
           </div>
         </div>
       </div>
+
+      <!-- Instagram Carousel Manager -->
+      <div class="glass-panel p-8 md:col-span-2">
+        <h2 class="font-headline-lg text-primary uppercase text-xl mb-2">Carrossel do Instagram</h2>
+        <p class="text-[10px] font-label-caps text-on-surface-variant mb-6">As imagens aparecem na página da loja automaticamente após salvar. Se a lista estiver vazia, a seção fica oculta.</p>
+
+        <!-- Add form -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
+          <div class="md:col-span-2">
+            <label class="text-[10px] font-label-caps text-white/60 uppercase tracking-widest block mb-1">URL da Imagem *</label>
+            <input id="ig-url-input" type="url" placeholder="https://..." class="w-full bg-surface-main border border-white/10 px-3 py-2 text-[11px] font-label-caps text-white placeholder:text-on-surface-variant/40 focus:border-white/40 focus:outline-none tracking-widest">
+          </div>
+          <div>
+            <label class="text-[10px] font-label-caps text-white/60 uppercase tracking-widest block mb-1">Link do Post (opcional)</label>
+            <input id="ig-link-input" type="url" placeholder="https://www.instagram.com/p/..." class="w-full bg-surface-main border border-white/10 px-3 py-2 text-[11px] font-label-caps text-white placeholder:text-on-surface-variant/40 focus:border-white/40 focus:outline-none tracking-widest">
+          </div>
+        </div>
+        <button onclick="addInstagramItem()" class="bg-white text-black font-label-caps text-[11px] uppercase tracking-widest px-6 py-2 hover:bg-white/80 transition-colors mb-6">+ Adicionar Imagem</button>
+
+        <!-- List -->
+        <div id="ig-list" class="space-y-2 mb-6"></div>
+
+        <!-- Save -->
+        <div class="flex items-center gap-4">
+          <button onclick="saveInstagramCarousel()" id="btn-save-instagram" class="bg-white text-black font-label-caps text-[11px] uppercase tracking-widest px-8 py-3 hover:bg-white/80 transition-colors">Salvar Lista →</button>
+          <button onclick="clearInstagramCarousel()" class="border border-red-500/30 text-red-400 font-label-caps text-[11px] uppercase tracking-widest px-6 py-3 hover:bg-red-500/10 transition-colors">Limpar Tudo</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -433,7 +462,7 @@
 </main>
 <!-- FOOTER BAR -->
 <footer class="fixed bottom-0 right-0 left-[240px] border-t border-border-subtle bg-surface-main flex justify-between items-center px-8 h-9 z-50">
-  <div class="flex items-center space-x-6"><span class="font-label-caps text-[10px] text-on-surface-variant tracking-tight">© 2024 REVIZZI CENTRO AUTOMOTIVO | NÚCLEO DE DESEMPENHO INDUSTRIAL</span></div>
+  <div class="flex items-center space-x-6"><span class="font-label-caps text-[10px] text-on-surface-variant tracking-tight">© 2026 REVIZZI CENTRO AUTOMOTIVO | NÚCLEO DE DESEMPENHO INDUSTRIAL</span></div>
   <div id="footer-links" class="flex items-center space-x-6">
     <a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary transition-all" href="#">LOGS DO SISTEMA</a>
     <a class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary transition-all" href="#">DOCS DA API</a>
@@ -1134,6 +1163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchEstoqueProducts();
     fetchAdminTestimonials();
     initMobileAdminSidebar();
+    loadInstagramCarousel();
     // Bind Estoque "Adicionar Item" button
     document.querySelector('#section-Estoque button[onclick]') && null;
     const addBtn = document.querySelector('#section-Estoque header button, #section-Estoque .flex.items-center.justify-between.mb-8 button');
@@ -1224,6 +1254,84 @@ async function handleExcelImport(event) {
         }
     };
     reader.readAsArrayBuffer(file);
+}
+
+
+// ═══════════════════════════════════
+// INSTAGRAM CAROUSEL MANAGER
+// ═══════════════════════════════════
+let instagramItems = []; // { url, link }
+
+function renderInstagramList() {
+    const el = document.getElementById('ig-list');
+    if (!el) return;
+    if (instagramItems.length === 0) {
+        el.innerHTML = '<p class="text-[10px] font-label-caps text-white/30 uppercase tracking-widest">Nenhuma imagem adicionada.</p>';
+        return;
+    }
+    el.innerHTML = instagramItems.map((item, i) => `
+        <div class="flex items-center gap-3 border border-white/10 p-3 bg-surface-main/50">
+            <img src="${item.url}" alt="" class="w-14 h-14 object-cover flex-shrink-0 bg-white/5" onerror="this.style.display='none'">
+            <div class="flex-1 min-w-0">
+                <p class="text-[11px] font-label-caps text-white truncate">${item.url}</p>
+                ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="text-[10px] text-on-surface-variant hover:text-primary truncate block">${item.link}</a>` : '<p class="text-[10px] text-white/20 font-label-caps">Sem link</p>'}
+            </div>
+            <button onclick="removeInstagramItem(${i})" class="material-symbols-outlined text-[18px] text-red-400 hover:text-red-300 transition-colors flex-shrink-0">delete</button>
+        </div>
+    `).join('');
+}
+
+function addInstagramItem() {
+    const urlInput = document.getElementById('ig-url-input');
+    const linkInput = document.getElementById('ig-link-input');
+    const url = (urlInput?.value || '').trim();
+    const link = (linkInput?.value || '').trim();
+    if (!url) { showToast('Informe a URL da imagem.', 'error'); return; }
+    instagramItems.push({ url, link });
+    urlInput.value = '';
+    linkInput.value = '';
+    renderInstagramList();
+    showToast('Imagem adicionada. Clique em Salvar Lista para confirmar.', 'success');
+}
+
+function removeInstagramItem(index) {
+    instagramItems.splice(index, 1);
+    renderInstagramList();
+}
+
+async function saveInstagramCarousel() {
+    const btn = document.getElementById('btn-save-instagram');
+    if (btn) { btn.disabled = true; btn.textContent = 'SALVANDO...'; }
+    try {
+        const { error } = await db.from('site_settings')
+            .upsert({ id: 'instagram_carousel', value: JSON.stringify(instagramItems) }, { onConflict: 'id' });
+        if (error) throw error;
+        showToast('Carrossel do Instagram salvo!', 'success');
+    } catch (err) {
+        showToast('Erro ao salvar: ' + (err.message || 'Tente novamente.'), 'error');
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Salvar Lista →'; }
+    }
+}
+
+async function clearInstagramCarousel() {
+    if (!confirm('Remover todas as imagens do carrossel e limpar o site?')) return;
+    instagramItems = [];
+    renderInstagramList();
+    await saveInstagramCarousel();
+}
+
+async function loadInstagramCarousel() {
+    try {
+        const { data, error } = await db.from('site_settings').select('value').eq('id', 'instagram_carousel').single();
+        if (error || !data || !data.value) { renderInstagramList(); return; }
+        try { instagramItems = JSON.parse(data.value); } catch(e) { instagramItems = []; }
+        if (!Array.isArray(instagramItems)) instagramItems = [];
+        renderInstagramList();
+    } catch(e) {
+        instagramItems = [];
+        renderInstagramList();
+    }
 }
 
 </script>
