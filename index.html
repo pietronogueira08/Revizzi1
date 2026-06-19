@@ -1547,9 +1547,29 @@ async function handleConfirmOrder() {
         check.classList.remove('hidden');
         Cart.items = [];
         updateCartBadge();
-        
-        // FUTURE: Send Telegram Notification Here
-        
+        // Send Telegram Notification
+        let tgText = `🚀 *NOVO PEDIDO REVIZZI* 🚀\n\n`;
+        tgText += `*Cliente:* ${customerName}\n`;
+        tgText += `*Telefone:* ${customerPhone}\n`;
+        tgText += `*Endereço:* ${customerAddress}, ${customerNumber} - ${customerDistrict}, ${customerCity}/${customerState} (${customerCep})\n\n`;
+        tgText += `*ITENS DO PEDIDO:*\n`;
+        orderItems.forEach(item => {
+            tgText += `- ${item.quantity}x ${item.name} (R$ ${item.price.toFixed(2)})\n`;
+        });
+        tgText += `\n*Frete:* ${window.CheckoutFreight.name || 'Padrão'} (R$ ${(window.CheckoutFreight.price || 0).toFixed(2)})\n`;
+        tgText += `*Forma de Pagamento:* ${paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito'}\n`;
+        tgText += `*TOTAL:* R$ ${orderTotal.toFixed(2)}\n\n`;
+        tgText += `O pedido foi salvo no painel de administração!`;
+
+        fetch('https://api.telegram.org/bot8828379382:AAGn_db5gchFlOChk5NGTZJdd8_mVycbgKc/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: '6570470949',
+                text: tgText,
+                parse_mode: 'Markdown'
+            })
+        }).catch(err => console.error('Erro ao enviar Telegram:', err));
         setTimeout(closeCheckout, 2500);
     }, 1500);
 }
