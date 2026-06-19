@@ -1987,10 +1987,11 @@ async function initInstagramCarousel() {
         if (!section || !container) return;
         container.innerHTML = items.map(item => {
             const img = `<img src="${item.url}" alt="Instagram @revizzisjb" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">`;
+            const innerWrapper = `<div class="w-full h-full overflow-hidden rounded-[2px]">${img}</div>`;
             if (item.link) {
-                return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-square overflow-hidden bg-surface-main group block border border-border-subtle hover:border-white/30 transition-colors">${img}</a>`;
+                return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-square bg-surface-card p-2 group block border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md">${innerWrapper}</a>`;
             }
-            return `<div class="aspect-square overflow-hidden bg-surface-main group border border-border-subtle">${img}</div>`;
+            return `<div class="aspect-square bg-surface-card p-2 group border border-border-subtle shadow-lg rounded-md">${innerWrapper}</div>`;
         }).join('');
         section.style.display = '';
     } catch(e) {
