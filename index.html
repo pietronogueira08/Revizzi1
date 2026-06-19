@@ -1542,28 +1542,14 @@ async function handleConfirmOrder() {
         console.error('Supabase exception:', e);
         return;
     }
-    // Build WhatsApp message to notify the owner
-    let waText = `*NOVO PEDIDO REVIZZI* 🚀\n\n`;
-    waText += `*Cliente:* ${customerName}\n`;
-    waText += `*Telefone:* ${customerPhone}\n`;
-    waText += `*Endereço:* ${customerAddress}, ${customerNumber} - ${customerDistrict}, ${customerCity}/${customerState} (${customerCep})\n\n`;
-    waText += `*ITENS DO PEDIDO:*\n`;
-    orderItems.forEach(item => {
-        waText += `- ${item.quantity}x ${item.name} (R$ ${item.price.toFixed(2)})\n`;
-    });
-    waText += `\n*Frete:* ${window.CheckoutFreight.name || 'Padrão'} (R$ ${(window.CheckoutFreight.price || 0).toFixed(2)})\n`;
-    waText += `*Forma de Pagamento:* ${paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito'}\n`;
-    waText += `*TOTAL:* R$ ${orderTotal.toFixed(2)}\n\n`;
-    waText += `O pedido também foi salvo no painel!`;
-
-    const waUrl = `https://wa.me/5522998633809?text=${encodeURIComponent(waText)}`;
-
     setTimeout(function() {
         text.textContent = 'Pedido Confirmado!';
         check.classList.remove('hidden');
         Cart.items = [];
         updateCartBadge();
-        window.open(waUrl, '_blank'); // Open WhatsApp
+        
+        // FUTURE: Send Telegram Notification Here
+        
         setTimeout(closeCheckout, 2500);
     }, 1500);
 }
