@@ -1230,11 +1230,11 @@ async function handleExcelImport(event) {
                     const finalDesc = description ? `Ref: ${reference}\n${description}` : `Ref: ${reference}`;
 
                     productsToInsert.push({
-                        title: finalTitle,
+                        name: finalTitle,
                         description: finalDesc,
                         price: price,
                         category: currentCategory,
-                        image: image
+                        img_url: image
                     });
                 }
             }
