@@ -834,6 +834,11 @@ function renderEstoqueTable(products) {
         </tr>`).join('');
 }
 
+function openProductModalById(id) {
+    const product = window._OS_PRODUCTS.find(p => p.id == id);
+    if (product) openProductModal(product);
+}
+
 function openProductModal(product = null) {
     const isEdit = product && product.id;
     let modal = document.getElementById('product-modal-overlay');
@@ -974,6 +979,11 @@ async function saveProduct(id) {
         errEl.style.display = 'block';
         errEl.textContent = '⚠ Erro: ' + (err.message || 'Tente novamente.');
     }
+}
+
+function deleteProductById(id) {
+    const product = window._OS_PRODUCTS.find(p => p.id == id);
+    if (product) deleteProduct(product.id, product.name);
 }
 
 async function deleteProduct(id, name) {
