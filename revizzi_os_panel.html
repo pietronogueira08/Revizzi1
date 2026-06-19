@@ -1231,10 +1231,11 @@ async function handleExcelImport(event) {
 
                     productsToInsert.push({
                         name: finalTitle,
+                        brand: brand || 'Diversos',
                         description: finalDesc,
                         price: price,
                         category: currentCategory,
-                        img_url: image
+                        img_url: image || null
                     });
                 }
             }
@@ -1246,11 +1247,11 @@ async function handleExcelImport(event) {
                 alert(`${productsToInsert.length} produtos importados com sucesso!`);
                 await fetchEstoqueProducts();
             } else {
-                alert("Nenhum produto encontrado na planilha.");
+                alert("Nenhum produto válido encontrado na planilha.");
             }
         } catch (error) {
             console.error("Erro importando excel:", error);
-            alert("Erro ao importar a planilha. Verifique o formato do arquivo.");
+            alert("Erro do Banco de Dados:\n" + (error.message || JSON.stringify(error)));
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
