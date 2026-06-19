@@ -578,7 +578,7 @@
 <dialog id="product-modal">
 <div class="grid grid-cols-1 md:grid-cols-2">
 <div class="aspect-square bg-surface-main relative">
-<img id="product-modal-img" class="w-full h-full object-cover" src="" alt=""/>
+<img id="product-modal-img" class="w-full h-full object-cover" src="" alt="" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
 </div>
 <div class="flex flex-col justify-between p-8">
 <div>
@@ -1061,7 +1061,7 @@ function renderCartDrawer() {
             const li = document.createElement('li');
             li.className = 'flex items-center gap-4 py-4 border-b border-white/5';
             li.innerHTML = `
-                <img src="${product.img}" alt="${product.name}" class="w-16 h-16 object-cover bg-surface-main flex-shrink-0 rounded-[2px]"/>
+                <img src="${product.img}" alt="${product.name}" class="w-16 h-16 object-cover bg-surface-main flex-shrink-0 rounded-[2px]" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
                 <div class="flex-1 min-w-0">
                     <p class="font-label-caps text-[10px] text-on-surface-variant uppercase">${product.brand}</p>
                     <p class="text-sm uppercase truncate mt-0.5">${product.name}</p>
@@ -1261,7 +1261,7 @@ function buildProductCard(p) {
         : '';
     return `<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="${p.id}">
         <div class="aspect-square relative overflow-hidden bg-surface-main">
-            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${p.img}" alt="${p.name}"/>
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${p.img}" alt="${p.name}" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
             ${badge}
         </div>
         <div class="p-6">
