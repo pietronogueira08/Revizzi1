@@ -116,8 +116,6 @@
 <button id="admin-mobile-menu-btn" class="md:hidden material-symbols-outlined text-on-surface-variant hover:text-primary">menu</button>
 <nav id="top-tabs" class="hidden md:flex items-center space-x-6">
 <a class="font-label-caps text-primary border-b-2 border-primary pb-1" href="#" data-section="Transmissão">TRANSMISSÃO AO VIVO</a>
-<a class="font-label-caps text-on-surface-variant hover:text-primary transition-all" href="#" data-section="Pit Wall">PIT WALL</a>
-<a class="font-label-caps text-on-surface-variant hover:text-primary transition-all" href="#" data-section="Relatórios">RELATÓRIOS</a>
 </nav>
 </div>
 <div class="flex items-center space-x-6">
@@ -164,18 +162,7 @@
       <div class="glass-panel p-6"><div class="flex justify-between items-start mb-2"><span class="font-label-caps text-[10px] text-white uppercase tracking-tighter">Ticket Médio</span><span class="material-symbols-outlined text-primary/40 text-lg">receipt_long</span></div><div class="font-display-lg text-headline-xl text-primary mb-1">R$ 0</div><div class="text-[10px] font-label-caps text-white/70">— AGUARDANDO DADOS</div></div>
     </div>
     <div class="bento-grid">
-      <div class="col-span-12 lg:col-span-8 glass-panel p-8 relative">
-        <div class="flex justify-between items-end mb-8">
-          <div><h2 class="font-headline-lg text-primary uppercase">Telemetria de Desempenho</h2><p class="font-label-caps text-[11px] text-on-surface-variant">Mapeamento de capacidade e fluxo em tempo real</p></div>
-          <div class="flex space-x-2"><button id="btn-24h" class="px-3 py-1 border border-primary text-[10px] font-label-caps text-primary">24H</button><button id="btn-7d" class="px-3 py-1 border border-border-subtle text-[10px] font-label-caps text-on-surface-variant hover:border-primary/40">7D</button></div>
-        </div>
-        <div id="chart-bars" class="w-full h-64 bg-surface-main relative flex items-end justify-between px-2 overflow-hidden">
-          <div class="absolute inset-0 grid grid-cols-12 grid-rows-4 pointer-events-none"><div class="border-t border-white/[0.03] col-span-12"></div><div class="border-t border-white/[0.03] col-span-12"></div><div class="border-t border-white/[0.03] col-span-12"></div><div class="border-t border-white/[0.03] col-span-12"></div></div>
-          <div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div><div class="w-8 bg-white/20 hover:bg-primary transition-colors h-[0%]"></div>
-        </div>
-        <div class="mt-6 flex justify-between"><div class="flex space-x-12"><div><div class="text-[10px] font-label-caps text-white">CARGA MÁXIMA</div><div class="font-display-lg text-2xl text-primary">0%</div></div><div><div class="text-[10px] font-label-caps text-white">TEMPO OCIOSO</div><div class="font-display-lg text-2xl text-primary">00:00:00</div></div></div><div id="chart-label" class="text-[10px] font-label-caps text-white/70 self-end">Últimas 24 horas</div></div>
-      </div>
-      <div class="col-span-12 lg:col-span-4 glass-panel p-0 overflow-hidden flex flex-col">
+      <div class="col-span-12 glass-panel p-0 overflow-hidden flex flex-col min-h-[400px]">
         <div class="p-6 border-b border-border-subtle"><h2 class="font-headline-lg text-primary uppercase text-2xl">Pedidos Recentes</h2></div>
         <div class="flex-1 overflow-y-auto">
           <table id="orders-table" class="w-full text-left border-collapse">
