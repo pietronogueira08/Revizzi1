@@ -823,12 +823,20 @@
 <span id="checkout-summary-total" class="font-price-display text-price-display"></span>
 </div>
 </div>
-<div class="flex gap-3">
+<div class="flex gap-3 mb-6">
 <button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="3">← Voltar</button>
-<button id="checkout-confirm-btn" class="flex-1 bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-3">
-<span id="confirm-btn-text">Confirmar Pedido</span>
+<button id="checkout-confirm-btn" class="flex-1 bg-[#009ee3] text-white font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-[#0089c5] transition-colors flex items-center justify-center gap-3">
+<span id="confirm-btn-text">Confirmar e Pagar</span>
 <svg id="confirm-checkmark" class="hidden w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline class="check-draw" points="20 6 9 17 4 12"/></svg>
 </button>
+</div>
+<div class="flex flex-col items-center justify-center gap-3 pt-6 border-t border-white/10">
+    <div class="flex gap-4 opacity-70">
+        <span class="material-symbols-outlined text-green-400">lock</span>
+        <span class="text-xs text-white uppercase tracking-widest font-bold">Ambiente 100% Seguro</span>
+        <span class="material-symbols-outlined text-green-400">verified</span>
+    </div>
+    <p class="text-[10px] text-white/50 text-center uppercase tracking-wider mt-2">Pagamento processado com segurança.<br/>Seus dados são criptografados de ponta a ponta.</p>
 </div>
 </div>
 
@@ -1412,6 +1420,30 @@ function closeCheckout() {
     document.body.style.overflow = '';
 }
 
+function validateStep(step) {
+    let ids = [];
+    if (step === 1) ids = ['ck-name', 'ck-email', 'ck-cpf', 'ck-phone'];
+    if (step === 2) ids = ['ck-cep', 'ck-address', 'ck-number', 'ck-district', 'ck-city', 'ck-state'];
+    
+    for (let id of ids) {
+        const el = document.getElementById(id);
+        if (el && !el.value.trim()) {
+            el.style.borderColor = 'red';
+            showToast('Por favor, preencha os campos obrigatórios.', 'error');
+            el.focus();
+            return false;
+        } else if (el) {
+            el.style.borderColor = 'rgba(255,255,255,0.1)';
+        }
+    }
+    
+    if (step === 2 && !window.CheckoutFreight.method) {
+        showToast('Calcule e selecione uma opção de entrega.', 'error');
+        return false;
+    }
+    return true;
+}
+
 function goToCheckoutStep(step) {
     currentCheckoutStep = step;
     document.querySelectorAll('.checkout-step-panel').forEach(p => p.classList.remove('active'));
@@ -1702,7 +1734,11 @@ function initCheckout() {
     document.getElementById('checkout-overlay').addEventListener('click', function(e) {
         const next = e.target.closest('.checkout-next-btn');
         const back = e.target.closest('.checkout-back-btn');
-        if (next) goToCheckoutStep(Number(next.dataset.next));
+        
+        if (next) {
+            const currentStep = Number(document.querySelector('.checkout-step-panel.active').id.replace('checkout-step-',''));
+            if (validateStep(currentStep)) goToCheckoutStep(Number(next.dataset.next));
+        }
         if (back) goToCheckoutStep(Number(back.dataset.back));
     });
 

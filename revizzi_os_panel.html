@@ -1369,52 +1369,50 @@ async function handleExcelImport(event) {
             const worksheet = workbook.Sheets[firstSheetName];
             const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
 
-            let currentCategory = 'Sem Categoria';
             const productsToInsert = [];
 
-            for (let i = 0; i < json.length; i++) {
+            // Starts at i = 1 to skip the header row
+            for (let i = 1; i < json.length; i++) {
                 const row = json[i];
                 if (!row || row.length === 0) continue;
 
-                const col0 = row[0] ? String(row[0]).trim() : '';
-                const col1 = row[1] ? String(row[1]).trim() : '';
-
-                if (col0.toLowerCase().includes('referência') && col1.toLowerCase().includes('produto')) {
-                    continue;
+                // Expected format:
+                // Col 0: Nome
+                // Col 1: Marca
+                // Col 2: Categoria
+                // Col 3: Preço
+                // Col 4: Descrição
+                // Col 5: Referência
+                // Col 6: Imagem URL
+                
+                const title = row[0] ? String(row[0]).trim() : '';
+                if (!title) continue; // Nome is mandatory
+                
+                const brand = row[1] ? String(row[1]).trim() : 'Diversos';
+                const category = row[2] ? String(row[2]).trim() : 'Sem Categoria';
+                
+                let priceRaw = row[3] ? String(row[3]) : '0';
+                priceRaw = priceRaw.replace('R$', '').replace(' ', '');
+                if (priceRaw.includes(',')) {
+                    priceRaw = priceRaw.replace(/\./g, '').replace(',', '.');
                 }
+                const price = parseFloat(priceRaw) || 0;
 
-                if (col0 && !col1 && !row[2] && !row[3] && !row[4]) {
-                    currentCategory = col0;
-                    continue;
-                }
+                const description = row[4] ? String(row[4]).trim() : '';
+                const reference = row[5] ? String(row[5]).trim() : '';
+                const image = row[6] ? String(row[6]).trim() : '';
 
-                if (col0 && col1) {
-                    const reference = col0;
-                    const title = col1;
-                    const brand = row[2] ? String(row[2]).trim() : '';
-                    
-                    let priceRaw = row[3] ? String(row[3]) : '0';
-                    priceRaw = priceRaw.replace('R$', '').replace(' ', '');
-                    if (priceRaw.includes(',')) {
-                        priceRaw = priceRaw.replace(/\./g, '').replace(',', '.');
-                    }
-                    const price = parseFloat(priceRaw) || 0;
+                const finalTitle = brand !== 'Diversos' ? `[${brand}] ${title}` : title;
+                const finalDesc = reference ? `Ref: ${reference}\n${description}` : description;
 
-                    const description = row[4] ? String(row[4]).trim() : '';
-                    const image = row[5] ? String(row[5]).trim() : '';
-
-                    const finalTitle = brand ? `[${brand}] ${title}` : title;
-                    const finalDesc = description ? `Ref: ${reference}\n${description}` : `Ref: ${reference}`;
-
-                    productsToInsert.push({
-                        name: finalTitle,
-                        brand: brand || 'Diversos',
-                        description: finalDesc,
-                        price: price,
-                        category: currentCategory,
-                        img_url: image || null
-                    });
-                }
+                productsToInsert.push({
+                    name: finalTitle,
+                    brand: brand,
+                    description: finalDesc,
+                    price: price,
+                    category: category,
+                    img_url: image || null
+                });
             }
 
             if (productsToInsert.length > 0) {
