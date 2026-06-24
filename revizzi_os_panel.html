@@ -1414,8 +1414,13 @@ async function handleExcelImport(event) {
                 const description = row[4] ? String(row[4]).trim() : '';
                 const reference = row[5] ? String(row[5]).trim() : '';
                 const image = row[6] ? String(row[6]).trim() : '';
+                const size = row[7] ? String(row[7]).trim() : ''; // Optional size column
 
-                const finalTitle = brand !== 'Diversos' ? `[${brand}] ${title}` : title;
+                let finalTitle = title;
+                if (size) {
+                    finalTitle += ` - ${size}`;
+                }
+                
                 const finalDesc = reference ? `Ref: ${reference}\n${description}` : description;
 
                 productsToInsert.push({
