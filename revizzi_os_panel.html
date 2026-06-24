@@ -217,6 +217,7 @@
       <div class="flex gap-4">
         <input type="file" id="import-excel-input" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleExcelImport(event)">
         <button id="btn-import-excel" onclick="document.getElementById('import-excel-input').click()" class="flex items-center justify-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all text-primary"><span class="material-symbols-outlined text-sm">upload_file</span>Importar Planilha</button>
+        <button onclick="deleteAllProducts()" class="flex items-center justify-center gap-2 border border-red-500/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-red-500/60 transition-all text-red-500"><span class="material-symbols-outlined text-sm">delete_sweep</span>Excluir Tudo</button>
         <button onclick="openProductModal()" class="flex items-center justify-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">add</span>Adicionar Item</button>
       </div>
     </div>
@@ -1433,6 +1434,27 @@ async function handleExcelImport(event) {
         }
     };
     reader.readAsArrayBuffer(file);
+}
+
+async function deleteAllProducts() {
+    const consent = confirm("⚠️ ATENÇÃO: Tem certeza que deseja apagar TODOS os produtos cadastrados?\n\nEsta ação é irreversível e removerá todos os itens do banco de dados imediatamente.");
+    if (!consent) return;
+
+    const consent2 = prompt("Para confirmar a exclusão de todos os produtos, digite a palavra: APAGAR");
+    if (consent2 !== "APAGAR") {
+        showToast("Exclusão cancelada.", "error");
+        return;
+    }
+
+    try {
+        const { error } = await db.from('products').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+        if (error) throw error;
+        showToast("Todos os produtos foram apagados!", "success");
+        fetchEstoqueProducts();
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao excluir produtos: " + err.message);
+    }
 }
 
 
