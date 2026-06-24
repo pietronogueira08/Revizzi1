@@ -676,10 +676,10 @@ function printCorreiosLabel(orderId) {
     const order = window._OS_ORDERS.find(o => o.id === orderId);
     if (!order) return;
 
-    let printArea = document.getElementById('correios-print-area');
+    let printArea = document.getElementById('global-print-area');
     if (!printArea) {
         printArea = document.createElement('div');
-        printArea.id = 'correios-print-area';
+        printArea.id = 'global-print-area';
         document.body.appendChild(printArea);
     }
     
@@ -751,10 +751,13 @@ function printCorreiosLabel(orderId) {
         style = document.createElement('style');
         style.id = 'print-style';
         style.innerHTML = `
+            @media screen {
+                #global-print-area { display: none !important; }
+            }
             @media print {
-                body > *:not(#correios-print-area) { display: none !important; }
+                body > *:not(#global-print-area) { display: none !important; }
                 body { background: white; margin: 0; padding: 0; }
-                #correios-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+                #global-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
             }
         `;
         document.head.appendChild(style);
@@ -762,7 +765,6 @@ function printCorreiosLabel(orderId) {
 
     setTimeout(() => {
         window.print();
-        document.body.removeChild(printArea);
     }, 500);
 }
 
@@ -770,10 +772,10 @@ function printNFe(orderId) {
     const order = window._OS_ORDERS.find(o => o.id === orderId);
     if (!order) return;
 
-    let printArea = document.getElementById('nfe-print-area');
+    let printArea = document.getElementById('global-print-area');
     if (!printArea) {
         printArea = document.createElement('div');
-        printArea.id = 'nfe-print-area';
+        printArea.id = 'global-print-area';
         document.body.appendChild(printArea);
     }
     
