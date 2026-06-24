@@ -531,11 +531,24 @@ function openOrderModal(order) {
     // Render address
     const addressStr = order.address ? `${order.address}, ${order.number || 'S/N'} ${order.complement ? '- ' + order.complement : ''}<br>${order.district} - ${order.city}/${order.state}<br>CEP: ${order.cep}` : 'Endereço não informado';
     
+    let itemsHtml = order.items && order.items.length > 0 
+        ? order.items.map(i => `<div style="display:flex;justify-content:space-between;font-size:12px;color:#ccc;margin-bottom:4px;"><span>${i.quantity}x ${i.name || i.title || 'Item'}</span><span>R$ ${Number(i.price || i.unit_price || 0).toFixed(2)}</span></div>`).join('')
+        : '<div style="font-size:12px;color:#777;">Itens não registrados.</div>';
+
+    let paymentMethodStr = order.payment_method === 'pix' ? 'PIX' : (order.payment_method === 'card' ? 'Cartão de Crédito' : (order.payment_method || 'Mercado Pago'));
+
     document.getElementById('modal-body').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
             <div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Cliente</div><div style="color:#fff;font-size:14px;font-weight:600;">${order.client}</div></div>
-            <div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Total</div><div style="color:#fff;font-size:18px;font-weight:700;">${order.total}</div></div>
+            <div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Pagamento</div><div style="color:#fff;font-size:14px;font-weight:600;">${paymentMethodStr}</div></div>
             <div style="grid-column:span 2;"><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Endereço de Entrega</div><div style="color:#fff;font-size:12px;line-height:1.4;">${addressStr}</div></div>
+            <div style="grid-column:span 2;">
+                <div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:8px;">Itens do Pedido</div>
+                <div style="background:rgba(255,255,255,0.05);padding:12px;border:1px solid rgba(255,255,255,0.1);">
+                    ${itemsHtml}
+                    <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;color:#fff;font-weight:bold;font-size:14px;"><span>TOTAL GERAL</span><span>${order.total}</span></div>
+                </div>
+            </div>
         </div>
         <div style="display:flex;gap:12px;margin-bottom:12px;">
             <button onclick="printCorreiosLabel('${order.id}')" style="flex:1;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:12px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
