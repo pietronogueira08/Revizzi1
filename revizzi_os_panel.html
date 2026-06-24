@@ -780,6 +780,14 @@ function printNFe(orderId) {
         document.body.appendChild(printArea);
     }
     
+    let cpf = '000.000.000-00';
+    let phoneNum = order.phone || '';
+    if (phoneNum.includes('| CPF:')) {
+        const parts = phoneNum.split('| CPF:');
+        phoneNum = parts[0].trim();
+        cpf = parts[1].trim();
+    }
+    
     let itemsRows = '';
     let totalQtd = 0;
     let totalValor = 0;
@@ -836,7 +844,7 @@ function printNFe(orderId) {
         <h3 style="font-size:12px;margin:10px 0 2px 0;">DESTINATÁRIO/REMETENTE</h3>
         <div style="border:1px solid #000;display:flex;flex-wrap:wrap;">
             <div style="width:60%;padding:2px 5px;border-right:1px solid #000;border-bottom:1px solid #000;"><div style="font-size:8px;">NOME/RAZÃO SOCIAL</div><div style="font-size:11px;font-weight:bold;">${order.client}</div></div>
-            <div style="width:25%;padding:2px 5px;border-right:1px solid #000;border-bottom:1px solid #000;"><div style="font-size:8px;">CNPJ/CPF</div><div style="font-size:11px;">000.000.000-00</div></div>
+            <div style="width:25%;padding:2px 5px;border-right:1px solid #000;border-bottom:1px solid #000;"><div style="font-size:8px;">CNPJ/CPF</div><div style="font-size:11px;">${cpf}</div></div>
             <div style="width:15%;padding:2px 5px;border-bottom:1px solid #000;"><div style="font-size:8px;">DATA DA EMISSÃO</div><div style="font-size:11px;">${dataEmissao}</div></div>
             <div style="width:45%;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">ENDEREÇO</div><div style="font-size:11px;">${order.address}, ${order.number} ${order.complement}</div></div>
             <div style="width:25%;padding:2px 5px;border-right:1px solid #000;"><div style="font-size:8px;">BAIRRO/DISTRITO</div><div style="font-size:11px;">${order.district}</div></div>
@@ -844,7 +852,7 @@ function printNFe(orderId) {
             <div style="width:15%;padding:2px 5px;"><div style="font-size:8px;">DATA SAÍDA</div><div style="font-size:11px;">${dataEmissao}</div></div>
             <div style="width:45%;padding:2px 5px;border-top:1px solid #000;border-right:1px solid #000;"><div style="font-size:8px;">MUNICÍPIO</div><div style="font-size:11px;">${order.city}</div></div>
             <div style="width:10%;padding:2px 5px;border-top:1px solid #000;border-right:1px solid #000;"><div style="font-size:8px;">UF</div><div style="font-size:11px;">${order.state}</div></div>
-            <div style="width:30%;padding:2px 5px;border-top:1px solid #000;border-right:1px solid #000;"><div style="font-size:8px;">FONE/FAX</div><div style="font-size:11px;">${order.phone || ''}</div></div>
+            <div style="width:30%;padding:2px 5px;border-top:1px solid #000;border-right:1px solid #000;"><div style="font-size:8px;">FONE/FAX</div><div style="font-size:11px;">${phoneNum}</div></div>
             <div style="width:15%;padding:2px 5px;border-top:1px solid #000;"><div style="font-size:8px;">HORA SAÍDA</div><div style="font-size:11px;">${horaEmissao}</div></div>
         </div>
         
@@ -900,32 +908,20 @@ function printNFe(orderId) {
         style = document.createElement('style');
         style.id = 'print-style';
         style.innerHTML = `
+            @media screen {
+                #global-print-area { display: none !important; }
+            }
             @media print {
-                body > *:not(#correios-print-area):not(#nfe-print-area) { display: none !important; }
+                body > *:not(#global-print-area) { display: none !important; }
                 body { background: white; margin: 0; padding: 0; }
-                #correios-print-area, #nfe-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+                #global-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
             }
         `;
         document.head.appendChild(style);
-    } else {
-        style.innerHTML = `
-            @media print {
-                body > *:not(#correios-print-area):not(#nfe-print-area) { display: none !important; }
-                body { background: white; margin: 0; padding: 0; }
-                #correios-print-area, #nfe-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
-            }
-        `;
     }
-
-    // Hide Correios area if it exists so only NFe is printed
-    const correios = document.getElementById('correios-print-area');
-    if (correios) correios.style.display = 'none';
-    printArea.style.display = 'block';
 
     setTimeout(() => {
         window.print();
-        document.body.removeChild(printArea);
-        if (correios) correios.style.display = 'block'; // restore
     }, 500);
 }
 
