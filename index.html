@@ -1437,7 +1437,7 @@ function validateStep(step) {
         }
     }
     
-    if (step === 2 && !window.CheckoutFreight.method) {
+    if (step === 2 && !window.CheckoutFreight.name) {
         showToast('Calcule e selecione uma opção de entrega.', 'error');
         return false;
     }
