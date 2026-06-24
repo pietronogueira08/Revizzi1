@@ -1574,12 +1574,7 @@ async function handleConfirmOrder() {
         console.error('Supabase exception:', e);
         return;
     }
-    setTimeout(function() {
-        text.textContent = 'Pedido Confirmado!';
-        check.classList.remove('hidden');
-        Cart.items = [];
-        updateCartBadge();
-        // Send Telegram Notification
+    try {
         let tgText = `🚀 <b>NOVO PEDIDO REVIZZI</b> 🚀\n\n`;
         tgText += `<b>Cliente:</b> ${customerName}\n`;
         tgText += `<b>Telefone:</b> ${customerPhone}\n`;
@@ -1591,19 +1586,43 @@ async function handleConfirmOrder() {
         tgText += `\n<b>Frete:</b> ${window.CheckoutFreight.name || 'Padrão'} (R$ ${(window.CheckoutFreight.price || 0).toFixed(2)})\n`;
         tgText += `<b>Pagamento:</b> ${paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito'}\n`;
         tgText += `<b>TOTAL:</b> R$ ${orderTotal.toFixed(2)}\n\n`;
-        tgText += `O pedido foi salvo no painel de administração!`;
+        tgText += `O cliente está sendo redirecionado para o Mercado Pago!`;
 
         fetch('https://api.telegram.org/bot8828379382:AAGn_db5gchFlOChk5NGTZJdd8_mVycbgKc/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: '6570470949',
-                text: tgText,
-                parse_mode: 'HTML'
-            })
+            body: JSON.stringify({ chat_id: '6570470949', text: tgText, parse_mode: 'HTML' })
         }).catch(err => console.error('Erro ao enviar Telegram:', err));
+
+        text.textContent = 'Gerando Pagamento Seguro...';
+
+        // Call Vercel Serverless Function to get Mercado Pago Link
+        const res = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                items: [...orderItems, { title: 'Frete (' + (window.CheckoutFreight.name || 'Padrão') + ')', quantity: 1, unit_price: window.CheckoutFreight.price || 0 }],
+                customerName: customerName,
+                customerEmail: customerEmail
+            })
+        });
+
+        const mpData = await res.json();
+
+        if (mpData.init_point) {
+            Cart.items = [];
+            updateCartBadge();
+            window.location.href = mpData.init_point;
+        } else {
+            alert('Erro ao redirecionar para o Mercado Pago: ' + (mpData.error || 'Desconhecido'));
+            setTimeout(closeCheckout, 2500);
+        }
+
+    } catch (err) {
+        console.error('API Error:', err);
+        alert('Falha de conexão com o Mercado Pago.');
         setTimeout(closeCheckout, 2500);
-    }, 1500);
+    }
 }
 
 // ═══════════════════════════════════
