@@ -15,9 +15,9 @@ export default async function handler(req, res) {
 
     const payload = {
       items: items.map(item => ({
-        title: item.title,
-        quantity: Number(item.quantity),
-        unit_price: Number(item.unit_price),
+        title: item.title || item.name || 'Produto',
+        quantity: Number(item.quantity) || 1,
+        unit_price: Number(item.unit_price || item.price || 0),
         currency_id: 'BRL'
       })),
       payer: {
