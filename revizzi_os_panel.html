@@ -541,6 +541,7 @@ function openOrderModal(order) {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
             <div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Cliente</div><div style="color:#fff;font-size:14px;font-weight:600;">${order.client}</div></div>
             <div><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Pagamento</div><div style="color:#fff;font-size:14px;font-weight:600;">${paymentMethodStr}</div></div>
+            <div style="grid-column:span 2;"><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Contato / CPF</div><div style="color:#fff;font-size:14px;font-weight:600;">${order.phone || 'Não informado'}</div></div>
             <div style="grid-column:span 2;"><div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">Endereço de Entrega</div><div style="color:#fff;font-size:12px;line-height:1.4;">${addressStr}</div></div>
             <div style="grid-column:span 2;">
                 <div style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:8px;">Itens do Pedido</div>

@@ -1514,7 +1514,9 @@ async function handleConfirmOrder() {
     // Collect customer data
     const customerName  = (document.getElementById('ck-name')  || {}).value || 'Cliente';
     const customerEmail = (document.getElementById('ck-email') || {}).value || '';
-    const customerPhone = (document.getElementById('ck-phone') || {}).value || '';
+    const customerPhoneRaw = (document.getElementById('ck-phone') || {}).value || '';
+    const customerCpfRaw   = (document.getElementById('ck-cpf')   || {}).value || '';
+    const customerPhone = customerPhoneRaw + (customerCpfRaw ? ` | CPF: ${customerCpfRaw}` : '');
     const customerCep   = (document.getElementById('ck-cep')   || {}).value || '';
     
     // Address data
