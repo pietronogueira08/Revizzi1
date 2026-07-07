@@ -692,17 +692,16 @@ async function printCorreiosLabel(orderId) {
             throw new Error(data.error || 'Erro na API');
         }
         
-        if (data.mockup && data.pdfUrl) {
-            alert("ERRO CORREIOS: " + (data.errorLogs || "Falha na validação."));
-            showToast(data.message || 'Abrindo modelo de etiqueta...');
+        if (data.pdfUrl) {
+            showToast('Abrindo etiqueta do Melhor Envio...');
             window.open(data.pdfUrl, '_blank');
         } else if (data.success && data.data) {
-            showToast('Etiqueta gerada com sucesso!');
-            if (data.pdfUrl) window.open(data.pdfUrl, '_blank');
+            showToast('Etiqueta inserida no carrinho do Melhor Envio com sucesso!');
         }
     } catch(err) {
         console.error('Erro ao gerar etiqueta:', err);
-        showToast('Falha na API dos Correios. Gerando Declaração Manual...', 'error');
+        alert("ERRO MELHOR ENVIO:\n" + err.message);
+        showToast('Falha na API do Melhor Envio. Gerando Declaração Manual...', 'error');
         printManualCorreiosLabel(orderId);
     }
 }
