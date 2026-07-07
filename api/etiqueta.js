@@ -81,7 +81,10 @@ export default async function handler(req, res) {
         remetente: {
             nome: "Revizzi Centro Automotivo",
             cpfCnpj: user, 
-            telefone: "22999999999",
+            telefone: {
+                ddd: "22",
+                numero: "999999999"
+            },
             endereco: {
                 cep: "28200000",
                 logradouro: "Avenida Genecy Mendonca",
@@ -93,11 +96,14 @@ export default async function handler(req, res) {
         },
         destinatario: {
             nome: (order.customer_name || "Cliente Revizzi").substring(0, 50),
-            telefone: telefoneDestinatario.substring(0, 11),
+            telefone: {
+                ddd: telefoneDestinatario.substring(0, 2),
+                numero: telefoneDestinatario.substring(2)
+            },
             endereco: {
                 cep: cepDestinatario,
                 logradouro: (order.customer_address || "Endereco Padrao").substring(0, 50),
-                numero: (order.customer_number || "S/N").substring(0, 5),
+                numero: (order.customer_number || "SN").substring(0, 5),
                 complemento: (order.customer_complement || "").substring(0, 30),
                 bairro: (order.customer_district || "Bairro").substring(0, 50),
                 cidade: (order.customer_city || "Cidade").substring(0, 50),
@@ -105,15 +111,13 @@ export default async function handler(req, res) {
             }
         },
         codigoServico: codigoServico,
-        objeto: {
-            codigoFormatoObjeto: "1", 
-            peso: 1000,
-            altura: 20,
-            largura: 20,
-            comprimento: 20,
-            indicadorObjetosProibidos: false,
-            itensDeclaracaoConteudo: itensDeclaracao
-        }
+        codigoFormatoObjeto: "1",
+        pesoInformado: "1000",
+        alturaInformada: "20",
+        larguraInformada: "20",
+        comprimentoInformado: "20",
+        indicadorObjetosProibidos: "N",
+        itensDeclaracaoConteudo: itensDeclaracao
     };
 
     const prepostagemRes = await fetch('https://api.correios.com.br/prepostagem/v1/prepostagens', {
