@@ -673,7 +673,40 @@ async function fetchOrders() {
     }
 }
 
-function printCorreiosLabel(orderId) {
+async function printCorreiosLabel(orderId) {
+    const order = window._OS_ORDERS ? window._OS_ORDERS.find(o => o.id === orderId) : ORDERS.find(o => o.id === orderId);
+    if (!order) return;
+    
+    showToast('Gerando etiqueta nos Correios...');
+    
+    try {
+        const res = await fetch('/api/etiqueta', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ order })
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok || data.error) {
+            throw new Error(data.error || 'Erro na API');
+        }
+        
+        if (data.mockup && data.pdfUrl) {
+            showToast(data.message || 'Abrindo modelo de etiqueta...');
+            window.open(data.pdfUrl, '_blank');
+        } else if (data.success && data.data) {
+            showToast('Etiqueta gerada com sucesso!');
+            if (data.pdfUrl) window.open(data.pdfUrl, '_blank');
+        }
+    } catch(err) {
+        console.error('Erro ao gerar etiqueta:', err);
+        showToast('Falha na API dos Correios. Gerando Declaração Manual...', 'error');
+        printManualCorreiosLabel(orderId);
+    }
+}
+
+function printManualCorreiosLabel(orderId) {
     const order = window._OS_ORDERS.find(o => o.id === orderId);
     if (!order) return;
 

@@ -1631,31 +1631,31 @@ async function handleConfirmOrder() {
 // I. FREIGHT SIMULATION LOGIC
 // ═══════════════════════════════════
 async function simulateFreight(cep, orderTotal) {
-    const rawCep = cep.replace(/\D/g, '');
-    let uf = 'SP'; // Default fallback
-    try {
-        const res = await fetch(`https://viacep.com.br/ws/${rawCep}/json/`);
-        const data = await res.json();
-        if (!data.erro && data.uf) uf = data.uf;
-    } catch(e) { console.warn('ViaCEP failed, fallback to SP', e); }
-
-    const isSudeste = ['SP','RJ','MG','ES'].includes(uf);
-    const isSul = ['RS','SC','PR'].includes(uf);
-    
-    let pacBase = isSudeste ? 15 : isSul ? 22 : 35;
-    let sedexBase = isSudeste ? 25 : isSul ? 40 : 60;
-    
-    let pacDays = isSudeste ? 4 : isSul ? 6 : 9;
-    let sedexDays = isSudeste ? 2 : isSul ? 3 : 5;
-
     let options = [];
+    let pacBase = 35; let pacDays = 8;
+    let sedexBase = 60; let sedexDays = 4;
+
+    try {
+        const res = await fetch('/api/frete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cepDestino: cep })
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.pac) { pacBase = data.pac.preco; pacDays = data.pac.prazo; }
+            if (data.sedex) { sedexBase = data.sedex.preco; sedexDays = data.sedex.prazo; }
+        }
+    } catch(e) {
+        console.warn('API frete failed, using defaults', e);
+    }
     
     if (orderTotal >= 199) {
         options.push({ id: 'free', name: 'Frete Grátis', price: 0, days: pacDays + 1 });
     }
     
-    options.push({ id: 'pac', name: 'PAC', price: pacBase, days: pacDays });
-    options.push({ id: 'sedex', name: 'Sedex', price: sedexBase, days: sedexDays });
+    options.push({ id: 'pac', name: 'PAC (Correios)', price: pacBase, days: pacDays });
+    options.push({ id: 'sedex', name: 'Sedex (Correios)', price: sedexBase, days: sedexDays });
     
     return options;
 }
