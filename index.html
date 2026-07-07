@@ -1645,9 +1645,13 @@ async function simulateFreight(cep, orderTotal) {
             const data = await res.json();
             if (data.pac) { pacBase = data.pac.preco; pacDays = data.pac.prazo; }
             if (data.sedex) { sedexBase = data.sedex.preco; sedexDays = data.sedex.prazo; }
+        } else {
+            const errorData = await res.json();
+            alert("ERRO FRETE API:\n" + JSON.stringify(errorData));
         }
     } catch(e) {
         console.warn('API frete failed, using defaults', e);
+        alert("Erro no try-catch do frete: " + e.message);
     }
     
     if (orderTotal >= 199) {
