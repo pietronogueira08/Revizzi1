@@ -49,7 +49,19 @@ export default async function handler(req, res) {
 
     const mePayload = {
         service: serviceId,
-        // Omitimos o 'from' para que a API puxe automaticamente o endereço e CNPJ configurados no painel do Melhor Envio
+        from: {
+            name: "Revizzi Centro Automotivo",
+            phone: "22999999999",
+            email: "revizzi@revizzi.com.br",
+            company_document: "52826087000154", 
+            address: "Avenida Genecy Mendonca",
+            complement: "",
+            number: "10",
+            district: "Fatima",
+            city: "Sao Joao da Barra",
+            state_abbr: "RJ",
+            postal_code: "28200000"
+        },
         to: {
             name: (order.customer_name || "Cliente Revizzi").substring(0, 50),
             phone: telefoneDestinatario,
