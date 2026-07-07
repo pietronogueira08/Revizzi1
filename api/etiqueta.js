@@ -41,16 +41,15 @@ export default async function handler(req, res) {
     let serviceId = (freightMethodName && freightMethodName.toLowerCase().includes('sedex')) ? 2 : 1;
 
     const telefoneDestinatario = order.customer_phone ? order.customer_phone.replace(/\D/g, '') : "22999999999";
-    const docDestinatario = "12345678909"; // Necessita CPF real para ME gerar a tag corretamente
+    const docDestinatario = order.customer_cpf ? order.customer_cpf.replace(/\D/g, '') : "12345678909"; // We'll try to let ME fail if it's invalid, but we'll surface the error now.
 
     const mePayload = {
         service: serviceId,
-        agency: 49,
         from: {
             name: "Revizzi Centro Automotivo",
             phone: "22999999999",
             email: "revizzi@revizzi.com.br",
-            document: process.env.CORREIOS_USER || "52826087000154", // CNPJ
+            document: process.env.CORREIOS_USER || "52826087000154", 
             address: "Avenida Genecy Mendonca",
             complement: "",
             number: "10",
@@ -79,11 +78,10 @@ export default async function handler(req, res) {
             receipt: false,
             own_hand: false,
             reverse: false,
-            non_commercial: true // ISSO FORÇA A DECLARACAO DE CONTEUDO
+            non_commercial: true 
         }
     };
 
-    // 1. Adicionar ao Carrinho
     const cartRes = await fetch('https://www.melhorenvio.com.br/api/v2/me/cart', {
       method: 'POST',
       headers: {
@@ -97,7 +95,7 @@ export default async function handler(req, res) {
     if (!cartRes.ok) {
         const errTxt = await cartRes.text();
         console.error("Melhor Envio Cart Error:", errTxt);
-        return res.status(500).json({ error: `API Melhor Envio retornou erro no Carrinho: ${cartRes.status}`, errorLogs: errTxt });
+        return res.status(500).json({ error: `API Melhor Envio retornou erro no Carrinho: ${cartRes.status} | Detalhes: ${errTxt}` });
     }
 
     const cartData = await cartRes.json();
