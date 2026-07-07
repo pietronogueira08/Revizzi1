@@ -1674,9 +1674,8 @@ function initCheckout() {
     applyMask(document.getElementById('ck-card-num'),    '#### #### #### ####');
     applyMask(document.getElementById('ck-card-expiry'), '##/##');
 
-    // CEP auto-fill and freight trigger
-    document.getElementById('ck-cep').addEventListener('blur', async function() {
-        const raw = this.value.replace(/\D/g, '');
+    async function fetchCepAndFreight() {
+        const raw = document.getElementById('ck-cep').value.replace(/\D/g, '');
         if (raw.length === 8) {
             try {
                 const res = await fetch(`https://viacep.com.br/ws/${raw}/json/`);
@@ -1688,8 +1687,23 @@ function initCheckout() {
                     document.getElementById('ck-state').value = data.uf || '';
                 }
             } catch(e) { console.warn(e); }
+            
+            // Auto-trigger freight calculation
+            document.getElementById('ck-calc-freight-btn').click();
         }
-    });
+    }
+
+    // CEP auto-fill and freight trigger on blur
+    document.getElementById('ck-cep').addEventListener('blur', fetchCepAndFreight);
+
+    // CEP auto-fill and freight trigger on Search button click
+    const searchBtn = document.getElementById('ck-cep-search');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent form submission if it's inside a form
+            fetchCepAndFreight();
+        });
+    }
 
     // Checkout Freight Calc
     document.getElementById('ck-calc-freight-btn').addEventListener('click', async function() {
