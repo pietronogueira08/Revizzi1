@@ -80,7 +80,7 @@ export default async function handler(req, res) {
         cartaoPostagem: cartao,
         remetente: {
             nome: "Revizzi Centro Automotivo",
-            cpfCnpj: user, // CNPJ da cliente
+            cpfCnpj: user, 
             telefone: "22999999999",
             endereco: {
                 cep: "28200000",
@@ -105,14 +105,15 @@ export default async function handler(req, res) {
             }
         },
         codigoServico: codigoServico,
-        dimensao: {
-            tipo: "001", // 001 - Pacote/Caixa
+        objeto: {
+            codigoFormatoObjeto: "1", 
+            peso: 1000,
             altura: 20,
             largura: 20,
             comprimento: 20,
-            peso: 1000
-        },
-        itensDeclaracaoConteudo: itensDeclaracao
+            indicadorObjetosProibidos: false,
+            itensDeclaracaoConteudo: itensDeclaracao
+        }
     };
 
     const prepostagemRes = await fetch('https://api.correios.com.br/prepostagem/v1/prepostagens', {
