@@ -1,10 +1,10 @@
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
+  if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { cep } = req.query;
-  if (!cep) return res.status(400).json({ error: 'CEP é obrigatório' });
+  const { cepDestino } = req.body;
+  if (!cepDestino) return res.status(400).json({ error: 'CEP é obrigatório' });
 
   const token = process.env.MELHOR_ENVIO_TOKEN;
   if (!token) {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   try {
     const payload = {
         from: { postal_code: "28200000" },
-        to: { postal_code: cep.replace(/\D/g, '') },
+        to: { postal_code: cepDestino.replace(/\D/g, '') },
         products: [
             {
                 id: "produto_1",
@@ -33,56 +33,51 @@ export default async function handler(req, res) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'User-Agent': 'Revizzi (revizzi@revizzi.com.br)'
         },
         body: JSON.stringify(payload)
     });
 
     if (!meRes.ok) {
-        throw new Error(`Melhor Envio falhou: ${meRes.status}`);
+        const errTxt = await meRes.text();
+        console.error("ME Frete API Error:", errTxt);
+        return res.status(500).json({ error: `Erro na API do Melhor Envio: ${meRes.status}`, details: errTxt });
     }
 
     const data = await meRes.json();
     
-    // Filtra opções dos Correios (PAC e SEDEX) ou transportadoras úteis.
-    // O id das transportadoras e serviços varia, mas geralmente:
-    // Correios PAC = id 1, Correios Sedex = id 2
     let pacOption = null;
     let sedexOption = null;
     let fallbackOption = null;
     
     for (let option of data) {
-        if (option.error) continue; // Ignora se não entrega na região
+        if (option.error) continue; 
         
         let nome = option.name.toLowerCase();
         let preco = parseFloat(option.custom_price || option.price);
-        let prazo = option.custom_delivery_time || option.delivery_time;
+        let prazo = parseInt(option.custom_delivery_time || option.delivery_time);
 
         if (nome.includes('pac')) {
-            pacOption = { Servico: "PAC", Preco: preco, Prazo: prazo };
+            pacOption = { preco: preco, prazo: prazo };
         } else if (nome.includes('sedex')) {
-            sedexOption = { Servico: "SEDEX", Preco: preco, Prazo: prazo };
+            sedexOption = { preco: preco, prazo: prazo };
         } else if (!fallbackOption) {
-            fallbackOption = { Servico: option.name, Preco: preco, Prazo: prazo };
+            fallbackOption = { preco: preco, prazo: prazo };
         }
     }
     
-    // Retorna no formato compatível com o frontend atual
-    let results = [];
-    if (pacOption) results.push(pacOption);
-    if (sedexOption) results.push(sedexOption);
-    if (results.length === 0 && fallbackOption) results.push(fallbackOption);
-    if (results.length === 0) throw new Error("Nenhuma opção de frete disponível para este CEP.");
-    
-    // Transforma para o frontend que espera array bruto
-    let xmlMock = results.map(r => `<cServico><Codigo>${r.Servico === 'SEDEX' ? '04014' : '04510'}</Codigo><Valor>${r.Preco.toString().replace('.', ',')}</Valor><PrazoEntrega>${r.Prazo}</PrazoEntrega><Erro>0</Erro></cServico>`).join('');
+    // Se falhar em achar pac/sedex, tenta o fallback logico
+    if (!pacOption && fallbackOption) pacOption = fallbackOption;
+    if (!sedexOption && fallbackOption) sedexOption = fallbackOption;
 
-    return res.status(200).send(`<?xml version="1.0" encoding="ISO-8859-1"?><Servicos>${xmlMock}</Servicos>`);
+    return res.status(200).json({
+        pac: pacOption,
+        sedex: sedexOption
+    });
 
   } catch (error) {
     console.error('ME API Error:', error);
-    // Fallback caso a API do Melhor Envio caia, usamos um fixo só pra não travar a venda
-    const fallbackXml = `<Servicos><cServico><Codigo>04510</Codigo><Valor>25,00</Valor><PrazoEntrega>10</PrazoEntrega><Erro>0</Erro></cServico><cServico><Codigo>04014</Codigo><Valor>45,00</Valor><PrazoEntrega>3</PrazoEntrega><Erro>0</Erro></cServico></Servicos>`;
-    return res.status(200).send(`<?xml version="1.0" encoding="ISO-8859-1"?><Servicos>${fallbackXml}</Servicos>`);
+    return res.status(500).json({ error: error.message });
   }
 }
