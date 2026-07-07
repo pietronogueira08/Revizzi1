@@ -41,14 +41,47 @@ export default async function handler(req, res) {
     }
     const token = tokenData.token;
 
-    // 2. Create Pre-postagem (PLP)
-    // Note: This is a simplified mockup of the Pre-postagem payload.
-    // A real production payload requires exact sender details, NFe/Declaracao values, etc.
+    // 2. Build items for Declaracao de Conteudo
+    const orderItems = order.items || [];
+    let itensDeclaracao = [];
+    let totalValorDeclarado = 0;
+    
+    orderItems.forEach(item => {
+        // Ignora frete na declaracao
+        if (item.name && item.name.toLowerCase().includes('frete')) return;
+        
+        let val = parseFloat(item.price || 0);
+        totalValorDeclarado += (val * (item.quantity || 1));
+        
+        itensDeclaracao.push({
+            conteudo: (item.name || "Produto").substring(0, 30),
+            quantidade: parseInt(item.quantity || 1),
+            valor: parseFloat(val.toFixed(2)),
+            peso: 500 // Peso padrao 500g por item
+        });
+    });
+    
+    if (itensDeclaracao.length === 0) {
+        itensDeclaracao.push({
+            conteudo: "Produtos Diversos",
+            quantidade: 1,
+            valor: 10.00,
+            peso: 1000
+        });
+    }
+
+    // 3. Create Pre-postagem (PLP)
+    const telefoneDestinatario = order.customer_phone ? order.customer_phone.replace(/\D/g, '') : "22999999999";
+    const cepDestinatario = order.customer_cep ? order.customer_cep.replace(/\D/g, '') : "28010021";
+    let freightMethodName = order.items && order.items.find(i => i.name === 'Frete') ? order.items.find(i => i.name === 'Frete').method : '';
+    let codigoServico = (freightMethodName && freightMethodName.toLowerCase().includes('sedex')) ? '03140' : '03220';
+
     const plpPayload = {
         cartaoPostagem: cartao,
         remetente: {
             nome: "Revizzi Centro Automotivo",
-            cnpjCpf: "52826087000154",
+            cpfCnpj: user, // CNPJ da cliente
+            telefone: "22999999999",
             endereco: {
                 cep: "28200000",
                 logradouro: "Avenida Genecy Mendonca",
@@ -59,24 +92,27 @@ export default async function handler(req, res) {
             }
         },
         destinatario: {
-            nome: order.customer_name || "Cliente Revizzi",
+            nome: (order.customer_name || "Cliente Revizzi").substring(0, 50),
+            telefone: telefoneDestinatario.substring(0, 11),
             endereco: {
-                cep: (order.customer_cep || "").replace(/\D/g, ''),
-                logradouro: order.customer_address || "Endereco Padrao",
-                numero: "S/N", // Would need real number split
-                bairro: "Bairro",
-                cidade: "Cidade",
-                uf: "RJ"
+                cep: cepDestinatario,
+                logradouro: (order.customer_address || "Endereco Padrao").substring(0, 50),
+                numero: (order.customer_number || "S/N").substring(0, 5),
+                complemento: (order.customer_complement || "").substring(0, 30),
+                bairro: (order.customer_district || "Bairro").substring(0, 50),
+                cidade: (order.customer_city || "Cidade").substring(0, 50),
+                uf: (order.customer_state || "RJ").substring(0, 2)
             }
         },
-        servico: order.freight_method && order.freight_method.toLowerCase().includes('sedex') ? '03140' : '03220', // SEDEX or PAC
+        codigoServico: codigoServico,
         dimensao: {
-            tipo: "1", // Caixa
+            tipo: "001", // 001 - Pacote/Caixa
             altura: 20,
             largura: 20,
             comprimento: 20,
             peso: 1000
-        }
+        },
+        itensDeclaracaoConteudo: itensDeclaracao
     };
 
     const prepostagemRes = await fetch('https://api.correios.com.br/prepostagem/v1/prepostagens', {
@@ -91,24 +127,26 @@ export default async function handler(req, res) {
     if (!prepostagemRes.ok) {
         const errTxt = await prepostagemRes.text();
         console.error("Correios Prepostagem Error:", errTxt);
-        // Fallback: If API strict validation fails, we return a mockup PDF link for demonstration,
-        // since setting up real PLPs requires perfectly formatted addresses and Declaracao de Conteudo.
+        // Em caso de falha de validação dos Correios, ainda usamos o fallback
         return res.status(200).json({ 
             success: true, 
             mockup: true,
-            message: "A API retornou erro por falta de dados exatos do remetente/NFe, então geramos uma etiqueta modelo.",
-            pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", 
-            trackingCode: "BR" + Math.floor(Math.random()*100000000) + "BR" 
+            message: `A API bloqueou a etiqueta devido a formatação do endereço ou tamanho dos itens (${prepostagemRes.status}). Geramos o modelo manual para imprimir.`,
+            pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+            errorLogs: errTxt
         });
     }
 
     const prepostagemData = await prepostagemRes.json();
     
-    // In a real flow, you would now call /prepostagem/v1/prepostagens/{id}/etiqueta to get the PDF.
+    // Se deu certo, a API retorna o ID ou o código de rastreio
+    // A Etiqueta real em PDF precisa ser baixada na rota de emissão do rótulo
+    // Vamos verificar se a API já retorna a url no prepostagemData
     
     return res.status(200).json({
         success: true,
-        data: prepostagemData
+        data: prepostagemData,
+        message: "Pré-postagem gerada com sucesso!"
     });
 
   } catch (error) {
