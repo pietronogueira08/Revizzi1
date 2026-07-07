@@ -132,12 +132,8 @@ export default async function handler(req, res) {
     if (!prepostagemRes.ok) {
         const errTxt = await prepostagemRes.text();
         console.error("Correios Prepostagem Error:", errTxt);
-        // Em caso de falha de validação dos Correios, ainda usamos o fallback
-        return res.status(200).json({ 
-            success: true, 
-            mockup: true,
-            message: `A API bloqueou a etiqueta devido a formatação do endereço ou tamanho dos itens (${prepostagemRes.status}). Geramos o modelo manual para imprimir.`,
-            pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+        return res.status(500).json({ 
+            error: `API Correios retornou erro: ${prepostagemRes.status}`,
             errorLogs: errTxt
         });
     }
