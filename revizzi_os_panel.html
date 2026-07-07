@@ -693,6 +693,7 @@ async function printCorreiosLabel(orderId) {
         }
         
         if (data.mockup && data.pdfUrl) {
+            alert("ERRO CORREIOS: " + (data.errorLogs || "Falha na validação."));
             showToast(data.message || 'Abrindo modelo de etiqueta...');
             window.open(data.pdfUrl, '_blank');
         } else if (data.success && data.data) {
