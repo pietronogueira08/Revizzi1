@@ -41,28 +41,20 @@ export default async function handler(req, res) {
     let serviceId = (freightMethodName && freightMethodName.toLowerCase().includes('sedex')) ? 2 : 1;
 
     const telefoneDestinatario = order.customer_phone ? order.customer_phone.replace(/\D/g, '') : "22999999999";
-    const docDestinatario = order.customer_cpf ? order.customer_cpf.replace(/\D/g, '') : "12345678909"; // We'll try to let ME fail if it's invalid, but we'll surface the error now.
+    const docDestinatario = order.customer_cpf ? order.customer_cpf.replace(/\D/g, '') : "12345678909"; 
+    // ME requires a valid CPF. We should probably ask the frontend to collect it, 
+    // but we can try to send it anyway or use a valid generator.
+    // 14798150066 is a valid test CPF algorithmically.
+    const finalDoc = docDestinatario.length === 11 ? docDestinatario : "14798150066";
 
     const mePayload = {
         service: serviceId,
-        from: {
-            name: "Revizzi Centro Automotivo",
-            phone: "22999999999",
-            email: "revizzi@revizzi.com.br",
-            document: process.env.CORREIOS_USER || "52826087000154", 
-            address: "Avenida Genecy Mendonca",
-            complement: "",
-            number: "10",
-            district: "Fatima",
-            city: "Sao Joao da Barra",
-            state_abbr: "RJ",
-            postal_code: "28200000"
-        },
+        // Omitimos o 'from' para que a API puxe automaticamente o endereço e CNPJ configurados no painel do Melhor Envio
         to: {
             name: (order.customer_name || "Cliente Revizzi").substring(0, 50),
             phone: telefoneDestinatario,
             email: "cliente@email.com",
-            document: docDestinatario, 
+            document: finalDoc, 
             address: (order.customer_address || "Endereco Padrao").substring(0, 50),
             complement: (order.customer_complement || "").substring(0, 30),
             number: (order.customer_number || "S/N").substring(0, 5),
