@@ -241,6 +241,7 @@
                 <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Pedido / Cliente</th>
                 <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Valor Produto</th>
                 <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Custo Frete</th>
+                <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Taxa (MP)</th>
                 <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Total Recebido</th>
               </tr>
             </thead>
@@ -1107,6 +1108,7 @@ async function renderFinancials() {
         
         let grossTotal = 0;
         let freightTotal = 0;
+        let mpTaxTotal = 0;
         let tbodyHTML = '';
 
         const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -1122,9 +1124,17 @@ async function renderFinancials() {
                 }
             }
 
-            const productRevenue = total - freightCost;
+            let gatewayTax = 0;
+            if (o.payment_method === 'pix') {
+                gatewayTax = total * 0.0099; // 0.99% PIX
+            } else {
+                gatewayTax = total * 0.0498; // 4.98% Cartão
+            }
+
+            const productRevenue = total - freightCost - gatewayTax;
             grossTotal += total;
             freightTotal += freightCost;
+            mpTaxTotal += gatewayTax;
 
             const dateStr = new Date(o.created_at).toLocaleDateString('pt-BR');
             const orderId = '#' + String(o.id).slice(0,8).toUpperCase();
@@ -1135,15 +1145,17 @@ async function renderFinancials() {
                     <td class="px-6 py-4 text-[11px]"><span class="font-bold text-primary">${orderId}</span><br/><span class="text-white/50">${o.customer_name || 'Cliente'}</span></td>
                     <td class="px-6 py-4 text-[11px] text-green-400">${formatter.format(productRevenue)}</td>
                     <td class="px-6 py-4 text-[11px] text-red-400">${formatter.format(freightCost)}</td>
+                    <td class="px-6 py-4 text-[11px] text-red-400">${formatter.format(gatewayTax)}<br><span class="text-[9px] text-white/30">${o.payment_method === 'pix' ? 'PIX' : 'Cartão'}</span></td>
                     <td class="px-6 py-4 text-[11px] font-bold text-blue-400 text-right">${formatter.format(total)}</td>
                 </tr>
             `;
         });
 
-        const netRevenue = grossTotal - freightTotal;
+        const netRevenue = grossTotal - freightTotal - mpTaxTotal;
 
         document.getElementById('fin-gross-sales').textContent = formatter.format(grossTotal);
         document.getElementById('fin-freight-costs').textContent = formatter.format(freightTotal);
+        // Added Tax card in DOM if exists, otherwise append. Wait, I only have 3 cards. I will subtract from net revenue.
         document.getElementById('fin-net-revenue').textContent = formatter.format(netRevenue);
         
         document.getElementById('finance-tbody').innerHTML = _RAW_ORDERS.length ? tbodyHTML : `<tr><td colspan="5" class="px-6 py-8 text-center text-[10px] font-label-caps text-on-surface-variant tracking-widest">Nenhum pedido no período selecionado.</td></tr>`;
@@ -1168,13 +1180,15 @@ document.getElementById('btn-export-finance')?.addEventListener('click', () => {
             if (freightItem) freightCost = parseFloat(freightItem.price) || 0;
         }
         const total = parseFloat(o.total) || 0;
+        let gatewayTax = o.payment_method === 'pix' ? total * 0.0099 : total * 0.0498;
         return {
             'Data': new Date(o.created_at).toLocaleDateString('pt-BR'),
             'Pedido ID': '#' + String(o.id).slice(0,8).toUpperCase(),
             'Cliente': o.customer_name || 'Cliente',
             'Receita Bruta (Total Pago)': total,
-            'Custo Frete (Melhor Envio)': freightCost,
-            'Receita Líquida (Produtos)': total - freightCost,
+            'Custo Frete (Correios)': freightCost,
+            'Taxa Mercado Pago': gatewayTax,
+            'Receita Líquida (Produtos)': total - freightCost - gatewayTax,
             'Status': o.status
         };
     });
