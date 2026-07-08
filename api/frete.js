@@ -6,60 +6,78 @@ export default async function handler(req, res) {
   const { cepDestino } = req.body;
   if (!cepDestino) return res.status(400).json({ error: 'CEP é obrigatório' });
 
-  const cepDest = cepDestino.replace(/\D/g, '');
-  const cepOrigem = '28200000'; // CEP da Loja (SJB)
-  
-  // Para usar o contrato, configure no Vercel: CORREIOS_EMPRESA, CORREIOS_SENHA
-  const nCdEmpresa = process.env.CORREIOS_EMPRESA || '';
-  const sDsSenha = process.env.CORREIOS_SENHA || '';
-  
-  // Códigos de serviço: se tiver contrato, geralmente usa 03298 (PAC) e 03220 (SEDEX)
-  // Sem contrato: 04510 (PAC) e 04014 (SEDEX)
-  const codPac = nCdEmpresa ? (process.env.CORREIOS_PAC_COD || '03298') : '04510';
-  const codSedex = nCdEmpresa ? (process.env.CORREIOS_SEDEX_COD || '03220') : '04014';
-
-  async function fetchCorreios(codigoServico) {
-      const url = `http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdEmpresa=${nCdEmpresa}&sDsSenha=${sDsSenha}&sCepOrigem=${cepOrigem}&sCepDestino=${cepDest}&nVlPeso=1&nCdFormato=1&nVlComprimento=20&nVlAltura=20&nVlLargura=20&sCdMaoPropria=N&nVlValorDeclarado=0&sCdAvisoRecebimento=N&nCdServico=${codigoServico}&nVlDiametro=0`;
-      
-      const response = await fetch(url);
-      const xml = await response.text();
-      
-      // Regex para extrair do XML sem precisar de bibliotecas pesadas
-      const valorMatch = xml.match(/<Valor>(.*?)<\/Valor>/);
-      const prazoMatch = xml.match(/<PrazoEntrega>(.*?)<\/PrazoEntrega>/);
-      const erroMatch = xml.match(/<MsgErro><!\[CDATA\[(.*?)\]\]><\/MsgErro>/);
-      
-      if (erroMatch && erroMatch[1].trim() !== '') {
-          throw new Error(erroMatch[1]);
-      }
-      
-      if (valorMatch && prazoMatch) {
-          return {
-              preco: parseFloat(valorMatch[1].replace(',', '.')),
-              prazo: parseInt(prazoMatch[1])
-          };
-      }
-      throw new Error("Resposta inválida dos Correios");
+  const token = process.env.MELHOR_ENVIO_TOKEN;
+  if (!token) {
+    return res.status(500).json({ error: 'Token do Melhor Envio não configurado.' });
   }
 
   try {
-      // Busca PAC e SEDEX em paralelo
-      const [pac, sedex] = await Promise.all([
-          fetchCorreios(codPac).catch(e => { console.warn('Erro PAC:', e.message); return null; }),
-          fetchCorreios(codSedex).catch(e => { console.warn('Erro SEDEX:', e.message); return null; })
-      ]);
+    const payload = {
+        from: { postal_code: "28200000" },
+        to: { postal_code: cepDestino.replace(/\D/g, '') },
+        products: [
+            {
+                id: "produto_1",
+                width: 20,
+                height: 20,
+                length: 20,
+                weight: 1, // 1kg default
+                insurance_value: 10,
+                quantity: 1
+            }
+        ]
+    };
 
-      if (!pac && !sedex) {
-          return res.status(500).json({ error: 'Correios indisponível para este CEP.' });
-      }
+    const meRes = await fetch('https://www.melhorenvio.com.br/api/v2/me/shipment/calculate', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'User-Agent': 'Revizzi (revizzi@revizzi.com.br)'
+        },
+        body: JSON.stringify(payload)
+    });
 
-      return res.status(200).json({
-          pac: pac,
-          sedex: sedex
-      });
+    if (!meRes.ok) {
+        const errTxt = await meRes.text();
+        console.error("ME Frete API Error:", errTxt);
+        return res.status(500).json({ error: `Erro na API do Melhor Envio: ${meRes.status}`, details: errTxt });
+    }
+
+    const data = await meRes.json();
+    
+    let pacOption = null;
+    let sedexOption = null;
+    let fallbackOption = null;
+    
+    for (let option of data) {
+        if (option.error) continue; 
+        
+        let nome = option.name.toLowerCase();
+        let preco = parseFloat(option.custom_price || option.price);
+        let prazo = parseInt(option.custom_delivery_time || option.delivery_time);
+
+        if (nome.includes('pac')) {
+            pacOption = { preco: preco, prazo: prazo };
+        } else if (nome.includes('sedex')) {
+            sedexOption = { preco: preco, prazo: prazo };
+        } else if (!fallbackOption) {
+            fallbackOption = { preco: preco, prazo: prazo };
+        }
+    }
+    
+    // Se falhar em achar pac/sedex, tenta o fallback logico
+    if (!pacOption && fallbackOption) pacOption = fallbackOption;
+    if (!sedexOption && fallbackOption) sedexOption = fallbackOption;
+
+    return res.status(200).json({
+        pac: pacOption,
+        sedex: sedexOption
+    });
 
   } catch (error) {
-      console.error('Correios WS Error:', error);
-      return res.status(500).json({ error: error.message });
+    console.error('ME API Error:', error);
+    return res.status(500).json({ error: error.message });
   }
 }
