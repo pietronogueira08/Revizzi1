@@ -71,15 +71,26 @@ export default async function handler(req, res) {
         const { orderId, customerName, customerEmail, customerDocument, customerPhone, items, shipping, total, cep, street, number, complement, neighborhood, city, state } = req.body;
 
         const accessToken = await getBlingAccessToken();
+        const docLimpo = customerDocument.replace(/\D/g, '');
 
-        // Montar Payload do Pedido para o Bling V3
-        const blingOrder = {
-            numero: orderId,
-            data: new Date().toISOString().split('T')[0],
-            contato: {
-                nome: customerName,
-                tipoPessoa: customerDocument.length > 14 ? 'J' : 'F',
-                numeroDocumento: customerDocument.replace(/\D/g, ''),
+        // 1. Procurar se Contato já existe
+        let contatoId = null;
+        if (docLimpo) {
+            const searchRes = await fetch(`https://api.bling.com.br/Api/v3/contatos?numeroDocumento=${docLimpo}`, {
+                headers: { 'Authorization': `Bearer ${accessToken}`, 'Accept': '1.0' }
+            });
+            const searchData = await searchRes.json();
+            if (searchData && searchData.data && searchData.data.length > 0) {
+                contatoId = searchData.data[0].id;
+            }
+        }
+
+        // 2. Se não existe, Criar Contato
+        if (!contatoId) {
+            const novoContato = {
+                nome: customerName || 'Cliente',
+                tipo: 'F',
+                numeroDocumento: docLimpo,
                 telefone: customerPhone,
                 email: customerEmail,
                 endereco: {
@@ -93,6 +104,30 @@ export default async function handler(req, res) {
                         cep: cep.replace(/\D/g, '')
                     }
                 }
+            };
+            const createRes = await fetch('https://api.bling.com.br/Api/v3/contatos', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Accept': '1.0'
+                },
+                body: JSON.stringify(novoContato)
+            });
+            const createData = await createRes.json();
+            if (createData.data && createData.data.id) {
+                contatoId = createData.data.id;
+            } else {
+                throw new Error("Falha ao criar contato no Bling: " + JSON.stringify(createData));
+            }
+        }
+
+        // 3. Montar Payload do Pedido para o Bling V3
+        const blingOrder = {
+            numero: orderId,
+            data: new Date().toISOString().split('T')[0],
+            contato: {
+                id: contatoId
             },
             itens: items.map(item => ({
                 codigo: item.product_id || item.id || `PROD-${Math.random().toString(36).substring(7)}`,
@@ -118,7 +153,7 @@ export default async function handler(req, res) {
 
         const result = await blingRes.json();
 
-        if (!blingRes.ok) {
+        if (!blingRes.ok || result.error) {
             console.error('Bling API Error:', JSON.stringify(result));
             return res.status(400).json({ error: 'Erro ao criar pedido no Bling', details: result });
         }
