@@ -6,78 +6,96 @@ export default async function handler(req, res) {
   const { cepDestino } = req.body;
   if (!cepDestino) return res.status(400).json({ error: 'CEP é obrigatório' });
 
-  const token = process.env.MELHOR_ENVIO_TOKEN;
-  if (!token) {
-    return res.status(500).json({ error: 'Token do Melhor Envio não configurado.' });
+  const cepDest = cepDestino.replace(/\D/g, '');
+  const cepOrigem = '28200000'; // CEP da Loja (SJB)
+  
+  // Credenciais da Loja
+  const CNPJ = process.env.CORREIOS_CNPJ || '52826087000154';
+  const SENHA_API = process.env.CORREIOS_SENHA_API || 'fn8kxySsVhNn9RnPj4KwosPQj9qXD3CdyryXaWvn';
+  const CARTAO = process.env.CORREIOS_CARTAO || '0080201750';
+  
+  // Códigos de Serviço do Contrato
+  const COD_PAC = '03298';
+  const COD_SEDEX = '03220';
+
+  async function getCorreiosToken() {
+      const credentials = Buffer.from(`${CNPJ}:${SENHA_API}`).toString('base64');
+      const authRes = await fetch('https://api.correios.com.br/token/v1/autentica/cartaopostagem', {
+          method: 'POST',
+          headers: {
+              'Authorization': `Basic ${credentials}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ numero: CARTAO })
+      });
+      
+      const authData = await authRes.json();
+      if (!authData.token) {
+          throw new Error('Falha ao autenticar na nova API dos Correios: ' + JSON.stringify(authData));
+      }
+      return authData.token;
+  }
+
+  async function fetchPrice(token, codigoServico) {
+      const payload = {
+        idLote: "1",
+        parametrosPrazo: [
+          {
+            coProduto: codigoServico,
+            cepOrigem: cepOrigem,
+            cepDestino: cepDest,
+            nuPeso: 1,
+            nuFormato: 1,
+            nuComprimento: 20,
+            nuAltura: 20,
+            nuLargura: 20,
+            nuDiametro: 0,
+            vlDeclarado: 0
+          }
+        ]
+      };
+
+      const res = await fetch('https://api.correios.com.br/preco/v1/nacional', {
+          method: 'POST',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+      });
+      
+      const data = await res.json();
+      if (data && data.length > 0 && data[0].pcFinal) {
+          return {
+              preco: parseFloat(data[0].pcFinal.replace(',', '.')),
+              prazo: parseInt(data[0].prazoEntrega)
+          };
+      }
+      return null;
   }
 
   try {
-    const payload = {
-        from: { postal_code: "28200000" },
-        to: { postal_code: cepDestino.replace(/\D/g, '') },
-        products: [
-            {
-                id: "produto_1",
-                width: 20,
-                height: 20,
-                length: 20,
-                weight: 1, // 1kg default
-                insurance_value: 10,
-                quantity: 1
-            }
-        ]
-    };
+      // 1. Pega Token CWS
+      const token = await getCorreiosToken();
 
-    const meRes = await fetch('https://www.melhorenvio.com.br/api/v2/me/shipment/calculate', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-            'User-Agent': 'Revizzi (revizzi@revizzi.com.br)'
-        },
-        body: JSON.stringify(payload)
-    });
+      // 2. Busca PAC e SEDEX em paralelo
+      const [pac, sedex] = await Promise.all([
+          fetchPrice(token, COD_PAC).catch(e => null),
+          fetchPrice(token, COD_SEDEX).catch(e => null)
+      ]);
 
-    if (!meRes.ok) {
-        const errTxt = await meRes.text();
-        console.error("ME Frete API Error:", errTxt);
-        return res.status(500).json({ error: `Erro na API do Melhor Envio: ${meRes.status}`, details: errTxt });
-    }
+      if (!pac && !sedex) {
+          return res.status(500).json({ error: 'Correios indisponível para este CEP.' });
+      }
 
-    const data = await meRes.json();
-    
-    let pacOption = null;
-    let sedexOption = null;
-    let fallbackOption = null;
-    
-    for (let option of data) {
-        if (option.error) continue; 
-        
-        let nome = option.name.toLowerCase();
-        let preco = parseFloat(option.custom_price || option.price);
-        let prazo = parseInt(option.custom_delivery_time || option.delivery_time);
-
-        if (nome.includes('pac')) {
-            pacOption = { preco: preco, prazo: prazo };
-        } else if (nome.includes('sedex')) {
-            sedexOption = { preco: preco, prazo: prazo };
-        } else if (!fallbackOption) {
-            fallbackOption = { preco: preco, prazo: prazo };
-        }
-    }
-    
-    // Se falhar em achar pac/sedex, tenta o fallback logico
-    if (!pacOption && fallbackOption) pacOption = fallbackOption;
-    if (!sedexOption && fallbackOption) sedexOption = fallbackOption;
-
-    return res.status(200).json({
-        pac: pacOption,
-        sedex: sedexOption
-    });
+      return res.status(200).json({
+          pac: pac,
+          sedex: sedex
+      });
 
   } catch (error) {
-    console.error('ME API Error:', error);
-    return res.status(500).json({ error: error.message });
+      console.error('Correios CWS Error:', error);
+      return res.status(500).json({ error: error.message });
   }
 }
