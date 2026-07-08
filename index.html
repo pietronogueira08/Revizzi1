@@ -1545,7 +1545,7 @@ async function handleConfirmOrder() {
     // Save to Supabase
     try {
         if (typeof supabaseClient !== 'undefined') {
-            const { error } = await supabaseClient.from('orders').insert([{
+            const { data: insertedOrder, error } = await supabaseClient.from('orders').insert([{
                 customer_name:  customerName,
                 customer_email: customerEmail,
                 customer_phone: customerPhone,
@@ -1560,13 +1560,39 @@ async function handleConfirmOrder() {
                 total:          orderTotal,
                 status:         'pending',
                 payment_method: paymentMethod
-            }]);
+            }]).select();
             
             if (error) {
                 alert('Erro do banco de dados: ' + error.message);
                 console.error('Supabase error:', error);
                 return; // Stop checkout flow if error
             }
+            
+            // Envia para o Bling
+            try {
+                fetch('/api/bling-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: insertedOrder[0].id,
+                        customerName: customerName,
+                        customerEmail: customerEmail,
+                        customerDocument: customerCpfRaw,
+                        customerPhone: customerPhoneRaw,
+                        cep: customerCep,
+                        street: customerAddress,
+                        number: customerNumber,
+                        complement: customerComplement,
+                        neighborhood: customerDistrict,
+                        city: customerCity,
+                        state: customerState,
+                        items: orderItems,
+                        shipping: window.CheckoutFreight.price,
+                        total: orderTotal
+                    })
+                }).catch(e => console.error("Falha silenciosa ao enviar para o Bling:", e));
+            } catch(e) {}
+
         } else {
             alert('Erro: supabaseClient não encontrado!');
             return;
