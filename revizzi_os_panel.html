@@ -86,6 +86,10 @@
 <span class="material-symbols-outlined mr-3 text-xl">speed</span>
 <span class="font-label-caps uppercase tracking-widest text-[11px]">Painel</span>
 </a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Financeiro">
+<span class="material-symbols-outlined mr-3 text-xl">account_balance</span>
+<span class="font-label-caps uppercase tracking-widest text-[11px]">Financeiro</span>
+</a>
 <a class="flex items-center px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all" href="#" data-section="Estoque">
 <span class="material-symbols-outlined mr-3 text-xl">precision_manufacturing</span>
 <span class="font-label-caps uppercase tracking-widest text-[11px]">Estoque</span>
@@ -168,6 +172,79 @@
           <table id="orders-table" class="w-full text-left border-collapse">
             <thead class="sticky top-0 bg-surface-card z-10"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">ID</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Cliente</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Total</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Status</th></tr></thead>
             <tbody id="orders-tbody" class="divide-y divide-white/[0.04]"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ FINANCEIRO ══════════════════ -->
+  <div id="section-Financeiro" class="section-view">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+      <div>
+        <h1 class="font-headline-xl text-primary uppercase">Financeiro</h1>
+        <p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Conciliação de Faturamento e Custos de Frete (MP & Melhor Envio)</p>
+      </div>
+      <div class="flex flex-col md:flex-row items-center gap-4">
+        <select id="finance-period-select" class="bg-surface-card border border-white/10 text-white font-label-caps text-[11px] uppercase px-4 py-2 focus:outline-none focus:border-white/40 cursor-pointer">
+          <option value="all">Todo o Período</option>
+          <option value="current_cycle" selected>Ciclo Atual (16 a 15)</option>
+          <option value="last_cycle">Ciclo Anterior (16 a 15)</option>
+          <option value="last_30">Últimos 30 Dias</option>
+        </select>
+        <button id="btn-export-finance" class="flex items-center gap-2 border border-green-500/50 bg-green-500/10 text-green-400 px-4 py-2 font-label-caps text-[11px] uppercase hover:bg-green-500/20 transition-all">
+          <span class="material-symbols-outlined text-sm">download</span>
+          Exportar para Contador (XLSX)
+        </button>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="glass-panel p-6 border-l-2 border-l-blue-500">
+        <div class="flex justify-between items-start mb-2">
+          <span class="font-label-caps text-[10px] text-white uppercase tracking-tighter">Receita Bruta (Mercado Pago)</span>
+          <span class="material-symbols-outlined text-blue-400 text-lg">point_of_sale</span>
+        </div>
+        <div id="fin-gross-sales" class="font-display-lg text-headline-xl text-primary mb-1">R$ 0,00</div>
+        <div class="text-[10px] font-label-caps text-white/70">Total faturado pelo gateway</div>
+      </div>
+      
+      <div class="glass-panel p-6 border-l-2 border-l-red-500">
+        <div class="flex justify-between items-start mb-2">
+          <span class="font-label-caps text-[10px] text-white uppercase tracking-tighter">Custos de Frete (Melhor Envio)</span>
+          <span class="material-symbols-outlined text-red-400 text-lg">local_shipping</span>
+        </div>
+        <div id="fin-freight-costs" class="font-display-lg text-headline-xl text-primary mb-1">R$ 0,00</div>
+        <div class="text-[10px] font-label-caps text-white/70">Valor exato debitado na carteira ME</div>
+      </div>
+      
+      <div class="glass-panel p-6 border-l-2 border-l-green-500">
+        <div class="flex justify-between items-start mb-2">
+          <span class="font-label-caps text-[10px] text-white uppercase tracking-tighter">Receita Líquida (Produtos)</span>
+          <span class="material-symbols-outlined text-green-400 text-lg">savings</span>
+        </div>
+        <div id="fin-net-revenue" class="font-display-lg text-headline-xl text-primary mb-1">R$ 0,00</div>
+        <div class="text-[10px] font-label-caps text-white/70">Valor real a receber (Subtotal)</div>
+      </div>
+    </div>
+
+    <div class="bento-grid">
+      <div class="col-span-12 glass-panel p-0 overflow-hidden flex flex-col min-h-[400px]">
+        <div class="p-6 border-b border-border-subtle">
+          <h2 class="font-headline-lg text-primary uppercase text-2xl">Detalhe das Vendas</h2>
+        </div>
+        <div class="flex-1 overflow-auto">
+          <table id="finance-table" class="w-full text-left border-collapse">
+            <thead class="sticky top-0 bg-surface-card z-10">
+              <tr class="border-b border-border-subtle">
+                <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Data</th>
+                <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Pedido / Cliente</th>
+                <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Valor Produto</th>
+                <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Custo Frete</th>
+                <th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Total Recebido</th>
+              </tr>
+            </thead>
+            <tbody id="finance-tbody" class="divide-y divide-white/[0.04]"></tbody>
           </table>
         </div>
       </div>
@@ -972,6 +1049,142 @@ function updateKPIs(data) {
     if (countEl) countEl.textContent = data.filter(o => o.status === 'completed').length;
 }
 
+// ═══════════════════════════════════
+// FINANCEIRO
+// ═══════════════════════════════════
+
+let _RAW_ORDERS = [];
+
+function getCycleDates(referenceDate, offsetCycle = 0) {
+    let d = new Date(referenceDate);
+    // If offsetCycle = -1, we want the previous cycle
+    if (offsetCycle !== 0) {
+        d.setMonth(d.getMonth() + offsetCycle);
+    }
+    let day = d.getDate();
+    let month = d.getMonth();
+    let year = d.getFullYear();
+    
+    let start, end;
+    if (day >= 16) {
+        start = new Date(year, month, 16);
+        end = new Date(year, month + 1, 15, 23, 59, 59);
+    } else {
+        start = new Date(year, month - 1, 16);
+        end = new Date(year, month, 15, 23, 59, 59);
+    }
+    return { start, end };
+}
+
+async function renderFinancials() {
+    try {
+        const period = document.getElementById('finance-period-select').value;
+        const now = new Date();
+        let filterStart = null;
+        let filterEnd = null;
+
+        if (period === 'current_cycle') {
+            const { start, end } = getCycleDates(now, 0);
+            filterStart = start; filterEnd = end;
+        } else if (period === 'last_cycle') {
+            const { start, end } = getCycleDates(now, -1);
+            filterStart = start; filterEnd = end;
+        } else if (period === 'last_30') {
+            filterStart = new Date();
+            filterStart.setDate(filterStart.getDate() - 30);
+            filterEnd = new Date();
+        }
+
+        // Fetch ALL orders to ensure we don't miss any due to limit(50)
+        let query = db.from('orders').select('*').order('created_at', { ascending: false });
+        if (filterStart) query = query.gte('created_at', filterStart.toISOString());
+        if (filterEnd) query = query.lte('created_at', filterEnd.toISOString());
+
+        const { data, error } = await query;
+        if (error) throw error;
+        
+        _RAW_ORDERS = data || [];
+        
+        let grossTotal = 0;
+        let freightTotal = 0;
+        let tbodyHTML = '';
+
+        const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        _RAW_ORDERS.forEach(o => {
+            const total = parseFloat(o.total) || 0;
+            let freightCost = 0;
+            
+            if (o.items && Array.isArray(o.items)) {
+                const freightItem = o.items.find(i => i.name === 'Frete' || i.name === 'Logística');
+                if (freightItem) {
+                    freightCost = parseFloat(freightItem.price) || 0;
+                }
+            }
+
+            const productRevenue = total - freightCost;
+            grossTotal += total;
+            freightTotal += freightCost;
+
+            const dateStr = new Date(o.created_at).toLocaleDateString('pt-BR');
+            const orderId = '#' + String(o.id).slice(0,8).toUpperCase();
+            
+            tbodyHTML += `
+                <tr class="hover:bg-[#171717] transition-colors">
+                    <td class="px-6 py-4 text-[11px]">${dateStr}</td>
+                    <td class="px-6 py-4 text-[11px]"><span class="font-bold text-primary">${orderId}</span><br/><span class="text-white/50">${o.customer_name || 'Cliente'}</span></td>
+                    <td class="px-6 py-4 text-[11px] text-green-400">${formatter.format(productRevenue)}</td>
+                    <td class="px-6 py-4 text-[11px] text-red-400">${formatter.format(freightCost)}</td>
+                    <td class="px-6 py-4 text-[11px] font-bold text-blue-400 text-right">${formatter.format(total)}</td>
+                </tr>
+            `;
+        });
+
+        const netRevenue = grossTotal - freightTotal;
+
+        document.getElementById('fin-gross-sales').textContent = formatter.format(grossTotal);
+        document.getElementById('fin-freight-costs').textContent = formatter.format(freightTotal);
+        document.getElementById('fin-net-revenue').textContent = formatter.format(netRevenue);
+        
+        document.getElementById('finance-tbody').innerHTML = _RAW_ORDERS.length ? tbodyHTML : `<tr><td colspan="5" class="px-6 py-8 text-center text-[10px] font-label-caps text-on-surface-variant tracking-widest">Nenhum pedido no período selecionado.</td></tr>`;
+
+    } catch (err) {
+        console.error('Error fetching financials:', err);
+    }
+}
+
+document.getElementById('finance-period-select')?.addEventListener('change', renderFinancials);
+
+document.getElementById('btn-export-finance')?.addEventListener('click', () => {
+    if (_RAW_ORDERS.length === 0) {
+        showToast('Nenhum dado para exportar.', 'error');
+        return;
+    }
+    
+    const exportData = _RAW_ORDERS.map(o => {
+        let freightCost = 0;
+        if (o.items && Array.isArray(o.items)) {
+            const freightItem = o.items.find(i => i.name === 'Frete' || i.name === 'Logística');
+            if (freightItem) freightCost = parseFloat(freightItem.price) || 0;
+        }
+        const total = parseFloat(o.total) || 0;
+        return {
+            'Data': new Date(o.created_at).toLocaleDateString('pt-BR'),
+            'Pedido ID': '#' + String(o.id).slice(0,8).toUpperCase(),
+            'Cliente': o.customer_name || 'Cliente',
+            'Receita Bruta (Total Pago)': total,
+            'Custo Frete (Melhor Envio)': freightCost,
+            'Receita Líquida (Produtos)': total - freightCost,
+            'Status': o.status
+        };
+    });
+
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Financeiro");
+    XLSX.writeFile(wb, `Revizzi_Financeiro_${new Date().getTime()}.xlsx`);
+});
+
 function renderOrderTable(orders) {
     const tbody = document.getElementById('orders-tbody');
     if (!tbody) return;
@@ -1386,6 +1599,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSidebar(); initTopTabs(); initChartButtons();
     initNotifications(); initProfile(); initSearch(); initFooter(); initKPI();
     fetchOrders();
+    renderFinancials();
     fetchEstoqueProducts();
     fetchAdminTestimonials();
     initMobileAdminSidebar();
