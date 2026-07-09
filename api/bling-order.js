@@ -90,6 +90,7 @@ export default async function handler(req, res) {
             const novoContato = {
                 nome: customerName || 'Cliente',
                 tipo: 'F',
+                situacao: 'A',
                 numeroDocumento: docLimpo,
                 telefone: customerPhone,
                 email: customerEmail,
