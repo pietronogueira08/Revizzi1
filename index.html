@@ -208,10 +208,21 @@
             padding: 0;
             max-width: 800px;
             width: calc(100vw - 32px);
+            max-height: 90vh;
             border-radius: 2px;
+            overflow-y: auto;
         }
         #product-modal[open] { opacity: 1; }
         #product-modal::backdrop { background: rgba(0,0,0,0.85); }
+        @media (max-width: 767px) {
+            #product-modal {
+                width: calc(100vw - 16px);
+                max-height: 95vh;
+            }
+            #product-modal .aspect-square {
+                aspect-ratio: 4/3;
+            }
+        }
 
         /* ── Filter Section ── */
         #filter-overlay {
@@ -576,7 +587,7 @@
 <div class="aspect-square bg-surface-main relative">
 <img id="product-modal-img" class="w-full h-full object-cover" src="" alt="" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
 </div>
-<div class="flex flex-col justify-between p-8">
+<div class="flex flex-col justify-between p-6 md:p-8 overflow-y-auto">
 <div>
 <div class="flex justify-between items-start mb-4">
 <p id="product-modal-brand" class="font-label-caps text-[10px] text-on-surface-variant uppercase"></p>
@@ -589,8 +600,8 @@
 <div class="border-t border-white/10 pt-4">
   <label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Simular Frete</label>
   <div class="flex gap-2">
-    <input id="product-modal-cep" type="text" placeholder="00000-000" maxlength="9" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40" />
-    <button id="product-modal-calc-btn" class="bg-white/10 text-white font-label-caps text-[10px] uppercase px-4 hover:bg-white/20 transition-colors">Calcular</button>
+    <input id="product-modal-cep" type="text" placeholder="00000-000" maxlength="9" class="flex-1 min-w-0 bg-surface-container border border-white/10 text-primary font-body-md py-2 px-3 rounded-[2px] focus:outline-none focus:border-white/40 text-sm" />
+    <button id="product-modal-calc-btn" class="bg-white/10 text-white font-label-caps text-[10px] uppercase px-4 py-2 hover:bg-white/20 transition-colors flex-shrink-0 whitespace-nowrap">Calcular</button>
   </div>
   <div id="product-modal-freight-result" class="mt-3 text-xs text-on-surface-variant hidden flex-col gap-2"></div>
 </div>
@@ -1234,7 +1245,9 @@ function initProductModal() {
             resEl.classList.remove('hidden');
             resEl.classList.add('flex');
         } catch(e) {
-            showToast('Erro ao calcular frete', 'error');
+            resEl.innerHTML = '<div class="text-red-400 text-[10px]">Não foi possível calcular o frete. Tente novamente.</div>';
+            resEl.classList.remove('hidden');
+            resEl.classList.add('flex');
         }
         this.disabled = false; this.textContent = 'Calcular';
     });
@@ -1672,12 +1685,10 @@ async function simulateFreight(cep, orderTotal) {
             if (data.pac) { pacBase = data.pac.preco; pacDays = data.pac.prazo; }
             if (data.sedex) { sedexBase = data.sedex.preco; sedexDays = data.sedex.prazo; }
         } else {
-            const errorData = await res.json();
-            alert("ERRO FRETE API:\n" + JSON.stringify(errorData));
+            console.warn('Frete API returned error:', await res.text());
         }
     } catch(e) {
         console.warn('API frete failed, using defaults', e);
-        alert("Erro no try-catch do frete: " + e.message);
     }
     
     if (orderTotal >= 199) {
