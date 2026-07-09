@@ -9,16 +9,17 @@ export default async function handler(req, res) {
   const cepDest = cepDestino.replace(/\D/g, '');
   const cepOrigem = '28200000'; // CEP da Loja (SJB)
   
-  // Credenciais da Loja
+  // Credenciais do Contrato dos Correios
   const CNPJ = process.env.CORREIOS_CNPJ || '52826087000154';
   const SENHA_API = process.env.CORREIOS_SENHA_API || 'fn8kxySsVhNn9RnPj4KwosPQj9qXD3CdyryXaWvn';
   const CARTAO = process.env.CORREIOS_CARTAO || '0080201750';
   
-  // Códigos de Serviço do Contrato
+  // Códigos de Serviço do Contrato PJ
   const COD_PAC = '03298';
   const COD_SEDEX = '03220';
 
-  async function getCorreiosToken() {
+  try {
+      // ── 1. Autenticar no CWS dos Correios ──
       const credentials = Buffer.from(`${CNPJ}:${SENHA_API}`).toString('base64');
       const authRes = await fetch('https://api.correios.com.br/token/v1/autentica/cartaopostagem', {
           method: 'POST',
@@ -31,68 +32,104 @@ export default async function handler(req, res) {
       
       const authData = await authRes.json();
       if (!authData.token) {
-          throw new Error('Falha ao autenticar na nova API dos Correios: ' + JSON.stringify(authData));
+          throw new Error('Falha na autenticação Correios CWS');
       }
-      return authData.token;
-  }
+      const token = authData.token;
 
-  async function fetchPrice(token, codigoServico) {
-      const payload = {
-        idLote: "1",
-        parametrosPrazo: [
-          {
-            coProduto: codigoServico,
-            cepOrigem: cepOrigem,
-            cepDestino: cepDest,
-            nuPeso: 1,
-            nuFormato: 1,
-            nuComprimento: 20,
-            nuAltura: 20,
-            nuLargura: 20,
-            nuDiametro: 0,
-            vlDeclarado: 0
-          }
-        ]
+      // ── 2. Buscar Preço (PAC + SEDEX em uma única chamada) ──
+      const payloadPreco = {
+          idLote: "1",
+          parametrosProduto: [
+              {
+                  coProduto: COD_PAC,
+                  nuRequisicao: "1",
+                  cepOrigem: cepOrigem,
+                  cepDestino: cepDest,
+                  psObjeto: 1000,
+                  tpObjeto: 2,
+                  comprimento: 20,
+                  largura: 20,
+                  altura: 20,
+                  diametro: 0,
+                  vlDeclarado: 0
+              },
+              {
+                  coProduto: COD_SEDEX,
+                  nuRequisicao: "2",
+                  cepOrigem: cepOrigem,
+                  cepDestino: cepDest,
+                  psObjeto: 1000,
+                  tpObjeto: 2,
+                  comprimento: 20,
+                  largura: 20,
+                  altura: 20,
+                  diametro: 0,
+                  vlDeclarado: 0
+              }
+          ]
       };
 
-      const res = await fetch('https://api.correios.com.br/preco/v1/nacional', {
+      const precoRes = await fetch('https://api.correios.com.br/preco/v1/nacional', {
           method: 'POST',
           headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
               'Accept': 'application/json'
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payloadPreco)
       });
-      
-      const data = await res.json();
-      if (data && data.length > 0 && data[0].pcFinal) {
-          return {
-              preco: parseFloat(data[0].pcFinal.replace(',', '.')),
-              prazo: parseInt(data[0].prazoEntrega)
-          };
+
+      // ── 3. Buscar Prazo (PAC + SEDEX em uma única chamada) ──
+      const payloadPrazo = {
+          idLote: "1",
+          parametrosPrazo: [
+              { coProduto: COD_PAC, nuRequisicao: "1", cepOrigem: cepOrigem, cepDestino: cepDest },
+              { coProduto: COD_SEDEX, nuRequisicao: "2", cepOrigem: cepOrigem, cepDestino: cepDest }
+          ]
+      };
+
+      const prazoRes = await fetch('https://api.correios.com.br/prazo/v1/nacional', {
+          method: 'POST',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+          },
+          body: JSON.stringify(payloadPrazo)
+      });
+
+      const precoData = await precoRes.json();
+      const prazoData = await prazoRes.json();
+
+      // ── 4. Montar resposta ──
+      let pac = null;
+      let sedex = null;
+
+      if (Array.isArray(precoData) && Array.isArray(prazoData)) {
+          const precoPac = precoData.find(p => p.coProduto === COD_PAC && p.pcFinal && !p.txErro);
+          const precoSedex = precoData.find(p => p.coProduto === COD_SEDEX && p.pcFinal && !p.txErro);
+          const prazoPac = prazoData.find(p => p.coProduto === COD_PAC && !p.txErro);
+          const prazoSedex = prazoData.find(p => p.coProduto === COD_SEDEX && !p.txErro);
+
+          if (precoPac) {
+              pac = {
+                  preco: parseFloat(precoPac.pcFinal.replace(',', '.')),
+                  prazo: prazoPac ? prazoPac.prazoEntrega : 10
+              };
+          }
+          if (precoSedex) {
+              sedex = {
+                  preco: parseFloat(precoSedex.pcFinal.replace(',', '.')),
+                  prazo: prazoSedex ? prazoSedex.prazoEntrega : 5
+              };
+          }
       }
-      return null;
-  }
-
-  try {
-      // 1. Pega Token CWS
-      const token = await getCorreiosToken();
-
-      // 2. Busca PAC e SEDEX em paralelo
-      const [pac, sedex] = await Promise.all([
-          fetchPrice(token, COD_PAC).catch(e => null),
-          fetchPrice(token, COD_SEDEX).catch(e => null)
-      ]);
 
       if (!pac && !sedex) {
           return res.status(500).json({ error: 'Correios indisponível para este CEP.' });
       }
 
-      return res.status(200).json({
-          pac: pac,
-          sedex: sedex
-      });
+      return res.status(200).json({ pac, sedex });
 
   } catch (error) {
       console.error('Correios CWS Error:', error);
