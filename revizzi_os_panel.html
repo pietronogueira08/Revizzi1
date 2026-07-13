@@ -1289,6 +1289,18 @@ function openProductModal(product = null) {
         document.body.appendChild(modal);
         modal.addEventListener('click', e => { if (e.target === modal) closeProductModal(); });
     }
+
+    let dimW = '', dimH = '', dimL = '';
+    if (isEdit && product.dimensions) {
+        try {
+            let d = product.dimensions;
+            if (typeof d === 'string') d = JSON.parse(d);
+            dimW = d.width || '';
+            dimH = d.height || '';
+            dimL = d.length || '';
+        } catch(e) {}
+    }
+
     modal.innerHTML = `
     <div style="background:#131313;border:1px solid rgba(255,255,255,0.1);width:100%;max-width:540px;font-family:Inter,sans-serif;max-height:90vh;overflow-y:auto;">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.08);">
@@ -1330,8 +1342,12 @@ function openProductModal(product = null) {
                     <input id="pm-weight" type="number" step="1" value="${isEdit ? product.weight || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ex: 500">
                 </div>
                 <div>
-                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Dimensões (CxLxA cm)</label>
-                    <input id="pm-dimensions" type="text" value="${isEdit ? product.dimensions || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ex: 16x11x5">
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Dimensões (C x L x A)</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                        <input id="pm-dim-length" type="number" step="any" value="${dimL}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 10px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="C">
+                        <input id="pm-dim-width" type="number" step="any" value="${dimW}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 10px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="L">
+                        <input id="pm-dim-height" type="number" step="any" value="${dimH}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 10px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="A">
+                    </div>
                 </div>
                 <div style="grid-column:span 2;">
                     <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Imagem do Produto (Até 25MB)</label>
@@ -1367,7 +1383,20 @@ async function saveProduct(id) {
     const badgeText = document.getElementById('pm-badge').value.trim();
     const status = document.getElementById('pm-status') ? document.getElementById('pm-status').value : null;
     const weight = parseFloat(document.getElementById('pm-weight').value) || null;
-    const dimensions = document.getElementById('pm-dimensions').value.trim() || null;
+
+    const dimL = parseFloat(document.getElementById('pm-dim-length').value);
+    const dimW = parseFloat(document.getElementById('pm-dim-width').value);
+    const dimH = parseFloat(document.getElementById('pm-dim-height').value);
+    
+    let dimensions = null;
+    if (!isNaN(dimL) || !isNaN(dimW) || !isNaN(dimH)) {
+        dimensions = JSON.stringify({
+            length: isNaN(dimL) ? 0 : dimL,
+            width: isNaN(dimW) ? 0 : dimW,
+            height: isNaN(dimH) ? 0 : dimH
+        });
+    }
+
     const errEl = document.getElementById('pm-error');
     const fileInput = document.getElementById('pm-img-file');
     let imgUrl = document.getElementById('pm-old-img').value.trim() || null;
