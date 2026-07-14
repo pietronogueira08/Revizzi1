@@ -1350,10 +1350,15 @@ function openProductModal(product = null) {
                     </div>
                 </div>
                 <div style="grid-column:span 2;">
-                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Imagem do Produto (Até 25MB)</label>
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Imagem — URL (cole o link)</label>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <input id="pm-img-url" type="url" value="${isEdit ? product.img_url || '' : ''}" oninput="previewImgUrl(this.value)" style="flex:1;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="https://...">
+                        <img id="pm-img-preview" src="${isEdit && product.img_url ? product.img_url : ''}" onerror="this.style.display='none'" style="width:52px;height:52px;object-fit:contain;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;${isEdit && product.img_url ? '' : 'display:none;'}">
+                    </div>
+                    <p style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:5px;">— ou escolha um arquivo —</p>
                     <input type="hidden" id="pm-old-img" value="${isEdit ? product.img_url || '' : ''}">
-                    <input id="pm-img-file" type="file" accept="image/*" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;">
-                    <p style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:6px;">Deixe vazio para manter a imagem atual.</p>
+                    <input id="pm-img-file" type="file" accept="image/*" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;margin-top:4px;">
+                    <p style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:5px;">A URL tem prioridade sobre o arquivo. Deixe tudo vazio para manter a imagem atual.</p>
                 </div>
                 <div style="grid-column:span 2;">
                     <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Descrição</label>
@@ -1367,6 +1372,18 @@ function openProductModal(product = null) {
         </div>
     </div>`;
     modal.style.display = 'flex';
+}
+
+function previewImgUrl(url) {
+    const img = document.getElementById('pm-img-preview');
+    if (!img) return;
+    if (url && url.startsWith('http')) {
+        img.src = url;
+        img.style.display = 'block';
+        img.onerror = function() { this.style.display = 'none'; };
+    } else {
+        img.style.display = 'none';
+    }
 }
 
 function closeProductModal() {
@@ -1399,7 +1416,9 @@ async function saveProduct(id) {
 
     const errEl = document.getElementById('pm-error');
     const fileInput = document.getElementById('pm-img-file');
-    let imgUrl = document.getElementById('pm-old-img').value.trim() || null;
+    const imgUrlInput = document.getElementById('pm-img-url').value.trim();
+    // URL digitada tem prioridade; se vazia, mantém a imagem antiga
+    let imgUrl = imgUrlInput || document.getElementById('pm-old-img').value.trim() || null;
 
     if (!name || !brand || !category || isNaN(price) || price <= 0) {
         errEl.style.display = 'block';

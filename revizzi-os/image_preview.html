@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Revizzi — Preview Final de Imagens</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: Inter, sans-serif; }
+    .header { background: #111; border-bottom: 1px solid #222; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; flex-wrap: wrap; gap: 12px; }
+    .logo { font-size: 20px; font-weight: 800; letter-spacing: 0.05em; }
+    .stats { display: flex; gap: 18px; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-num { font-size: 20px; font-weight: 800; }
+    .stat-label { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
+    .filter-bar { padding: 14px 28px; border-bottom: 1px solid #1a1a1a; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .filter-btn { background: #1a1a1a; border: 1px solid #333; color: #888; padding: 5px 13px; font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 3px; transition: all 0.15s; }
+    .filter-btn.active, .filter-btn:hover { border-color: #fff; color: #fff; background: #222; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 10px; padding: 20px 28px; }
+    .card { background: #111; border: 1px solid #222; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.15s; }
+    .card:hover { border-color: #444; }
+    .card[style*="display:none"] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">REVIZZI — Preview Final</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" style="color:#4ade80">72</div><div class="stat-label">Alta conf.</div></div>
+      <div class="stat"><div class="stat-num" style="color:#a3e635">11</div><div class="stat-label">Méd. conf.</div></div>
+      <div class="stat"><div class="stat-num" style="color:#fbbf24">0</div><div class="stat-label">Manual</div></div>
+      <div class="stat"><div class="stat-num" style="color:#f87171">0</div><div class="stat-label">Sem img.</div></div>
+      <div class="stat"><div class="stat-num" style="color:#fff">83</div><div class="stat-label">Total</div></div>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <strong style="font-size:11px;color:#555;margin-right:4px;">FILTRAR:</strong>
+    <button class="filter-btn active" onclick="filterCards(this,'todos')">Todos (83)</button>
+    <button class="filter-btn" onclick="filterCards(this,'aplicado')">✅ Alta conf. (72)</button>
+    <button class="filter-btn" onclick="filterCards(this,'aplicado_medio')">✅ Méd. conf. (11)</button>
+    <button class="filter-btn" onclick="filterCards(this,'revisao')">🟡 Manual (0)</button>
+    <button class="filter-btn" onclick="filterCards(this,'falhou')">❌ Sem imagem (0)</button>
+  </div>
+  <div class="grid" id="grid">
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1368808/180_areon_black_force_sweet_gold_30ml_areon_5927_1_3cbb913f7b090e71a970d62f35da33bc.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">66pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Areon</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aromatizante seco - Black king vip</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1368808/180_areon_black_force_sweet_gold_30ml_areon_5927_1_3cbb913f7b090e71a970d62f35da33bc.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1063311/kit_c_48_folhas_expositor_areon_1470_1_9da1b15120a0d85b846e287c3e22c998.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Areon</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aromatizante seco - American Dream</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1063311/kit_c_48_folhas_expositor_areon_1470_1_9da1b15120a0d85b846e287c3e22c998.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/915336/aromatizante_automotivo_sport_lux_gold_areon_3395_7_75a7536fee15f0e9f4524476b73235e3.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Areon</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aromatizante seco - Gold</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/915336/aromatizante_automotivo_sport_lux_gold_areon_3395_7_75a7536fee15f0e9f4524476b73235e3.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/606785/aromatizante_seco_smile_vanilla_black_areon_8879_1_68b41640799938e5a1d1a98f9fbae4dd.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">65pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Areon</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aromatizante seco - Leather Interior</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/606785/aromatizante_seco_smile_vanilla_black_areon_8879_1_68b41640799938e5a1d1a98f9fbae4dd.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1152560/odorizador_areon_smile_black_crystal_4171_1_7e08787b76d4f24072b9c70cc52937f4.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Areon</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aromatizante seco - Black Crystal</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1152560/odorizador_areon_smile_black_crystal_4171_1_7e08787b76d4f24072b9c70cc52937f4.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/espumacar-300x300.jpg.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Nevasca 1,5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 cadillacauto.com.br</div>
+          <a href="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/espumacar-300x300.jpg.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/nevasca-site-nov24-300x300.jpg.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">High Shine 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 cadillacauto.com.br</div>
+          <a href="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/nevasca-site-nov24-300x300.jpg.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1349187/revitalizador_p_pneus_500_ml_pneu_fix_cadillac_2_20251128163929_1e1cc764029d.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Dissolve 1,5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1349187/revitalizador_p_pneus_500_ml_pneu_fix_cadillac_2_20251128163929_1e1cc764029d.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/escova_para_pneus-300x300.jpg.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Couro de secagem sintética 66x40</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 cadillacauto.com.br</div>
+          <a href="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/escova_para_pneus-300x300.jpg.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1349187/revitalizador_p_pneus_500_ml_pneu_fix_cadillac_1_20251128163929_df715cfe0691.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Dissolve 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1349187/revitalizador_p_pneus_500_ml_pneu_fix_cadillac_1_20251128163929_df715cfe0691.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/KIT-RISCO-ZERO-SITE-1-300x300.jpg.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Metal-Lac polidor de metais 150g</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 cadillacauto.com.br</div>
+          <a href="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/KIT-RISCO-ZERO-SITE-1-300x300.jpg.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1153789/categoria_img_131_20230727084419.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">53pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Demolidor 1,5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1153789/categoria_img_131_20230727084419.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/993655/cadillac_aromaticar_carro_novo_200ml_1357_1_0f73ba9385a509b111fd5b303066e4d9.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Splash cristalizador 10ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/993655/cadillac_aromaticar_carro_novo_200ml_1357_1_0f73ba9385a509b111fd5b303066e4d9.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/orange-300x300.jpg.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Nevasca 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 cadillacauto.com.br</div>
+          <a href="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/orange-300x300.jpg.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/cleaner-wax-150g-foto-de-frente-150x150.jpg.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">93pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Cleaner wax pasta 150g</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 cadillacauto.com.br</div>
+          <a href="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/cleaner-wax-150g-foto-de-frente-150x150.jpg.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/monster-300x300.jpg.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Cadillac</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Demolidor 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 cadillacauto.com.br</div>
+          <a href="https://cadillacauto.com.br/wp-content/webp-express/webp-images/uploads/2025/10/monster-300x300.jpg.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/424358/aplicador_de_selantes_e_revestimentos_de_pneus_ker_1_20260515134142_912271505afa.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Detailer</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aplicador para pneu côncavo</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/424358/aplicador_de_selantes_e_revestimentos_de_pneus_ker_1_20260515134142_912271505afa.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1265679/aplicador_premium_para_pneus_sgt_11_1_c791ffbe76e60d1038e2fc013483bacf.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Diversos</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aplicador para pneu hexagonal</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1265679/aplicador_premium_para_pneus_sgt_11_1_c791ffbe76e60d1038e2fc013483bacf.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1022502/pano_de_microfibra_multiuso_pct_c_3und_40x35cm_220gsm_vintex_251_1_a8eb0e0aa839259eae12dfbedde385fe.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Razux</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Pano microfibra suede 30x30 200gsm</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1022502/pano_de_microfibra_multiuso_pct_c_3und_40x35cm_220gsm_vintex_251_1_a8eb0e0aa839259eae12dfbedde385fe.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/wp-content/uploads/2022/04/kit-glaco-edicao-limitada-200806185144271652003-large-350x350.jpeg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">76pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Glaco glass compound 100ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/wp-content/uploads/2022/04/kit-glaco-edicao-limitada-200806185144271652003-large-350x350.jpeg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1287584/cera_dark_amp_black_1oog_edio_especial_2024_2_20260218160233_614a1f3badea.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">51pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Black magic 150ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1287584/cera_dark_amp_black_1oog_edio_especial_2024_2_20260218160233_614a1f3badea.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://http2.mlstatic.com/D_NQ_NP_634077-MLB89596063597_082025-O.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">56pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Fusso coat light 200g</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 http2.mlstatic.com</div>
+          <a href="https://http2.mlstatic.com/D_NQ_NP_634077-MLB89596063597_082025-O.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/Design-sem-nome-36-300x300.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Fusso coat dark 200g</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/Design-sem-nome-36-300x300.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/wp-content/uploads/2022/04/Esponja_Tire_Wax.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">83pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Escova para limpeza de pneus</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/wp-content/uploads/2022/04/Esponja_Tire_Wax.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1152560/glaco_big_roll_on_cristalizador_de_vidros_e_repelente_de_agua_soft99_120ml_209_7_3ed3ddfa19d478d7d046c0cd3768875d.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Glaco moto 20ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1152560/glaco_big_roll_on_cristalizador_de_vidros_e_repelente_de_agua_soft99_120ml_209_7_3ed3ddfa19d478d7d046c0cd3768875d.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1287584/kit_glaco_90313_1_a03d81d819557d33b50127622f9a46d2.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">53pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">4X Speed shine tire clear</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1287584/kit_glaco_90313_1_a03d81d819557d33b50127622f9a46d2.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/wp-content/uploads/2020/09/Banner-450x400-1.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">68pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Toalha beauty cloth raion - pele de raposa</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/wp-content/uploads/2020/09/Banner-450x400-1.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/Design-sem-nome-65-1.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">83pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Glaco big 120ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/Design-sem-nome-65-1.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/lenco-umedecido-automotivo-wet-tissue-soft99-9HAYN4-medium.jpeg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">68pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Antiembaçante gel 80ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/lenco-umedecido-automotivo-wet-tissue-soft99-9HAYN4-medium.jpeg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/35caa5b9-37de-44f5-8477-6b1206a83938-large-5840-600x600.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Det honey 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/35caa5b9-37de-44f5-8477-6b1206a83938-large-5840-600x600.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/files/80572/themes/247/img/settings/protecaomobilenovo.png?0730548940e0cf3e75cb74b472aecbdf" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">53pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Glaco washer 200ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/files/80572/themes/247/img/settings/protecaomobilenovo.png?0730548940e0cf3e75cb74b472aecbdf" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/fusso-coat-speed-barrier-600x600.jpeg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Luxury gloss cera líquida</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/lojaoficial/wp-content/uploads/2022/04/fusso-coat-speed-barrier-600x600.jpeg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1053525/kit_washer_220ml_instant_dry_75ml_glaco_cristalizador_soft99_883_1_5abb32ac9e4f82916f667ae27fdfb37a.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">51pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Glaco zero 40ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1053525/kit_washer_220ml_instant_dry_75ml_glaco_cristalizador_soft99_883_1_5abb32ac9e4f82916f667ae27fdfb37a.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://soft99.com.br/wp-content/uploads/2025/03/no_mask_500ml_revelador_de_hologramas_90315_4_4068978aba185fd03936e14b5bcf3636.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">83pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Soft 99</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Limpa tecido mousse</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 soft99.com.br</div>
+          <a href="https://soft99.com.br/wp-content/uploads/2025/03/no_mask_500ml_revelador_de_hologramas_90315_4_4068978aba185fd03936e14b5bcf3636.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1092849/v_mol_lava_autos_desincrustante_concentrado_vonixx_3996_1_4b64e82b28cb46d4d11d7a4e47c064b2.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vintex</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Lava autos 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1092849/v_mol_lava_autos_desincrustante_concentrado_vonixx_3996_1_4b64e82b28cb46d4d11d7a4e47c064b2.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1109830/removex_5l_vintex_297_2_8945c206b650d21a26c8065cb82cc494.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">61pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vintex</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Removex 5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1109830/removex_5l_vintex_297_2_8945c206b650d21a26c8065cb82cc494.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2025/07/hydrox-wash-240ml_final.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">86pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Strike 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2025/07/hydrox-wash-240ml_final.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2024/03/como-ser-uma-pessoa-interessante-jpg-webp.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Alumax 5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2024/03/como-ser-uma-pessoa-interessante-jpg-webp.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/993655/vonixx_rexer_240ml_2315_2_9daedc88b2292a4b7d623cd97e4378cc.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">61pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Focus 240ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/993655/vonixx_rexer_240ml_2315_2_9daedc88b2292a4b7d623cd97e4378cc.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/606785/vexus_limpador_de_rodas_e_motores_pronto_uso_500ml_vonixx_8633_2_d16d05747338e5276b182c360f1ce21b.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Vexus 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/606785/vexus_limpador_de_rodas_e_motores_pronto_uso_500ml_vonixx_8633_2_d16d05747338e5276b182c360f1ce21b.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1152560/kit_prizm_500ml_vonixx_com_aplicador_par_de_luvas_e_microfibra_5356_4_7d0c83102067ff3dbe581f2866d8dff8.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Prizm 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1152560/kit_prizm_500ml_vonixx_com_aplicador_par_de_luvas_e_microfibra_5356_4_7d0c83102067ff3dbe581f2866d8dff8.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2023/07/design-sem-nome-4.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">93pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aplicador de microfibra maxx</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2023/07/design-sem-nome-4.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1152560/kit_para_remocao_de_marcas_d_agua_e_chuva_acida_em_vidros_e_espelhos_focus_e_tacos_vonixx_5936_5_8796fd80f33cdb3280c401e037dc989f.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">61pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Taco descontaminação pesada carpete</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1152560/kit_para_remocao_de_marcas_d_agua_e_chuva_acida_em_vidros_e_espelhos_focus_e_tacos_vonixx_5936_5_8796fd80f33cdb3280c401e037dc989f.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1022502/v_lub_vonixx_500ml_lubrificante_para_barra_descontaminante_com_gatilho_413_1_fe399881e82f3388e98442943cc7bba4.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">71pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Izer 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1022502/v_lub_vonixx_500ml_lubrificante_para_barra_descontaminante_com_gatilho_413_1_fe399881e82f3388e98442943cc7bba4.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1092849/hidracouro_hidratante_de_couro_vonixx_500ml_3936_1_53a4d7dd3b2f7f218ef8d3c9edb7aacf.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">61pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Shiny 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1092849/hidracouro_hidratante_de_couro_vonixx_500ml_3936_1_53a4d7dd3b2f7f218ef8d3c9edb7aacf.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1439204/180_sintra_pro_limpador_bactericida_interno_concentrado_1_5l_vonixx_8107_1_e61422a79fb969d82db1dffd9485dd3f.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">58pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Hidracouro 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1439204/180_sintra_pro_limpador_bactericida_interno_concentrado_1_5l_vonixx_8107_1_e61422a79fb969d82db1dffd9485dd3f.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/424358/kit_vonixx_shiny_restaurax_v_eco_50424448_1_6329f3ff483e21e349256d3d96bb4a91_20240410101553.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">61pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Restaurax 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/424358/kit_vonixx_shiny_restaurax_v_eco_50424448_1_6329f3ff483e21e349256d3d96bb4a91_20240410101553.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1092849/90_verom_verniz_de_motor_1_5_l_vonixx_4694_3_7de1a551f6ff760b3b2bf88598eb43ec.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Verniz de motor aerosol 400ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1092849/90_verom_verniz_de_motor_1_5_l_vonixx_4694_3_7de1a551f6ff760b3b2bf88598eb43ec.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1022502/90_taco_para_descontaminacao_pesada_vonixx_tipo_carpete_2210_2_bf4c6e3da20623e0ab82d26fd7acecae.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Taco para acabamento em vidros lona</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1022502/90_taco_para_descontaminacao_pesada_vonixx_tipo_carpete_2210_2_bf4c6e3da20623e0ab82d26fd7acecae.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2023/07/vxx04198-scaled.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Escova macia face e caixa de rodas média</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2023/07/vxx04198-scaled.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1092849/delet_limpador_para_pneus_e_borrachas_vonixx_3998_2_31f541169919664104d03738b1ca592a.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Escova para limpeza de pneus</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1092849/delet_limpador_para_pneus_e_borrachas_vonixx_3998_2_31f541169919664104d03738b1ca592a.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://coremma.magehub.com.br/media/catalog/product/t/o/toalha-microfibra-secagem-vonixx-50x90-350gsm-108457-2005027_3.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Toalha mic secagem maxx 50x90 600gsm</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 coremma.magehub.com.br</div>
+          <a href="https://coremma.magehub.com.br/media/catalog/product/t/o/toalha-microfibra-secagem-vonixx-50x90-350gsm-108457-2005027_3.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/606785/espuma_aplicadora_de_cera_automotivo_para_pneus_e_borrachas_vonixx_5229_1_5fb5579911e35065f5f9a8ef76e0af44.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Toalha PVA 3D 64x43</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/606785/espuma_aplicadora_de_cera_automotivo_para_pneus_e_borrachas_vonixx_5229_1_5fb5579911e35065f5f9a8ef76e0af44.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1109830/blend_spray_vonixx_500ml_cera_liquida_automotiva_carnauba_e_silica_pano_microfibra_3688_2_e18ae4ffe1d4434043863334e9e0043c.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">83pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Blend Spray 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1109830/blend_spray_vonixx_500ml_cera_liquida_automotiva_carnauba_e_silica_pano_microfibra_3688_2_e18ae4ffe1d4434043863334e9e0043c.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1109830/blend_spray_black_vonixx_cera_de_carnaba_e_slica_5_6_20251028095839_2a31d673f89e.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">83pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Blend Spray black 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1109830/blend_spray_black_vonixx_cera_de_carnaba_e_slica_5_6_20251028095839_2a31d673f89e.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2023/07/vmol-galeria-site-4-jpg.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Carnauba tok final 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2023/07/vmol-galeria-site-4-jpg.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://cdn.awsli.com.br/2500x2500/1124/1124848/produto/198433490/delet-hvymxlxfgx.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">61pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Delet 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 cdn.awsli.com.br</div>
+          <a href="https://cdn.awsli.com.br/2500x2500/1124/1124848/produto/198433490/delet-hvymxlxfgx.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2024/03/sinergy_500ml_final.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">86pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Delet 1,5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2024/03/sinergy_500ml_final.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1152560/90_luster_cera_limpadora_spray_vonixx_500ml_4_20260206214344_b2415dfd69bd.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">68pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Luster 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1152560/90_luster_cera_limpadora_spray_vonixx_500ml_4_20260206214344_b2415dfd69bd.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://http2.mlstatic.com/D_NQ_NP_739117-MLA111069518948_052026-F.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">53pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Izer 1,5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 http2.mlstatic.com</div>
+          <a href="https://http2.mlstatic.com/D_NQ_NP_739117-MLA111069518948_052026-F.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1368808/restaurax_restaurador_de_plsticos_240ml_vonixx_2_20260402153654_bcd8a3ec6c0f.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">63pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Revox 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1368808/restaurax_restaurador_de_plsticos_240ml_vonixx_2_20260402153654_bcd8a3ec6c0f.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2025/03/intense-png.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">86pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Higicouro 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2025/03/intense-png.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2023/07/galeria-4-17-removebg-preview.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">80pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Pano microfibra vidros 40x40 260gsm</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2023/07/galeria-4-17-removebg-preview.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/424358/escova_vonixx_para_limpeza_com_cerdas_macias_50423815_1_35411febeaa967e0a7c1c3a518746bef.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Escova microfibra limpeza de rodas grande</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/424358/escova_vonixx_para_limpeza_com_cerdas_macias_50423815_1_35411febeaa967e0a7c1c3a518746bef.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1044951/180_shiny_revitalizador_de_pneus_vonixx_500ml_59_1_009f6389899b90aa51aa93277a21d3ba.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">66pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Makker 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1044951/180_shiny_revitalizador_de_pneus_vonixx_500ml_59_1_009f6389899b90aa51aa93277a21d3ba.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://http2.mlstatic.com/D_Q_NP_2X_955536-MLA99439300758_112025-T.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">51pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Hydrox fast 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 http2.mlstatic.com</div>
+          <a href="https://http2.mlstatic.com/D_Q_NP_2X_955536-MLA99439300758_112025-T.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2024/03/v-plastic-300x300px-1.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">93pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">V-mol 1,5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2024/03/v-plastic-300x300px-1.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/993655/vonixx_tryon_500ml_1967_5_651bfddb4ff8c7e9c2889bfb1973ac9a.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Tryon 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/993655/vonixx_tryon_500ml_1967_5_651bfddb4ff8c7e9c2889bfb1973ac9a.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2023/07/toalha-de-microfibra-sem-costura.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">95pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Toalha microfibra 40x40 600gsm Dupla face</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2023/07/toalha-de-microfibra-sem-costura.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2026/02/gif-glazy-anti-fog.gif" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">93pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Glazy anti-fog 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2026/02/gif-glazy-anti-fog.gif" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2023/09/dsc06815-fundo-branco-removebg-preview.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">93pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">V-mol 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2023/09/dsc06815-fundo-branco-removebg-preview.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2023/07/v20-sem-fundo-1.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">80pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">V-Floc 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2023/07/v20-sem-fundo-1.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://http2.mlstatic.com/D_Q_NP_2X_744374-MLB46008865693_052021-T.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">51pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">V-floc 1,5l</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 http2.mlstatic.com</div>
+          <a href="https://http2.mlstatic.com/D_Q_NP_2X_744374-MLB46008865693_052021-T.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1109830/intense_vonixx_500ml_revitalizador_renovador_restaurador_de_plasticos_internos_1911_3_7806ac8481ba28d8a5bbba1d314975f6.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Intense 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1109830/intense_vonixx_500ml_revitalizador_renovador_restaurador_de_plasticos_internos_1911_3_7806ac8481ba28d8a5bbba1d314975f6.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1349187/limpador_de_boinas_500ml_soult_fast_vonixx_3403_1_45aa5d53fa38a3e172b51ec46b8a046d.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">83pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Sintra fast 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1349187/limpador_de_boinas_500ml_soult_fast_vonixx_3403_1_45aa5d53fa38a3e172b51ec46b8a046d.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://www.vonixx.com.br/wp-content/uploads/2023/07/aplicador_de_espuma_vonixx_1687_2_07d2e5364fba12cfc8f4a9b2dffdd512.webp" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">88pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aplicador espuma pacote 2 unid</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vonixx.com.br</div>
+          <a href="https://www.vonixx.com.br/wp-content/uploads/2023/07/aplicador_de_espuma_vonixx_1687_2_07d2e5364fba12cfc8f4a9b2dffdd512.webp" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1368808/90_glazy_anti_fog_500ml_vonixx_8237_3_670a8b2503f13a0f83d07b698e4d0ce6.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">78pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Vonixx</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Glazy 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1368808/90_glazy_anti_fog_500ml_vonixx_8237_3_670a8b2503f13a0f83d07b698e4d0ce6.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1367928/pincel_medio_para_limpeza_detalhada_externa_js_318570117_1_314c381552c2dcf4059f32b500b9b719.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Zacs</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Pincel detalhamento médio externo 14</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1367928/pincel_medio_para_limpeza_detalhada_externa_js_318570117_1_314c381552c2dcf4059f32b500b9b719.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado_medio">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1408094/180_zucs_restaura_plastico_interno_externo_borrachas_500ml_zacs_995_1_465e227691a67f0bb3c8cb799975dee1.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">56pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Zacs</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Pincel detalhamento médio interno 14</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#365314;color:#a3e635;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ MÉD. CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1408094/180_zucs_restaura_plastico_interno_externo_borrachas_500ml_zacs_995_1_465e227691a67f0bb3c8cb799975dee1.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://vintex.com.br/wp-content/uploads/2022/04/APLICADOR-DE-PRODUTOS-PARA-PNEU-VINTEX-2-copiar.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">95pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Zacs</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Aplicador para pneu</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 vintex.com.br</div>
+          <a href="https://vintex.com.br/wp-content/uploads/2022/04/APLICADOR-DE-PRODUTOS-PARA-PNEU-VINTEX-2-copiar.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1022502/90_escova_para_limpeza_com_cerdas_macias_zacs_2382_1_9b51f6b1491c0638429819df07df0635.jpg" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#f59e0b;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">68pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Zacs</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Escova para limpeza de cinto de segurança</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1022502/90_escova_para_limpeza_com_cerdas_macias_zacs_2382_1_9b51f6b1491c0638429819df07df0635.jpg" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1022502/toalha_microfibra_40x40_350gsm_razux_661_1_36bfde668ec2fdd0f6b8211f606be7a0.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">73pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Zacs</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Toalha microfibra 40x60cm 350gsm Roxa</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1022502/toalha_microfibra_40x40_350gsm_razux_661_1_36bfde668ec2fdd0f6b8211f606be7a0.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-status="aplicado">
+      <div style="position:relative;height:160px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="https://images.tcdn.com.br/img/img_prod/1022502/mittus_500ml_zacs_shampoo_neutro_concentrado_2052_1_3ee3220d5af4466d04daf114803cce3c.png" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+             <div style="display:none;flex-direction:column;align-items:center;color:#444;"><span style="font-size:24px;">🚫</span><span style="font-size:10px;">Erro</span></div>
+        <div style="position:absolute;top:6px;right:6px;background:#22c55e;color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;">71pts</div>
+      </div>
+      <div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:10px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Zacs</div>
+        <div style="font-size:12px;color:#fff;font-weight:600;line-height:1.3;">Reflect 500ml</div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:4px;">
+          <span style="background:#166534;color:#4ade80;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.1em;border-radius:3px;">✅ ALTA CONF.</span>
+          <div style="font-size:9px;color:#555;">📡 images.tcdn.com.br</div>
+          <a href="https://images.tcdn.com.br/img/img_prod/1022502/mittus_500ml_zacs_shampoo_neutro_concentrado_2052_1_3ee3220d5af4466d04daf114803cce3c.png" target="_blank" style="font-size:9px;color:#3b82f6;text-decoration:none;word-break:break-all;line-height:1.2;">🔗 ver imagem</a>
+        </div>
+      </div>
+    </div></div>
+  <script>
+    const cards = [...document.querySelectorAll('.card')];
+    function filterCards(btn, filter) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      cards.forEach(card => {
+        const status = card.dataset.status;
+        card.style.display = (filter === 'todos' || status === filter) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>
