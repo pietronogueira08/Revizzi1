@@ -1332,9 +1332,9 @@ function openProductModal(product = null) {
                 <div>
                     <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Status</label>
                     <select id="pm-status" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;appearance:none;">
-                        <option value="Disponível" ${isEdit && product.status === 'Disponível' ? 'selected' : ''}>Disponível</option>
-                        <option value="Desativado" ${isEdit && product.status === 'Desativado' ? 'selected' : ''}>Desativado</option>
+                        <option value="Disponível" ${!isEdit || (isEdit && product.status === 'Disponível') ? 'selected' : ''}>Disponível</option>
                         <option value="Fora de estoque" ${isEdit && product.status === 'Fora de estoque' ? 'selected' : ''}>Fora de estoque</option>
+                        <option value="Inativo" ${isEdit && product.status === 'Inativo' ? 'selected' : ''}>Inativo</option>
                     </select>
                 </div>
                 <div>

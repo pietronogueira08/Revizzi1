@@ -977,7 +977,7 @@ async function fetchProductsFromSupabase() {
         if (error) throw error;
         
         if (data && data.length > 0) {
-            window.PRODUCTS = data.map(item => {
+            window.PRODUCTS = data.filter(item => item.status !== 'Inativo' && item.status !== 'Desativado').map(item => {
                 return {
                     id: item.id,
                     brand: item.brand,
@@ -987,7 +987,8 @@ async function fetchProductsFromSupabase() {
                     category: item.category,
                     badge: item.badge_text ? { text: item.badge_text, style: item.badge_style || 'bg-primary text-surface-main' } : null,
                     img: item.img_url || 'imagem_2026-06-17_163850035-removebg-preview.png',
-                    description: item.description
+                    description: item.description,
+                    status: item.status || 'Disponível'
                 };
             });
         }
@@ -1261,16 +1262,22 @@ function buildProductCard(p) {
     const badge = p.badge
         ? `<div class="absolute top-4 left-4 ${p.badge.style} font-label-caps text-[10px] px-2 py-1 uppercase font-bold">${p.badge.text}</div>`
         : '';
-    return `<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="${p.id}">
+    
+    const isOutOfStock = p.status === 'Fora de estoque';
+    const btnClass = isOutOfStock ? 'w-full bg-surface-card text-on-surface-variant font-label-caps text-label-caps py-4 uppercase font-bold border border-white/10 cursor-not-allowed' : 'w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors';
+    const btnText = isOutOfStock ? 'Esgotado' : 'Adicionar ao Carrinho';
+    const btnAttr = isOutOfStock ? 'disabled' : `data-add-to-cart="${p.id}"`;
+
+    return `<div class="bg-surface-card border border-white/10 group overflow-hidden ${isOutOfStock ? '' : 'cursor-pointer'}" ${isOutOfStock ? '' : `data-product-id="${p.id}"`}>
         <div class="aspect-square relative overflow-hidden bg-surface-main">
-            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${p.img}" alt="${p.name}" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'opacity-50 grayscale' : ''}" src="${p.img}" alt="${p.name}" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
             ${badge}
         </div>
         <div class="p-6">
             <p class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">${p.brand}</p>
-            <h3 class="font-body-md text-body-md mb-4 uppercase">${p.name}</h3>
-            <p class="font-price-display text-price-display mb-6">${p.priceFormatted}</p>
-            <button class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors" data-add-to-cart="${p.id}">Adicionar ao Carrinho</button>
+            <h3 class="font-body-md text-body-md mb-4 uppercase ${isOutOfStock ? 'text-white/50' : ''}">${p.name}</h3>
+            <p class="font-price-display text-price-display mb-6 ${isOutOfStock ? 'text-white/50' : ''}">${p.priceFormatted}</p>
+            <button class="${btnClass}" ${btnAttr}>${btnText}</button>
         </div>
     </div>`;
 }
