@@ -800,7 +800,8 @@
 </div>
 </div>
 <!-- PIX Form -->
-<div id="pay-pix-form" class="hidden flex flex-col items-center gap-6 py-4">
+<div id="pay-pix-form" class="hidden flex flex-col items-center gap-6 py-4 w-full px-4">
+<button type="button" id="pix-confirm-btn" class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-all duration-300" onclick="this.classList.remove('bg-primary', 'text-surface-main'); this.classList.add('bg-green-500', 'text-white'); this.innerHTML='Confirmado <span class=\'material-symbols-outlined align-middle ml-2\'>check_circle</span>';">Confirmar</button>
 </div>
 <div class="flex gap-3 mt-8">
 <button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="2">← Voltar</button>
