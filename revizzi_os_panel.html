@@ -183,7 +183,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
       <div>
         <h1 class="font-headline-xl text-primary uppercase">Financeiro</h1>
-        <p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Conciliação de Faturamento e Custos de Frete (MP & Melhor Envio)</p>
+        <p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Conciliação de Faturamento e Custos de Frete (MP & Bling)</p>
       </div>
       <div class="flex flex-col md:flex-row items-center gap-4">
         <select id="finance-period-select" class="bg-surface-card border border-white/10 text-white font-label-caps text-[11px] uppercase px-4 py-2 focus:outline-none focus:border-white/40 cursor-pointer">
@@ -211,11 +211,11 @@
       
       <div class="glass-panel p-6 border-l-2 border-l-red-500">
         <div class="flex justify-between items-start mb-2">
-          <span class="font-label-caps text-[10px] text-white uppercase tracking-tighter">Custos de Frete (Melhor Envio)</span>
+          <span class="font-label-caps text-[10px] text-white uppercase tracking-tighter">Custos de Frete (Bling)</span>
           <span class="material-symbols-outlined text-red-400 text-lg">local_shipping</span>
         </div>
         <div id="fin-freight-costs" class="font-display-lg text-headline-xl text-primary mb-1">R$ 0,00</div>
-        <div class="text-[10px] font-label-caps text-white/70">Valor exato debitado na carteira ME</div>
+        <div class="text-[10px] font-label-caps text-white/70">Valor exato debitado no Bling</div>
       </div>
       
       <div class="glass-panel p-6 border-l-2 border-l-green-500">
@@ -771,15 +771,15 @@ async function printCorreiosLabel(orderId) {
         }
         
         if (data.pdfUrl) {
-            showToast('Abrindo etiqueta do Melhor Envio...');
+            showToast('Abrindo etiqueta do Bling...');
             window.open(data.pdfUrl, '_blank');
         } else if (data.success && data.data) {
-            showToast('Etiqueta inserida no carrinho do Melhor Envio com sucesso!');
+            showToast('Etiqueta inserida no carrinho do Bling com sucesso!');
         }
     } catch(err) {
         console.error('Erro ao gerar etiqueta:', err);
-        alert("ERRO MELHOR ENVIO:\n" + err.message);
-        showToast('Falha na API do Melhor Envio. Gerando Declaração Manual...', 'error');
+        alert("ERRO BLING:\n" + err.message);
+        showToast('Falha na API do Bling. Gerando Declaração Manual...', 'error');
         printManualCorreiosLabel(orderId);
     }
 }

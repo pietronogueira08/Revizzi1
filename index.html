@@ -801,22 +801,6 @@
 </div>
 <!-- PIX Form -->
 <div id="pay-pix-form" class="hidden flex flex-col items-center gap-6 py-4">
-<p class="font-body-md text-body-md text-on-surface-variant text-center">Escaneie o QR Code abaixo para pagar via PIX.</p>
-<div class="p-4 bg-white">
-<svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-<rect width="160" height="160" fill="white"/>
-<rect x="10" y="10" width="40" height="40" fill="#000"/><rect x="16" y="16" width="28" height="28" fill="#fff"/><rect x="22" y="22" width="16" height="16" fill="#000"/>
-<rect x="110" y="10" width="40" height="40" fill="#000"/><rect x="116" y="16" width="28" height="28" fill="#fff"/><rect x="122" y="22" width="16" height="16" fill="#000"/>
-<rect x="10" y="110" width="40" height="40" fill="#000"/><rect x="16" y="116" width="28" height="28" fill="#fff"/><rect x="22" y="122" width="16" height="16" fill="#000"/>
-<rect x="58" y="10" width="4" height="4" fill="#000"/><rect x="66" y="10" width="4" height="4" fill="#000"/><rect x="74" y="10" width="4" height="4" fill="#000"/><rect x="82" y="10" width="4" height="4" fill="#000"/><rect x="90" y="10" width="4" height="4" fill="#000"/>
-<rect x="10" y="58" width="4" height="4" fill="#000"/><rect x="10" y="66" width="4" height="4" fill="#000"/><rect x="10" y="74" width="4" height="4" fill="#000"/><rect x="10" y="82" width="4" height="4" fill="#000"/>
-<rect x="58" y="58" width="44" height="44" fill="#000"/><rect x="62" y="62" width="8" height="8" fill="#fff"/><rect x="74" y="62" width="8" height="8" fill="#fff"/><rect x="86" y="62" width="8" height="8" fill="#fff"/><rect x="62" y="74" width="8" height="8" fill="#fff"/><rect x="86" y="74" width="8" height="8" fill="#fff"/><rect x="62" y="86" width="8" height="8" fill="#fff"/><rect x="74" y="86" width="8" height="8" fill="#fff"/>
-<rect x="58" y="110" width="4" height="4" fill="#000"/><rect x="66" y="118" width="4" height="4" fill="#000"/><rect x="74" y="110" width="4" height="4" fill="#000"/><rect x="82" y="118" width="4" height="4" fill="#000"/><rect x="90" y="110" width="4" height="4" fill="#000"/><rect x="106" y="110" width="4" height="4" fill="#000"/><rect x="58" y="126" width="4" height="4" fill="#000"/><rect x="74" y="126" width="4" height="4" fill="#000"/><rect x="90" y="126" width="4" height="4" fill="#000"/><rect x="58" y="142" width="4" height="4" fill="#000"/><rect x="82" y="142" width="4" height="4" fill="#000"/><rect x="106" y="142" width="4" height="4" fill="#000"/>
-<rect x="110" y="58" width="4" height="4" fill="#000"/><rect x="118" y="66" width="4" height="4" fill="#000"/><rect x="126" y="58" width="4" height="4" fill="#000"/><rect x="134" y="66" width="4" height="4" fill="#000"/><rect x="142" y="58" width="4" height="4" fill="#000"/><rect x="110" y="74" width="4" height="4" fill="#000"/><rect x="126" y="74" width="4" height="4" fill="#000"/><rect x="142" y="82" width="4" height="4" fill="#000"/><rect x="110" y="90" width="4" height="4" fill="#000"/><rect x="118" y="90" width="4" height="4" fill="#000"/><rect x="134" y="90" width="4" height="4" fill="#000"/>
-</svg>
-</div>
-<p class="font-label-caps text-[10px] uppercase text-on-surface-variant">Válido por 15 minutos</p>
-<div class="w-full border border-white/10 bg-surface-container px-4 py-3 font-body-md text-xs text-on-surface-variant break-all select-all">00020126580014BR.GOV.BCB.PIX0136revizzi@revizzi.com.br5204000053039865802BR5913REVIZZI STORE6009SAO PAULO62070503***6304ABCD</div>
 </div>
 <div class="flex gap-3 mt-8">
 <button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="2">← Voltar</button>
@@ -1583,7 +1567,7 @@ async function handleConfirmOrder() {
             
             // Envia para o Bling
             try {
-                fetch('/api/bling-order', {
+                await fetch('/api/bling-order', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
