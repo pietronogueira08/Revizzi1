@@ -773,7 +773,7 @@
 <h3 class="font-headline-xl text-headline-xl uppercase mb-8">Pagamento</h3>
 <div class="flex gap-0 border border-white/10 mb-6">
 <button id="pay-card-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase bg-primary text-surface-main transition-colors">💳 Cartão</button>
-<button id="pay-pix-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors">💚 PIX</button>
+<button id="pay-pix-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors">PIX</button>
 </div>
 <!-- Card Form -->
 <div id="pay-card-form" class="flex flex-col gap-4">
@@ -807,7 +807,7 @@
 <div id="pay-pix-form" class="hidden flex flex-col gap-4 py-2 w-full">
   <!-- Destaque PIX -->
   <div class="bg-green-500/10 border border-green-500/40 rounded-[2px] px-5 py-4 text-center">
-    <p class="text-green-400 font-bold text-xl mb-1">💚 5% de desconto no PIX</p>
+    <p class="text-green-400 font-bold text-xl mb-1">5% de desconto no PIX</p>
     <p class="text-[12px] text-green-500/80">O valor com desconto será exibido no resumo do pedido.</p>
   </div>
   <div class="bg-surface-container border border-white/10 rounded-[2px] px-4 py-3">
@@ -831,7 +831,7 @@
 <div class="border border-white/10 bg-surface-card p-6 mb-8">
 <ul id="checkout-summary-list" class="flex flex-col gap-3 mb-6"></ul>
 <div id="checkout-pix-discount-row" class="hidden flex justify-between items-center mb-2">
-<span class="text-[11px] text-green-400 uppercase">💚 Desconto PIX (5%)</span>
+<span class="text-[11px] text-green-400 uppercase">Desconto PIX (5%)</span>
 <span id="checkout-pix-discount-value" class="text-[11px] text-green-400 font-bold"></span>
 </div>
 <div class="border-t border-white/10 pt-4 flex justify-between">
@@ -1209,7 +1209,6 @@ function openProductModal(id) {
             : '';
         pixEl.innerHTML = `
             <div class="flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-[2px] px-3 py-2">
-                <span style="font-size:16px">💚</span>
                 <div>
                     <p class="text-green-400 font-bold text-base leading-tight">${product.pixPriceFormatted} <span class="text-[10px] font-normal text-green-500/80 uppercase tracking-wide">no PIX — 5% OFF</span></p>
                     ${parcelaStr}
@@ -1317,7 +1316,7 @@ function buildProductCard(p) {
 
     // Linha de preço PIX nos cards
     const pixLine = isOutOfStock ? '' : `<p class="text-[11px] text-green-400 font-bold mb-2 flex items-center gap-1">
-        <span style="font-size:11px">💚</span> ${p.pixPriceFormatted} no PIX <span class="text-[9px] text-green-500/80 font-normal">(5% OFF)</span>
+        ${p.pixPriceFormatted} no PIX <span class="text-[9px] text-green-500/80 font-normal">(5% OFF)</span>
     </p>`;
 
     return `<div class="bg-surface-card border border-white/10 group overflow-hidden ${isOutOfStock ? '' : 'cursor-pointer'}" ${isOutOfStock ? '' : `data-product-id="${p.id}"`}>
@@ -1742,7 +1741,7 @@ async function handleConfirmOrder() {
         });
         tgText += `\n<b>Frete:</b> ${(window.CheckoutFreight && window.CheckoutFreight.name) || 'Padrão'} (R$ ${freightPrice.toFixed(2)})\n`;
         if (isPix) {
-            tgText += `<b>Pagamento:</b> PIX 💚\n`;
+            tgText += `<b>Pagamento:</b> PIX\n`;
             tgText += `<b>Desconto PIX (5%):</b> -R$ ${pixDiscountApplied.toFixed(2)}\n`;
         } else {
             const installLabel = selectedInstallments === 1 ? 'À vista' : `${selectedInstallments}x`;
