@@ -594,7 +594,8 @@
 <button id="product-modal-close" class="hover:opacity-60 transition-opacity -mt-1"><span class="material-symbols-outlined">close</span></button>
 </div>
 <h2 id="product-modal-name" class="font-headline-xl text-headline-xl uppercase mb-3"></h2>
-<p id="product-modal-price" class="font-price-display text-price-display mb-5"></p>
+<p id="product-modal-price" class="font-price-display text-price-display mb-3"></p>
+<div id="product-modal-pix-block" class="mb-5"></div>
 <p id="product-modal-desc" class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6"></p>
 
 <div class="border-t border-white/10 pt-4">
@@ -770,12 +771,15 @@
 <!-- Step 3: Pagamento -->
 <div id="checkout-step-3" class="checkout-step-panel">
 <h3 class="font-headline-xl text-headline-xl uppercase mb-8">Pagamento</h3>
-<div class="flex gap-0 border border-white/10 mb-8">
-<button id="pay-card-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase bg-primary text-surface-main transition-colors">Cartão</button>
-<button id="pay-pix-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors">PIX</button>
+<div class="flex gap-0 border border-white/10 mb-6">
+<button id="pay-card-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase bg-primary text-surface-main transition-colors">💳 Cartão</button>
+<button id="pay-pix-btn" class="flex-1 py-3 font-label-caps text-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors">💚 PIX</button>
 </div>
 <!-- Card Form -->
 <div id="pay-card-form" class="flex flex-col gap-4">
+<div class="bg-surface-container border border-white/10 rounded-[2px] px-4 py-3 text-[11px] text-on-surface-variant">
+  📌 <span class="text-white font-semibold">3× sem juros</span> · Parcela mín. R$ 50,00 · <span class="text-white/60">4× a 12× com juros</span>
+</div>
 <div>
 <label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Número do Cartão</label>
 <input id="ck-card-num" type="text" placeholder="0000 0000 0000 0000" maxlength="19" class="w-full bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40"/>
@@ -800,8 +804,20 @@
 </div>
 </div>
 <!-- PIX Form -->
-<div id="pay-pix-form" class="hidden flex flex-col items-center gap-6 py-4 w-full px-4">
-<button type="button" id="pix-confirm-btn" class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-all duration-300" onclick="this.classList.remove('bg-primary', 'text-surface-main'); this.classList.add('bg-green-500', 'text-white'); this.innerHTML='Confirmado <span class=\'material-symbols-outlined align-middle ml-2\'>check_circle</span>';">Confirmar</button>
+<div id="pay-pix-form" class="hidden flex flex-col gap-4 py-2 w-full">
+  <!-- Destaque PIX -->
+  <div class="bg-green-500/10 border border-green-500/40 rounded-[2px] px-5 py-4 text-center">
+    <p class="text-green-400 font-bold text-xl mb-1">💚 5% de desconto no PIX</p>
+    <p class="text-[12px] text-green-500/80">O valor com desconto será exibido no resumo do pedido.</p>
+  </div>
+  <div class="bg-surface-container border border-white/10 rounded-[2px] px-4 py-3">
+    <p class="font-label-caps text-[10px] uppercase text-on-surface-variant mb-2">Como funciona</p>
+    <ul class="text-[12px] text-white/60 flex flex-col gap-1.5">
+      <li>✅ Pagamento instantâneo</li>
+      <li>✅ Confirmação automática</li>
+      <li>✅ Desconto de 5% sobre o total</li>
+    </ul>
+  </div>
 </div>
 <div class="flex gap-3 mt-8">
 <button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="2">← Voltar</button>
@@ -814,6 +830,10 @@
 <h3 class="font-headline-xl text-headline-xl uppercase mb-8">Resumo do Pedido</h3>
 <div class="border border-white/10 bg-surface-card p-6 mb-8">
 <ul id="checkout-summary-list" class="flex flex-col gap-3 mb-6"></ul>
+<div id="checkout-pix-discount-row" class="hidden flex justify-between items-center mb-2">
+<span class="text-[11px] text-green-400 uppercase">💚 Desconto PIX (5%)</span>
+<span id="checkout-pix-discount-value" class="text-[11px] text-green-400 font-bold"></span>
+</div>
 <div class="border-t border-white/10 pt-4 flex justify-between">
 <span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Total</span>
 <span id="checkout-summary-total" class="font-price-display text-price-display"></span>
@@ -978,12 +998,17 @@ async function fetchProductsFromSupabase() {
         
         if (data && data.length > 0) {
             window.PRODUCTS = data.filter(item => item.status !== 'Inativo' && item.status !== 'Desativado').map(item => {
+                // +5% sobre o preço da tabela física para cobrir Bling, NF e enquadramento tributário
+                const basePrice = parseFloat(item.price) * 1.05;
+                const pixPrice  = basePrice * 0.95; // desconto PIX de 5%
                 return {
                     id: item.id,
                     brand: item.brand,
                     name: item.name,
-                    price: parseFloat(item.price),
-                    priceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price),
+                    price: basePrice,
+                    priceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(basePrice),
+                    pixPrice: pixPrice,
+                    pixPriceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(pixPrice),
                     category: item.category,
                     badge: item.badge_text ? { text: item.badge_text, style: item.badge_style || 'bg-primary text-surface-main' } : null,
                     img: item.img_url || 'imagem_2026-06-17_163850035-removebg-preview.png',
@@ -1170,6 +1195,28 @@ function openProductModal(id) {
     document.getElementById('product-modal-brand').textContent = product.brand;
     document.getElementById('product-modal-name').textContent = product.name;
     document.getElementById('product-modal-price').textContent = product.priceFormatted;
+
+    // Bloco PIX + parcelamento no modal
+    const pixEl = document.getElementById('product-modal-pix-block');
+    if (pixEl) {
+        // Parcela máxima sem juros (3x, parcela mín R$50)
+        let maxSemJuros = 0;
+        for (let n = 3; n >= 1; n--) {
+            if (product.price / n >= 50) { maxSemJuros = n; break; }
+        }
+        const parcelaStr = maxSemJuros > 1
+            ? `<span class="text-[11px] text-white/50">ou ${maxSemJuros}× de ${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(product.price / maxSemJuros)} sem juros no cartão</span>`
+            : '';
+        pixEl.innerHTML = `
+            <div class="flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-[2px] px-3 py-2">
+                <span style="font-size:16px">💚</span>
+                <div>
+                    <p class="text-green-400 font-bold text-base leading-tight">${product.pixPriceFormatted} <span class="text-[10px] font-normal text-green-500/80 uppercase tracking-wide">no PIX — 5% OFF</span></p>
+                    ${parcelaStr}
+                </div>
+            </div>`;
+    }
+
     document.getElementById('product-modal-desc').textContent = product.description;
     const addBtn = document.getElementById('product-modal-add');
     addBtn.dataset.currentProductId = id;
@@ -1268,6 +1315,11 @@ function buildProductCard(p) {
     const btnText = isOutOfStock ? 'Esgotado' : 'Adicionar ao Carrinho';
     const btnAttr = isOutOfStock ? 'disabled' : `data-add-to-cart="${p.id}"`;
 
+    // Linha de preço PIX nos cards
+    const pixLine = isOutOfStock ? '' : `<p class="text-[11px] text-green-400 font-bold mb-2 flex items-center gap-1">
+        <span style="font-size:11px">💚</span> ${p.pixPriceFormatted} no PIX <span class="text-[9px] text-green-500/80 font-normal">(5% OFF)</span>
+    </p>`;
+
     return `<div class="bg-surface-card border border-white/10 group overflow-hidden ${isOutOfStock ? '' : 'cursor-pointer'}" ${isOutOfStock ? '' : `data-product-id="${p.id}"`}>
         <div class="aspect-square relative overflow-hidden bg-surface-main">
             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'opacity-50 grayscale' : ''}" src="${p.img}" alt="${p.name}" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
@@ -1275,8 +1327,10 @@ function buildProductCard(p) {
         </div>
         <div class="p-6">
             <p class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">${p.brand}</p>
-            <h3 class="font-body-md text-body-md mb-4 uppercase ${isOutOfStock ? 'text-white/50' : ''}">${p.name}</h3>
-            <p class="font-price-display text-price-display mb-6 ${isOutOfStock ? 'text-white/50' : ''}">${p.priceFormatted}</p>
+            <h3 class="font-body-md text-body-md mb-2 uppercase ${isOutOfStock ? 'text-white/50' : ''}">${p.name}</h3>
+            <p class="font-price-display text-price-display mb-1 ${isOutOfStock ? 'text-white/50' : ''}">${p.priceFormatted}</p>
+            ${pixLine}
+            <div class="mb-4"></div>
             <button class="${btnClass}" ${btnAttr}>${btnText}</button>
         </div>
     </div>`;
@@ -1483,15 +1537,56 @@ function updateStepperUI(activeStep) {
     });
 }
 
+// Taxas Mercado Pago por número de parcelas (% descontado do que o lojista recebe)
+// Para repassar ao comprador: totalCliente = preço / (1 - taxa)
+const MP_FEES = {
+    1:  0.0398,
+    2:  0.0652,
+    3:  0.0861,
+    4:  0.1068,
+    5:  0.1265,
+    6:  0.1395,
+    7:  0.1523,
+    8:  0.1649,
+    9:  0.1772,
+    10: 0.1892,
+    11: 0.2011,
+    12: 0.2127
+};
+const MIN_INSTALLMENT = 50; // parcela mínima R$ 50,00
+const MAX_NO_INTEREST = 3;  // até 3x sem juros
+
+function calcInstallment(total, n) {
+    if (n <= MAX_NO_INTEREST) {
+        // Sem juros — lojista absorve a taxa (coberta pelo +5% nos preços)
+        return { monthly: total / n, totalPaid: total, hasInterest: false };
+    } else {
+        // Com juros — grosseado para que a Revizzi receba o valor cheio
+        const fee = MP_FEES[n] || 0;
+        const totalPaid = total / (1 - fee);
+        return { monthly: totalPaid / n, totalPaid, hasInterest: true };
+    }
+}
+
 function populateInstallments() {
     const select = document.getElementById('ck-installments');
     select.innerHTML = '';
-    const total = Cart.total();
-    for (let i = 1; i <= 12; i++) {
-        const val = (total / i).toFixed(2).replace('.', ',');
+    const total = Cart.total() + (window.CheckoutFreight ? (window.CheckoutFreight.price || 0) : 0);
+    const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+
+    for (let n = 1; n <= 12; n++) {
+        const { monthly, totalPaid, hasInterest } = calcInstallment(total, n);
+        // Parcela mínima de R$50
+        if (monthly < MIN_INSTALLMENT && n > 1) continue;
         const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = i === 1 ? `À vista — R$ ${val}` : `${i}× de R$ ${val} sem juros`;
+        opt.value = n;
+        if (n === 1) {
+            opt.textContent = `À vista — ${fmt(total)}`;
+        } else if (!hasInterest) {
+            opt.textContent = `${n}× de ${fmt(monthly)} sem juros`;
+        } else {
+            opt.textContent = `${n}× de ${fmt(monthly)} com juros (total ${fmt(totalPaid)})`;
+        }
         select.appendChild(opt);
     }
 }
@@ -1499,13 +1594,31 @@ function populateInstallments() {
 function renderCheckoutSummary() {
     const list = document.getElementById('checkout-summary-list');
     const totalEl = document.getElementById('checkout-summary-total');
+    const pixDiscount = document.getElementById('checkout-pix-discount-row');
+
     list.innerHTML = Cart.items.map(({ product, qty }) =>
         `<li class="flex justify-between items-start gap-4">
             <span class="text-sm text-on-surface-variant flex-1">${product.name} × ${qty}</span>
             <span class="text-sm font-semibold flex-shrink-0">${product.priceFormatted}</span>
         </li>`
     ).join('');
-    totalEl.textContent = Cart.totalFormatted();
+
+    const freight = window.CheckoutFreight ? (window.CheckoutFreight.price || 0) : 0;
+    const subtotal = Cart.total() + freight;
+    const isPix = !document.getElementById('pay-card-form') || document.getElementById('pay-card-form').classList.contains('hidden');
+    const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+
+    if (isPix) {
+        const discount = subtotal * 0.05;
+        const pixTotal = subtotal - discount;
+        if (pixDiscount) pixDiscount.classList.remove('hidden');
+        const discountEl = document.getElementById('checkout-pix-discount-value');
+        if (discountEl) discountEl.textContent = '-' + fmt(discount);
+        totalEl.innerHTML = `${fmt(pixTotal)} <span class="text-green-400 text-[11px] ml-1">PIX</span>`;
+    } else {
+        if (pixDiscount) pixDiscount.classList.add('hidden');
+        totalEl.textContent = fmt(subtotal);
+    }
 }
 
 async function handleConfirmOrder() {
@@ -1532,9 +1645,12 @@ async function handleConfirmOrder() {
     const customerCity       = (document.getElementById('ck-city')      || {}).value || '';
     const customerState      = (document.getElementById('ck-state')     || {}).value || '';
 
-    // Determine payment method
+    // Determine payment method and installments
     const isCard = !document.getElementById('pay-card-form').classList.contains('hidden');
     const paymentMethod = isCard ? 'card' : 'pix';
+    const installmentsEl = document.getElementById('ck-installments');
+    const selectedInstallments = isCard && installmentsEl ? parseInt(installmentsEl.value) || 1 : 1;
+    const isPix = !isCard;
 
     // Build order items array
     const orderItems = Cart.items.map(({ product, qty }) => ({
@@ -1545,7 +1661,13 @@ async function handleConfirmOrder() {
         quantity: qty
     }));
 
-    const orderTotal = Cart.total() + (window.CheckoutFreight.price || 0);
+    const freightPrice = window.CheckoutFreight ? (window.CheckoutFreight.price || 0) : 0;
+    const subtotalWithFreight = Cart.total() + freightPrice;
+    // Aplicar desconto PIX se for pagamento PIX
+    const pixDiscountApplied = isPix ? subtotalWithFreight * 0.05 : 0;
+    const orderTotal = subtotalWithFreight - pixDiscountApplied;
+    // Calcular total com juros se parcelado (4x+)
+    const { totalPaid: orderTotalWithFees } = isCard ? calcInstallment(orderTotal, selectedInstallments) : { totalPaid: orderTotal };
 
     // Save to Supabase
     try {
@@ -1561,10 +1683,12 @@ async function handleConfirmOrder() {
                 customer_district: customerDistrict,
                 customer_city: customerCity,
                 customer_state: customerState,
-                items:          [...orderItems, { name: 'Frete', price: window.CheckoutFreight.price, quantity: 1, method: window.CheckoutFreight.name }],
-                total:          orderTotal,
+                items:          [...orderItems, { name: 'Frete', price: freightPrice, quantity: 1, method: window.CheckoutFreight ? window.CheckoutFreight.name : 'Padrão' }],
+                total:          orderTotalWithFees,
                 status:         'pending',
-                payment_method: paymentMethod
+                payment_method: paymentMethod,
+                installments:   selectedInstallments,
+                pix_discount:   pixDiscountApplied > 0 ? pixDiscountApplied : null
             }]).select();
             
             if (error) {
@@ -1616,9 +1740,16 @@ async function handleConfirmOrder() {
         orderItems.forEach(item => {
             tgText += `- ${item.quantity}x ${item.name} (R$ ${item.price.toFixed(2)})\n`;
         });
-        tgText += `\n<b>Frete:</b> ${window.CheckoutFreight.name || 'Padrão'} (R$ ${(window.CheckoutFreight.price || 0).toFixed(2)})\n`;
-        tgText += `<b>Pagamento:</b> ${paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito'}\n`;
-        tgText += `<b>TOTAL:</b> R$ ${orderTotal.toFixed(2)}\n\n`;
+        tgText += `\n<b>Frete:</b> ${(window.CheckoutFreight && window.CheckoutFreight.name) || 'Padrão'} (R$ ${freightPrice.toFixed(2)})\n`;
+        if (isPix) {
+            tgText += `<b>Pagamento:</b> PIX 💚\n`;
+            tgText += `<b>Desconto PIX (5%):</b> -R$ ${pixDiscountApplied.toFixed(2)}\n`;
+        } else {
+            const installLabel = selectedInstallments === 1 ? 'À vista' : `${selectedInstallments}x`;
+            const hasInterest = selectedInstallments > MAX_NO_INTEREST;
+            tgText += `<b>Pagamento:</b> Cartão de Crédito — ${installLabel}${hasInterest ? ' (com juros)' : ' (sem juros)'}\n`;
+        }
+        tgText += `<b>TOTAL COBRADO:</b> R$ ${orderTotalWithFees.toFixed(2)}\n\n`;
         tgText += `O cliente está sendo redirecionado para o Mercado Pago!`;
 
         fetch('https://api.telegram.org/bot8828379382:AAGn_db5gchFlOChk5NGTZJdd8_mVycbgKc/sendMessage', {
@@ -1634,7 +1765,7 @@ async function handleConfirmOrder() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                items: [...orderItems, { title: 'Frete (' + (window.CheckoutFreight.name || 'Padrão') + ')', quantity: 1, unit_price: window.CheckoutFreight.price || 0 }],
+                items: [...orderItems, { title: 'Frete (' + ((window.CheckoutFreight && window.CheckoutFreight.name) || 'Padrão') + ')', quantity: 1, unit_price: freightPrice }],
                 customerName: customerName,
                 customerEmail: customerEmail
             })
@@ -1787,6 +1918,8 @@ function initCheckout() {
         const pix = document.getElementById('pay-pix-btn');
         pix.classList.remove('bg-primary', 'text-surface-main');
         pix.classList.add('text-on-surface-variant');
+        populateInstallments();
+        renderCheckoutSummary();
     });
     document.getElementById('pay-pix-btn').addEventListener('click', function() {
         document.getElementById('pay-pix-form').classList.remove('hidden');
@@ -1796,6 +1929,7 @@ function initCheckout() {
         const card = document.getElementById('pay-card-btn');
         card.classList.remove('bg-primary', 'text-surface-main');
         card.classList.add('text-on-surface-variant');
+        renderCheckoutSummary();
     });
 
     // Next/Back navigation (delegated on overlay)

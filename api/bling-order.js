@@ -139,7 +139,21 @@ export default async function handler(req, res) {
             })),
             transporte: {
                 fretePorConta: 0,
-                frete: Number(shipping) || 0
+                frete: Number(shipping) || 0,
+                pesoBruto: 1.0,
+                volumes: [
+                    {
+                        servico: "SEDEX",
+                        dimensoes: {
+                            largura: 20,
+                            altura: 20,
+                            profundidade: 20,
+                            unidadeMedida: 1
+                        },
+                        pesoBruto: 1.0,
+                        quantidade: 1
+                    }
+                ]
             }
         };
 
