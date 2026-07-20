@@ -1375,10 +1375,21 @@ function renderFilterGrid() {
 }
 
 function buildFilterCheckboxes() {
-    const dynamicCategories = PRODUCTS.map(p => p.category);
+    const dynamicCategories = PRODUCTS.map(p => p.category).filter(Boolean).map(c => c.trim());
     const standardCategories = ["Polimento", "Equipamentos", "Acessórios", "Motos", "Desengraxantes e desincrustantes", "Aplicadores", "Escovas e pincéis", "Toalhas", "Ceras", "Pneus e rodas", "Couro", "Lava auto", "Plásticos", "Específicos", "Vidros", "Aromatizantes"];
-    const categories = [...new Set([...standardCategories, ...dynamicCategories])];
-    const brands = ["Vintex", "Razux", "Zacs", "Soft 99", "Cadillac", "Magil Clean", "Jaça", "Little theee", "Nação Detail", "Auto América", "Kers", "Lincoln", "SGT Tools sigma", "Mothers", "Menzerna"];
+    const categoriesMap = new Map();
+    [...standardCategories, ...dynamicCategories].forEach(c => {
+        if (c && !categoriesMap.has(c.toLowerCase())) categoriesMap.set(c.toLowerCase(), c);
+    });
+    const categories = Array.from(categoriesMap.values()).sort();
+
+    const dynamicBrands = PRODUCTS.map(p => p.brand).filter(Boolean).map(b => b.trim());
+    const standardBrands = ["Vonixx", "Vintex", "Razux", "Zacs", "Soft 99", "Cadillac", "Magil Clean", "Jaça", "Little Trees", "Nação Detail", "Auto América", "Kers", "Lincoln", "SGT Tools Sigma", "Mothers", "Menzerna", "Areon"];
+    const brandsMap = new Map();
+    [...standardBrands, ...dynamicBrands].forEach(b => {
+        if (b && !brandsMap.has(b.toLowerCase())) brandsMap.set(b.toLowerCase(), b);
+    });
+    const brands = Array.from(brandsMap.values()).sort();
     const cbHtml = (value, cls) =>
         `<label class="flex items-center gap-3 cursor-pointer group">
             <input type="checkbox" value="${value}" class="${cls} cursor-pointer"/>
