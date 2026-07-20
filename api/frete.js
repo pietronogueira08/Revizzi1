@@ -20,8 +20,9 @@ export default async function handler(req, res) {
 
   // ── Peso e dimensões reais ──
   // Correios exigem peso mínimo de 300g e máximo de 30.000g
+  // A margem de embalagem (+10%) já é aplicada pelo frontend antes de enviar.
   const PESO_MINIMO = 300;
-  const PESO_PADRAO = 500; // usado quando o produto não tem peso cadastrado
+  const PESO_PADRAO = 300; // usado quando o produto não tem peso cadastrado
 
   const pesoRaw = Number(pesoTotal) || PESO_PADRAO;
   const peso    = Math.max(PESO_MINIMO, Math.round(pesoRaw));   // aplica mínimo de 300g

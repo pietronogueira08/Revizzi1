@@ -1273,10 +1273,12 @@ function initProductModal() {
         const priceText = document.getElementById('product-modal-price').textContent;
         const basePrice = parseFloat(priceText.replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
         
-        // Pegar peso e dimensões do produto atual
+        // Pegar peso e dimensões do produto atual (1 unidade) com margem de embalagem +10%
         const prodId = document.getElementById('product-modal-add').dataset.currentProductId;
         const prod = PRODUCTS.find(p => p.id === prodId);
-        const peso = prod ? (prod.weight || null) : null;  // null → API usa padrão de 500g
+        const PESO_PADRAO_MODAL = 300; // padrão para produto sem peso cadastrado
+        const pesoBase = prod && prod.weight ? Number(prod.weight) : PESO_PADRAO_MODAL;
+        const peso = Math.round(pesoBase * 1.10); // +10% de margem de embalagem
         const dims = prod ? (prod.dimensions || null) : null;
         
         try {
@@ -1899,24 +1901,31 @@ function initCheckout() {
         
         try {
             // ── Calcular peso total do carrinho ──
-            // Soma peso × quantidade de cada item. Itens sem peso usam 500g como padrão.
-            const PESO_PADRAO_ITEM = 500;
-            let pesoCarrinho = 0;
-            let maxComp = 15, maxLarg = 15, altTotal = 0;
+            // Regras:
+            //  1. Soma peso × qty de cada item (padrão 300g para item sem peso)
+            //  2. Aplica margem de embalagem de +10% sobre o total
+            //  3. O mínimo de 300g é aplicado pela API no total recebido
+            const PESO_PADRAO_ITEM = 300;
+            let pesoLiquidoTotal = 0;
+            let volumeTotal = 0; // cm³, para calcular caixa cúbica equivalente
 
             Cart.items.forEach(({ product, qty }) => {
                 const pesoItem = product.weight ? Number(product.weight) : PESO_PADRAO_ITEM;
-                pesoCarrinho += pesoItem * qty;
+                pesoLiquidoTotal += pesoItem * qty;
 
-                // Dimensões: maior footprint + soma de alturas
-                if (product.dimensions) {
-                    maxComp = Math.max(maxComp, product.dimensions.length || 15);
-                    maxLarg = Math.max(maxLarg, product.dimensions.width  || 15);
-                    altTotal += (product.dimensions.height || 10) * qty;
-                }
+                // Dimensões: somar volumes para estimar caixa cúbica equivalente (opção C)
+                const vol = product.dimensions
+                    ? (product.dimensions.length || 15) * (product.dimensions.width || 15) * (product.dimensions.height || 10)
+                    : (15 * 15 * 10); // dimensões padrão estimadas para produto sem dados
+                volumeTotal += vol * qty;
             });
 
-            const dimsCarrinho = { length: maxComp, width: maxLarg, height: Math.max(10, altTotal) };
+            // Peso bruto com margem de embalagem (+10%)
+            const pesoCarrinho = Math.round(pesoLiquidoTotal * 1.10);
+
+            // Caixa cúbica equivalente: raiz cúbica do volume total
+            const ladoCubico = Math.round(Math.cbrt(volumeTotal));
+            const dimsCarrinho = { length: ladoCubico, width: ladoCubico, height: ladoCubico };
 
             const freights = await simulateFreight(cep, Cart.total(), pesoCarrinho, dimsCarrinho);
 
