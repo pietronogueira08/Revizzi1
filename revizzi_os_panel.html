@@ -1290,7 +1290,7 @@ function openProductModal(product = null) {
         modal.addEventListener('click', e => { if (e.target === modal) closeProductModal(); });
     }
 
-    let dimW = '', dimH = '', dimL = '';
+    let dimW = '', dimH = '', dimL = '', dimD = '';
     if (isEdit && product.dimensions) {
         try {
             let d = product.dimensions;
@@ -1298,6 +1298,7 @@ function openProductModal(product = null) {
             dimW = d.width || '';
             dimH = d.height || '';
             dimL = d.length || '';
+            dimD = d.diameter || '';
         } catch(e) {}
     }
 
@@ -1342,11 +1343,12 @@ function openProductModal(product = null) {
                     <input id="pm-weight" type="number" step="1" value="${isEdit ? product.weight || '' : ''}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 14px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ex: 500">
                 </div>
                 <div>
-                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Dimensões (C x L x A)</label>
-                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                    <label style="font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-bottom:6px;">Dimensões (C x L x A x Ø)</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;">
                         <input id="pm-dim-length" type="number" step="any" value="${dimL}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 10px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="C">
                         <input id="pm-dim-width" type="number" step="any" value="${dimW}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 10px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="L">
                         <input id="pm-dim-height" type="number" step="any" value="${dimH}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 10px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="A">
+                        <input id="pm-dim-diameter" type="number" step="any" value="${dimD}" style="width:100%;background:#0C0C0C;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:10px 10px;font-size:12px;font-family:Inter;outline:none;box-sizing:border-box;" placeholder="Ø">
                     </div>
                 </div>
                 <div style="grid-column:span 2;">
@@ -1404,13 +1406,15 @@ async function saveProduct(id) {
     const dimL = parseFloat(document.getElementById('pm-dim-length').value);
     const dimW = parseFloat(document.getElementById('pm-dim-width').value);
     const dimH = parseFloat(document.getElementById('pm-dim-height').value);
+    const dimD = parseFloat(document.getElementById('pm-dim-diameter').value);
     
     let dimensions = null;
-    if (!isNaN(dimL) || !isNaN(dimW) || !isNaN(dimH)) {
+    if (!isNaN(dimL) || !isNaN(dimW) || !isNaN(dimH) || !isNaN(dimD)) {
         dimensions = JSON.stringify({
             length: isNaN(dimL) ? 0 : dimL,
             width: isNaN(dimW) ? 0 : dimW,
-            height: isNaN(dimH) ? 0 : dimH
+            height: isNaN(dimH) ? 0 : dimH,
+            diameter: isNaN(dimD) ? 0 : dimD
         });
     }
 

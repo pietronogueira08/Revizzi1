@@ -1914,9 +1914,14 @@ function initCheckout() {
                 pesoLiquidoTotal += pesoItem * qty;
 
                 // Dimensões: somar volumes para estimar caixa cúbica equivalente (opção C)
-                const vol = product.dimensions
-                    ? (product.dimensions.length || 15) * (product.dimensions.width || 15) * (product.dimensions.height || 10)
-                    : (15 * 15 * 10); // dimensões padrão estimadas para produto sem dados
+                let vol = 15 * 15 * 10;
+                if (product.dimensions) {
+                    const d = product.dimensions;
+                    const l = d.length || d.diameter || 15;
+                    const w = d.width || d.diameter || 15;
+                    const h = d.height || 10;
+                    vol = l * w * h;
+                }
                 volumeTotal += vol * qty;
             });
 
