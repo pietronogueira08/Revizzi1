@@ -997,10 +997,17 @@ async function fetchProductsFromSupabase() {
         if (error) throw error;
         
         if (data && data.length > 0) {
-            window.PRODUCTS = data.filter(item => item.status !== 'Inativo' && item.status !== 'Desativado').map(item => {
+        window.PRODUCTS = data.filter(item => item.status !== 'Inativo' && item.status !== 'Desativado').map(item => {
                 // +5% sobre o preço da tabela física para cobrir Bling, NF e enquadramento tributário
                 const basePrice = parseFloat(item.price) * 1.05;
                 const pixPrice  = basePrice * 0.95; // desconto PIX de 5%
+
+                // Dimensões: o banco guarda como JSON string {length, width, height} em cm
+                let dims = null;
+                if (item.dimensions) {
+                    try { dims = typeof item.dimensions === 'string' ? JSON.parse(item.dimensions) : item.dimensions; } catch(e) {}
+                }
+
                 return {
                     id: item.id,
                     brand: item.brand,
@@ -1013,7 +1020,10 @@ async function fetchProductsFromSupabase() {
                     badge: item.badge_text ? { text: item.badge_text, style: item.badge_style || 'bg-primary text-surface-main' } : null,
                     img: item.img_url || 'imagem_2026-06-17_163850035-removebg-preview.png',
                     description: item.description,
-                    status: item.status || 'Disponível'
+                    status: item.status || 'Disponível',
+                    // Logística
+                    weight: item.weight ? Number(item.weight) : null,   // gramas
+                    dimensions: dims                                      // {length, width, height} em cm
                 };
             });
         }
@@ -1263,8 +1273,14 @@ function initProductModal() {
         const priceText = document.getElementById('product-modal-price').textContent;
         const basePrice = parseFloat(priceText.replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
         
+        // Pegar peso e dimensões do produto atual
+        const prodId = document.getElementById('product-modal-add').dataset.currentProductId;
+        const prod = PRODUCTS.find(p => p.id === prodId);
+        const peso = prod ? (prod.weight || null) : null;  // null → API usa padrão de 500g
+        const dims = prod ? (prod.dimensions || null) : null;
+        
         try {
-            const freights = await simulateFreight(cep, basePrice);
+            const freights = await simulateFreight(cep, basePrice, peso, dims);
             resEl.innerHTML = freights.map(f => `
                 <div class="flex justify-between items-center border border-white/10 p-2 rounded-[2px] bg-white/5">
                     <div>
@@ -1791,20 +1807,26 @@ async function handleConfirmOrder() {
 // ═══════════════════════════════════
 // I. FREIGHT SIMULATION LOGIC
 // ═══════════════════════════════════
-async function simulateFreight(cep, orderTotal) {
+async function simulateFreight(cep, orderTotal, pesoTotal, dims) {
     let options = [];
     let pacBase = 35; let pacDays = 8;
     let sedexBase = 60; let sedexDays = 4;
 
     try {
+        const body = { cepDestino: cep };
+        if (pesoTotal)        body.pesoTotal   = pesoTotal;
+        if (dims?.length)     body.comprimento = dims.length;
+        if (dims?.width)      body.largura     = dims.width;
+        if (dims?.height)     body.altura      = dims.height;
+
         const res = await fetch('/api/frete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cepDestino: cep })
+            body: JSON.stringify(body)
         });
         if (res.ok) {
             const data = await res.json();
-            if (data.pac) { pacBase = data.pac.preco; pacDays = data.pac.prazo; }
+            if (data.pac)   { pacBase = data.pac.preco;   pacDays   = data.pac.prazo;   }
             if (data.sedex) { sedexBase = data.sedex.preco; sedexDays = data.sedex.prazo; }
         } else {
             console.warn('Frete API returned error:', await res.text());
@@ -1817,7 +1839,7 @@ async function simulateFreight(cep, orderTotal) {
         options.push({ id: 'free', name: 'Frete Grátis', price: 0, days: pacDays + 1 });
     }
     
-    options.push({ id: 'pac', name: 'PAC (Correios)', price: pacBase, days: pacDays });
+    options.push({ id: 'pac',   name: 'PAC (Correios)',   price: pacBase,   days: pacDays   });
     options.push({ id: 'sedex', name: 'Sedex (Correios)', price: sedexBase, days: sedexDays });
     
     return options;
@@ -1876,7 +1898,28 @@ function initCheckout() {
         optsEl.innerHTML = '<p class="text-[11px] text-white/50 animate-pulse">Calculando opções...</p>';
         
         try {
-            const freights = await simulateFreight(cep, Cart.total());
+            // ── Calcular peso total do carrinho ──
+            // Soma peso × quantidade de cada item. Itens sem peso usam 500g como padrão.
+            const PESO_PADRAO_ITEM = 500;
+            let pesoCarrinho = 0;
+            let maxComp = 15, maxLarg = 15, altTotal = 0;
+
+            Cart.items.forEach(({ product, qty }) => {
+                const pesoItem = product.weight ? Number(product.weight) : PESO_PADRAO_ITEM;
+                pesoCarrinho += pesoItem * qty;
+
+                // Dimensões: maior footprint + soma de alturas
+                if (product.dimensions) {
+                    maxComp = Math.max(maxComp, product.dimensions.length || 15);
+                    maxLarg = Math.max(maxLarg, product.dimensions.width  || 15);
+                    altTotal += (product.dimensions.height || 10) * qty;
+                }
+            });
+
+            const dimsCarrinho = { length: maxComp, width: maxLarg, height: Math.max(10, altTotal) };
+
+            const freights = await simulateFreight(cep, Cart.total(), pesoCarrinho, dimsCarrinho);
+
             optsEl.innerHTML = freights.map((f, i) => `
                 <label class="flex items-center gap-3 border border-white/10 p-3 cursor-pointer hover:bg-white/5 transition-colors">
                     <input type="radio" name="ck_freight" value='${JSON.stringify(f)}' class="accent-primary w-4 h-4" ${i===0?'checked':''}>
