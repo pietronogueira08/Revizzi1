@@ -11,17 +11,20 @@ export default function ProductsPage() {
   const { products, loading, error, updateProduct } = useProducts();
   const [search, setSearch]     = useState('');
   const [category, setCategory] = useState('');
+  const [brand, setBrand]       = useState('');
   const [editing, setEditing]   = useState<Product | null>(null);
 
   // Categorias dinâmicas do banco
   const categories = [...new Set(products.map((p) => p.category))].sort();
+  const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))].sort();
 
   const filtered = products.filter((p) => {
     const matchSearch =
       p.name.toLowerCase().includes(search.toLowerCase()) ||
       (p.brand ?? '').toLowerCase().includes(search.toLowerCase());
     const matchCat = !category || p.category === category;
-    return matchSearch && matchCat;
+    const matchBrand = !brand || p.brand === brand;
+    return matchSearch && matchCat && matchBrand;
   });
 
   const formatPrice = (price: number | null | undefined) => {
@@ -92,6 +95,22 @@ export default function ProductsPage() {
             <option value="">Todas as categorias</option>
             {categories.map((c) => (
               <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+          <select
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+            className="h-9 px-3 text-[13px] outline-none cursor-pointer"
+            style={{
+              background: '#171717',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderLeft: 'none',
+              color: brand ? '#FFFFFF' : '#888888',
+            }}
+          >
+            <option value="">Todas as marcas</option>
+            {brands.map((b) => (
+              <option key={b} value={b}>{b}</option>
             ))}
           </select>
         </div>
@@ -264,7 +283,7 @@ export default function ProductsPage() {
                 <Search size={24} style={{ color: '#555555', marginBottom: 12 }} />
                 <p className="text-[14px]" style={{ color: '#888888' }}>Nenhum produto encontrado</p>
                 <button
-                  onClick={() => { setSearch(''); setCategory(''); }}
+                  onClick={() => { setSearch(''); setCategory(''); setBrand(''); }}
                   className="mt-4 text-[12px] uppercase tracking-wider underline transition-colors hover:text-white"
                   style={{ color: '#555555' }}
                 >

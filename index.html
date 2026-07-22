@@ -387,17 +387,16 @@
 </div>
 </div>
 <div class="hidden md:flex items-center gap-8 nav-link-container">
-<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="quem-somos.html">Quem Somos</a>
-<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-destaque">Produtos</a>
-<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Contato</a>
-<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-localizacao">Localização</a>
-<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="https://www.instagram.com/revizzisjb/" target="_blank">Rede Social</a>
+<a class="font-label-caps text-[13px] text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="quem-somos.html">Quem Somos</a>
+<a class="font-label-caps text-[13px] text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-destaque">Produtos</a>
+<a class="font-label-caps text-[13px] text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-contato">Contato</a>
+<a class="font-label-caps text-[13px] text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="#section-localizacao">Localização</a>
+<a class="font-label-caps text-[13px] text-on-surface-variant hover:text-primary transition-colors uppercase nav-link" href="https://www.instagram.com/revizzisjb/" target="_blank">Rede Social</a>
 </div>
 <div class="flex items-center gap-6">
-<div class="relative flex items-center transition-all duration-300 w-8 focus-within:w-48 overflow-hidden group">
-<label for="header-search-input" class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 absolute z-10 left-1 p-0.5">search</label>
-<input type="text" id="header-search-input" placeholder="Buscar produto..." class="bg-transparent border-b border-transparent focus:border-white/50 outline-none text-[12px] font-label-caps tracking-widest uppercase text-primary placeholder:text-white/40 w-full pl-8 pr-2 py-1 focus:ring-0 cursor-pointer focus:cursor-text">
-</div>
+<button onclick="document.getElementById('main-search-bar').focus();document.getElementById('main-search-bar').scrollIntoView({behavior:'smooth',block:'center'});" class="hover:opacity-80 transition-opacity" aria-label="Buscar produto">
+<span class="material-symbols-outlined text-primary">search</span>
+</button>
 <button id="auth-btn" class="hover:opacity-80 transition-opacity">
 <span class="material-symbols-outlined text-primary">person</span>
 </button>
@@ -434,7 +433,20 @@
 </button>
 </section>
 
-
+<!-- Section 1.7: Buscador Principal -->
+<section class="w-full bg-surface-card border-b border-border-subtle py-6 md:py-8 z-40 relative">
+    <div class="container mx-auto px-margin-desktop">
+        <div class="relative w-full max-w-3xl mx-auto">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary text-2xl pointer-events-none">search</span>
+            <input type="text" id="main-search-bar"
+                placeholder="Busque aqui o produto que precisa ou navegue pelas categorias"
+                class="w-full bg-surface-main border border-white/10 focus:border-primary/70 outline-none pl-12 pr-10 py-4 text-[13px] font-label-caps uppercase placeholder:text-white/25 text-primary tracking-wider transition-all"
+                oninput="FilterState.query=this.value.toLowerCase();renderFilterGrid();if(this.value.length>1)smoothScrollTo('#section-catalogo');">
+            <button onclick="document.getElementById('main-search-bar').value='';FilterState.query='';renderFilterGrid();"
+                class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-white/20 hover:text-white/60 transition-colors text-[18px]">close</button>
+        </div>
+    </div>
+</section>
 
 <!-- Section 2.5: Quem é a Revizzi -->
 <section class="bg-surface-card border-b border-border-subtle py-6 md:py-8 reveal">
@@ -679,6 +691,40 @@
             <span class="material-symbols-outlined text-[18px]">logout</span>
             Sair da Conta
         </button>
+    </div>
+</div>
+
+<!-- ── WAITLIST MODAL ── -->
+<div id="waitlist-modal" class="fixed inset-0 z-[200] flex items-center justify-center hidden">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeWaitlistModal()"></div>
+    <div class="relative bg-surface-card border border-white/10 w-full max-w-sm mx-4 p-6 shadow-2xl">
+        <button onclick="closeWaitlistModal()" class="absolute top-4 right-4 text-white/40 hover:text-white transition-colors">
+            <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-primary text-[20px]">notifications</span>
+            </div>
+            <div>
+                <p class="font-label-caps text-[10px] uppercase tracking-widest text-on-surface-variant mb-0.5">Produto esgotado</p>
+                <p id="waitlist-product-name" class="font-body-md text-[13px] text-white font-bold truncate max-w-[200px]"></p>
+            </div>
+        </div>
+        <p class="text-[12px] text-on-surface-variant mb-4 leading-relaxed">Deixe seu e-mail abaixo e <span class="text-primary font-bold">avisaremos assim que esse produto voltar ao estoque.</span></p>
+        <div id="waitlist-form-area">
+            <input type="email" id="waitlist-email-input" placeholder="seu@email.com"
+                class="w-full bg-surface-main border border-white/10 focus:border-primary outline-none px-4 py-3 text-[13px] text-primary uppercase font-label-caps placeholder:text-white/30 placeholder:normal-case tracking-wider transition-colors mb-3">
+            <button onclick="submitWaitlist()" id="waitlist-submit-btn"
+                class="w-full bg-primary text-surface-main font-label-caps py-3 uppercase font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">notifications_active</span>
+                Me avise quando chegar!
+            </button>
+        </div>
+        <div id="waitlist-success" class="hidden text-center py-4">
+            <span class="material-symbols-outlined text-primary text-4xl mb-2 block">check_circle</span>
+            <p class="font-label-caps uppercase text-[13px] text-primary font-bold">Cadastrado com sucesso!</p>
+            <p class="text-[12px] text-on-surface-variant mt-1">Você será avisado por e-mail quando o produto chegar.</p>
+        </div>
     </div>
 </div>
 
@@ -1098,7 +1144,10 @@ async function fetchProductsFromSupabase() {
         if (error) throw error;
         
         if (data && data.length > 0) {
-        window.PRODUCTS = data.filter(item => item.status !== 'Inativo' && item.status !== 'Desativado').map(item => {
+        window.PRODUCTS = data.filter(item => {
+            const s = (item.status || '').toLowerCase().trim();
+            return s !== 'inativo' && s !== 'desativado';
+        }).map(item => {
                 // +5% sobre o preço da tabela física para cobrir Bling, NF e enquadramento tributário
                 const basePrice = parseFloat(item.price) * 1.05;
                 const pixPrice  = basePrice * 0.95; // desconto PIX de 5%
@@ -1428,17 +1477,20 @@ function buildProductCard(p) {
         ? `<div class="absolute top-4 left-4 ${p.badge.style} font-label-caps text-[10px] px-2 py-1 uppercase font-bold">${p.badge.text}</div>`
         : '';
     
-    const isOutOfStock = p.status === 'Fora de estoque';
-    const btnClass = isOutOfStock ? 'w-full bg-surface-card text-on-surface-variant font-label-caps text-label-caps py-4 uppercase font-bold border border-white/10 cursor-not-allowed' : 'w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors';
-    const btnText = isOutOfStock ? 'Esgotado' : 'Adicionar ao Carrinho';
-    const btnAttr = isOutOfStock ? 'disabled' : `data-add-to-cart="${p.id}"`;
+    const isOutOfStock = (p.status || '').toLowerCase().trim() === 'fora de estoque';
+    const btnClass = isOutOfStock
+        ? 'w-full bg-transparent text-primary font-label-caps text-label-caps py-4 uppercase font-bold border border-primary/50 hover:bg-primary/10 transition-colors cursor-pointer'
+        : 'w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors';
+    const btnText = isOutOfStock ? '🔔 Avise-me quando disponível' : 'Adicionar ao Carrinho';
+    const pName = (p.name || '').replace(/'/g, "\\'");
+    const btnAttr = isOutOfStock ? `onclick="openWaitlistModal('${p.id}', '${pName}')"` : `data-add-to-cart="${p.id}"`;
 
     // Linha de preço PIX nos cards
-    const pixLine = isOutOfStock ? '' : `<p class="text-[11px] text-green-400 font-bold mb-2 flex items-center gap-1">
+    const pixLine = isOutOfStock ? '<p class="text-[11px] text-white/40 font-bold mb-2">Produto fora de estoque</p>' : `<p class="text-[11px] text-green-400 font-bold mb-2 flex items-center gap-1">
         ${p.pixPriceFormatted} no PIX <span class="text-[9px] text-green-500/80 font-normal">(5% OFF)</span>
     </p>`;
 
-    return `<div class="bg-surface-card border border-white/10 group overflow-hidden ${isOutOfStock ? '' : 'cursor-pointer'}" ${isOutOfStock ? '' : `data-product-id="${p.id}"`}>
+    return `<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="${p.id}">
         <div class="aspect-square relative overflow-hidden bg-surface-main">
             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'opacity-50 grayscale' : ''}" src="${p.img}" alt="${p.name}" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
             ${badge}
@@ -1522,8 +1574,8 @@ function resetFilters() {
     if (pMax) pMax.value = '5000';
     const sortSel = document.getElementById('filter-sort-select');
     if (sortSel) sortSel.value = 'relevance';
-    const searchInput = document.getElementById('header-search-input');
-    if (searchInput) searchInput.value = '';
+    const mainSearch = document.getElementById('main-search-bar');
+    if (mainSearch) mainSearch.value = '';
     renderFilterGrid();
 }
 
@@ -1564,9 +1616,9 @@ function initFilters() {
         renderFilterGrid();
     });
 
-    const searchInput = document.getElementById('header-search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
+    const mainSearchBar = document.getElementById('main-search-bar');
+    if (mainSearchBar) {
+        mainSearchBar.addEventListener('input', function(e) {
             FilterState.query = e.target.value.toLowerCase();
             renderFilterGrid();
             if (FilterState.query.length > 1) {
@@ -2445,6 +2497,53 @@ async function initInstagramCarousel() {
         section.style.display = '';
     } catch(e) {
         console.error('Erro no carrossel Instagram:', e);
+    }
+}
+
+// ── WAITLIST FUNCTIONS ──────────────────────────────────────────────
+let _waitlistProductId = null;
+
+function openWaitlistModal(productId, productName) {
+    _waitlistProductId = productId;
+    document.getElementById('waitlist-product-name').textContent = productName;
+    document.getElementById('waitlist-email-input').value = '';
+    document.getElementById('waitlist-form-area').classList.remove('hidden');
+    document.getElementById('waitlist-success').classList.add('hidden');
+    document.getElementById('waitlist-modal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeWaitlistModal() {
+    document.getElementById('waitlist-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+    _waitlistProductId = null;
+}
+
+async function submitWaitlist() {
+    const email = document.getElementById('waitlist-email-input').value.trim();
+    if (!email || !email.includes('@')) {
+        document.getElementById('waitlist-email-input').focus();
+        document.getElementById('waitlist-email-input').style.borderColor = '#f87171';
+        return;
+    }
+    document.getElementById('waitlist-email-input').style.borderColor = '';
+    const btn = document.getElementById('waitlist-submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    try {
+        const { error } = await supabaseClient.from('waitlist').insert({
+            product_id: _waitlistProductId,
+            email: email
+        });
+        if (error) throw error;
+        document.getElementById('waitlist-form-area').classList.add('hidden');
+        document.getElementById('waitlist-success').classList.remove('hidden');
+        setTimeout(closeWaitlistModal, 3000);
+    } catch(e) {
+        console.error('Erro ao salvar na waitlist:', e);
+        btn.disabled = false;
+        btn.textContent = 'Tentar novamente';
     }
 }
 </script>
