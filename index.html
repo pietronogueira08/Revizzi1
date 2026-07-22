@@ -198,6 +198,12 @@
         }
         #cart-overlay.open { opacity: 1; pointer-events: auto; }
 
+        /* ── Auth Modal ── */
+        #auth-overlay { display: none; }
+        #auth-overlay.open { display: block; }
+        #auth-drawer { opacity: 0; pointer-events: none; }
+        #auth-drawer.open { opacity: 1; pointer-events: auto; }
+
         /* ── Product Modal ── */
         #product-modal {
             opacity: 0;
@@ -392,7 +398,7 @@
 <label for="header-search-input" class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 absolute z-10 left-1 p-0.5">search</label>
 <input type="text" id="header-search-input" placeholder="Buscar produto..." class="bg-transparent border-b border-transparent focus:border-white/50 outline-none text-[12px] font-label-caps tracking-widest uppercase text-primary placeholder:text-white/40 w-full pl-8 pr-2 py-1 focus:ring-0 cursor-pointer focus:cursor-text">
 </div>
-<button class="hover:opacity-80 transition-opacity">
+<button id="auth-btn" class="hover:opacity-80 transition-opacity">
 <span class="material-symbols-outlined text-primary">person</span>
 </button>
 <button id="cart-btn" class="hover:opacity-80 transition-opacity relative">
@@ -579,6 +585,61 @@
 </div>
 <button id="checkout-btn" class="w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity">Ir para Checkout →</button>
 </div>
+</div>
+
+<!-- ── AUTH OVERLAY ── -->
+<div id="auth-overlay" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"></div>
+
+<!-- ── AUTH MODAL ── -->
+<div id="auth-drawer" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[400px] z-[70] bg-surface-card border border-white/10 flex flex-col p-6 rounded-lg transition-all duration-300">
+    <div class="flex items-center justify-between mb-6">
+        <h2 id="auth-title" class="font-headline-lg text-headline-lg uppercase">Login</h2>
+        <button id="auth-close-btn" class="hover:opacity-60 transition-opacity"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    
+    <!-- Auth Toggle -->
+    <div id="auth-tabs" class="flex gap-4 mb-6 border-b border-white/10 pb-2">
+        <button id="tab-login" class="font-label-caps uppercase text-primary font-bold">Entrar</button>
+        <button id="tab-register" class="font-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors">Cadastrar</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" class="flex flex-col gap-4">
+        <input type="email" id="login-email" placeholder="E-mail" class="bg-surface-main border border-border-subtle p-3 text-[12px] font-label-caps uppercase w-full outline-none focus:border-primary placeholder:text-white/40 transition-colors" required>
+        <input type="password" id="login-password" placeholder="Senha" class="bg-surface-main border border-border-subtle p-3 text-[12px] font-label-caps uppercase w-full outline-none focus:border-primary placeholder:text-white/40 transition-colors" required>
+        <button type="submit" class="w-full bg-primary text-surface-main font-label-caps py-3 uppercase font-bold hover:opacity-90 transition-opacity mt-2">Entrar</button>
+        
+        <div class="flex items-center gap-2 my-2 opacity-50">
+            <div class="flex-1 h-px bg-white/20"></div>
+            <span class="font-label-caps text-[10px] uppercase">OU</span>
+            <div class="flex-1 h-px bg-white/20"></div>
+        </div>
+        
+        <button type="button" id="btn-google-login" class="w-full bg-white text-black font-label-caps py-3 uppercase font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-3 rounded-sm">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5">
+            Continuar com Google
+        </button>
+    </form>
+
+    <!-- Register Form -->
+    <form id="register-form" class="flex flex-col gap-4 hidden">
+        <input type="text" id="reg-name" placeholder="Nome Completo" class="bg-surface-main border border-border-subtle p-3 text-[12px] font-label-caps uppercase w-full outline-none focus:border-primary placeholder:text-white/40 transition-colors" required>
+        <input type="email" id="reg-email" placeholder="E-mail" class="bg-surface-main border border-border-subtle p-3 text-[12px] font-label-caps uppercase w-full outline-none focus:border-primary placeholder:text-white/40 transition-colors" required>
+        <input type="password" id="reg-password" placeholder="Senha" class="bg-surface-main border border-border-subtle p-3 text-[12px] font-label-caps uppercase w-full outline-none focus:border-primary placeholder:text-white/40 transition-colors" required minlength="6">
+        <input type="tel" id="reg-phone" placeholder="WhatsApp (Opcional)" class="bg-surface-main border border-border-subtle p-3 text-[12px] font-label-caps uppercase w-full outline-none focus:border-primary placeholder:text-white/40 transition-colors">
+        <button type="submit" class="w-full bg-primary text-surface-main font-label-caps py-3 uppercase font-bold hover:opacity-90 transition-opacity mt-2">Criar Conta</button>
+    </form>
+
+    <!-- Profile View (Logged in) -->
+    <div id="profile-view" class="flex-col gap-4 hidden">
+        <p class="font-label-caps uppercase text-[12px]">Olá, <span id="profile-name" class="text-primary font-bold">...</span></p>
+        <div class="bg-surface-main p-4 border border-border-subtle flex flex-col gap-2">
+            <span class="font-label-caps uppercase text-[10px] text-on-surface-variant">Seus Dados</span>
+            <p id="profile-email-disp" class="text-[12px] opacity-80"></p>
+            <p id="profile-phone-disp" class="text-[12px] opacity-80"></p>
+        </div>
+        <button id="btn-logout" class="w-full bg-transparent border border-error text-error font-label-caps py-3 uppercase font-bold hover:bg-error/10 transition-colors mt-4">Sair da Conta</button>
+    </div>
 </div>
 
 <!-- ── PRODUCT MODAL ── -->
@@ -1498,8 +1559,20 @@ function initFilters() {
 // ═══════════════════════════════════
 let currentCheckoutStep = 1;
 
-function openCheckout() {
+async function openCheckout() {
     if (Cart.items.length === 0) return;
+    
+    if (typeof window.getCurrentAuthUser === 'function') {
+        const user = await window.getCurrentAuthUser();
+        if (user) {
+            document.getElementById('ck-email').value = user.email || '';
+            document.getElementById('ck-name').value = user.user_metadata?.full_name || '';
+            document.getElementById('ck-phone').value = user.user_metadata?.phone || '';
+            document.getElementById('ck-email').readOnly = true;
+            document.getElementById('ck-email').classList.add('opacity-50', 'pointer-events-none');
+        }
+    }
+
     populateInstallments();
     renderCheckoutSummary();
     goToCheckoutStep(1);
@@ -1706,6 +1779,12 @@ async function handleConfirmOrder() {
     // Save to Supabase
     try {
         if (typeof supabaseClient !== 'undefined') {
+            let userId = null;
+            if (typeof window.getCurrentAuthUser === 'function') {
+                const user = await window.getCurrentAuthUser();
+                if (user) userId = user.id;
+            }
+            
             const { data: insertedOrder, error } = await supabaseClient.from('orders').insert([{
                 customer_name:  customerName,
                 customer_email: customerEmail,
@@ -1722,7 +1801,8 @@ async function handleConfirmOrder() {
                 status:         'pending',
                 payment_method: paymentMethod,
                 installments:   selectedInstallments,
-                pix_discount:   pixDiscountApplied > 0 ? pixDiscountApplied : null
+                pix_discount:   pixDiscountApplied > 0 ? pixDiscountApplied : null,
+                user_id:        userId
             }]).select();
             
             if (error) {
@@ -2341,4 +2421,5 @@ async function initInstagramCarousel() {
     <path d="M16 0C7.163 0 0 7.163 0 16c0 2.826.737 5.48 2.026 7.785L0 32l8.424-2.004A15.938 15.938 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.3 13.3 0 01-6.788-1.858l-.487-.289-5.002 1.19 1.238-4.859-.317-.499A13.263 13.263 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.273-9.91c-.399-.2-2.36-1.164-2.727-1.297-.367-.133-.633-.2-.9.2-.266.4-1.033 1.297-1.266 1.563-.233.267-.467.3-.866.1-.4-.2-1.688-.622-3.215-1.983-1.188-1.059-1.99-2.366-2.223-2.766-.233-.4-.025-.616.175-.815.18-.178.4-.467.6-.7.2-.233.267-.4.4-.666.133-.267.067-.5-.033-.7-.1-.2-.9-2.166-1.233-2.966-.325-.78-.655-.673-.9-.686-.233-.013-.5-.016-.767-.016-.267 0-.7.1-1.066.5-.367.4-1.4 1.367-1.4 3.333s1.433 3.867 1.633 4.133c.2.267 2.82 4.306 6.833 6.034.955.413 1.7.66 2.28.845.958.306 1.83.263 2.52.16.769-.114 2.36-.965 2.693-1.897.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.766-.467z"/>
   </svg>
 </a>
+<script src="auth.js"></script>
 </body></html>
