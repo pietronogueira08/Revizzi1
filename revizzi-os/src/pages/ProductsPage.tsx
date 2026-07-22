@@ -193,30 +193,22 @@ export default function ProductsPage() {
 
                     {/* Status */}
                     <td className="px-4 py-2.5">
-                      {product.status ? (
-                        <span
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] uppercase tracking-wider font-semibold whitespace-nowrap"
-                          style={{
-                            background:
-                              product.status === 'Ativo' ? 'rgba(34, 197, 94, 0.15)' :
-                              product.status === 'Inativo' ? 'rgba(239, 68, 68, 0.15)' :
-                              'rgba(245, 158, 11, 0.15)',
-                            color:
-                              product.status === 'Ativo' ? '#4ade80' :
-                              product.status === 'Inativo' ? '#f87171' :
-                              '#fbbf24',
-                          }}
-                        >
-                          <span style={{
-                            width: 6, height: 6, borderRadius: '50%', display: 'inline-block',
-                            background:
-                              product.status === 'Ativo' ? '#4ade80' :
-                              product.status === 'Inativo' ? '#f87171' :
-                              '#fbbf24',
-                          }} />
-                          {product.status}
-                        </span>
-                      ) : (
+                      {product.status ? (() => {
+                        const s = product.status.toLowerCase().trim();
+                        const isGreen = s === 'ativo' || s === 'disponível' || s === 'disponivel';
+                        const isRed = s === 'inativo' || s === 'desativado';
+                        const bg = isGreen ? 'rgba(34, 197, 94, 0.15)' : isRed ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)';
+                        const color = isGreen ? '#4ade80' : isRed ? '#f87171' : '#fbbf24';
+                        return (
+                          <span
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] uppercase tracking-wider font-semibold whitespace-nowrap"
+                            style={{ background: bg, color: color }}
+                          >
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', display: 'inline-block', background: color }} />
+                            {product.status}
+                          </span>
+                        );
+                      })() : (
                         <span style={{ color: '#333', fontSize: 11 }}>—</span>
                       )}
                     </td>
