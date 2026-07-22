@@ -141,7 +141,7 @@ export default function ProductsPage() {
             <table className="w-full text-[13px]">
               <thead>
                 <tr style={{ background: '#171717', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                  {['Produto', 'Categoria', 'Peso / Dim.', 'Preço', ''].map((col) => (
+                  {['Produto', 'Status', 'Categoria', 'Peso / Dim.', 'Preço', ''].map((col) => (
                     <th
                       key={col}
                       className="text-left px-4 py-3 font-medium uppercase tracking-widest text-[11px]"
@@ -183,25 +183,42 @@ export default function ProductsPage() {
                           )}
                         </div>
                         <div className="flex flex-col leading-snug">
-                          <div className="flex items-center gap-2">
-                            <span className="text-white font-medium">{product.name}</span>
-                            {product.status && (
-                              <span
-                                className="px-1.5 py-0.5 rounded-sm text-[9px] uppercase tracking-wider font-semibold"
-                                style={{
-                                  background: product.status === 'Ativo' ? 'rgba(34, 197, 94, 0.15)' : product.status === 'Inativo' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)',
-                                  color: product.status === 'Ativo' ? '#4ade80' : product.status === 'Inativo' ? '#f87171' : '#fbbf24',
-                                }}
-                              >
-                                {product.status}
-                              </span>
-                            )}
-                          </div>
+                          <span className="text-white font-medium">{product.name}</span>
                           <span className="text-[11px] font-mono" style={{ color: '#555555' }}>
                             {product.brand}
                           </span>
                         </div>
                       </div>
+                    </td>
+
+                    {/* Status */}
+                    <td className="px-4 py-2.5">
+                      {product.status ? (
+                        <span
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] uppercase tracking-wider font-semibold whitespace-nowrap"
+                          style={{
+                            background:
+                              product.status === 'Ativo' ? 'rgba(34, 197, 94, 0.15)' :
+                              product.status === 'Inativo' ? 'rgba(239, 68, 68, 0.15)' :
+                              'rgba(245, 158, 11, 0.15)',
+                            color:
+                              product.status === 'Ativo' ? '#4ade80' :
+                              product.status === 'Inativo' ? '#f87171' :
+                              '#fbbf24',
+                          }}
+                        >
+                          <span style={{
+                            width: 6, height: 6, borderRadius: '50%', display: 'inline-block',
+                            background:
+                              product.status === 'Ativo' ? '#4ade80' :
+                              product.status === 'Inativo' ? '#f87171' :
+                              '#fbbf24',
+                          }} />
+                          {product.status}
+                        </span>
+                      ) : (
+                        <span style={{ color: '#333', fontSize: 11 }}>—</span>
+                      )}
                     </td>
 
                     {/* Categoria */}

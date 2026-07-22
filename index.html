@@ -1483,14 +1483,16 @@ function buildProductCard(p) {
         : 'w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors';
     const btnText = isOutOfStock ? '🔔 Avise-me quando disponível' : 'Adicionar ao Carrinho';
     const pName = (p.name || '').replace(/'/g, "\\'");
-    const btnAttr = isOutOfStock ? `onclick="openWaitlistModal('${p.id}', '${pName}')"` : `data-add-to-cart="${p.id}"`;
+    const btnAttr = isOutOfStock
+        ? `onclick="event.stopPropagation();openWaitlistModal('${p.id}', '${pName}')"`
+        : `data-add-to-cart="${p.id}"`;
 
     // Linha de preço PIX nos cards
     const pixLine = isOutOfStock ? '<p class="text-[11px] text-white/40 font-bold mb-2">Produto fora de estoque</p>' : `<p class="text-[11px] text-green-400 font-bold mb-2 flex items-center gap-1">
         ${p.pixPriceFormatted} no PIX <span class="text-[9px] text-green-500/80 font-normal">(5% OFF)</span>
     </p>`;
 
-    return `<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="${p.id}">
+    return `<div class="bg-surface-card border border-white/10 group overflow-hidden ${isOutOfStock ? 'cursor-default' : 'cursor-pointer'}" ${isOutOfStock ? '' : `data-product-id="${p.id}"`}>
         <div class="aspect-square relative overflow-hidden bg-surface-main">
             <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'opacity-50 grayscale' : ''}" src="${p.img}" alt="${p.name}" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
             ${badge}
