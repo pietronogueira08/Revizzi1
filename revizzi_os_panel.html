@@ -308,7 +308,7 @@
       <div class="p-6 border-b border-border-subtle flex items-center justify-between"><h2 class="font-headline-lg text-primary uppercase text-xl">Inventário de Produtos</h2><span class="text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Conectado ao Supabase</span></div>
       <div class="overflow-x-auto">
         <table class="w-full text-left">
-          <thead class="bg-surface-card"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Produto</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Marca</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Categoria</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Preço</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Ação</th></tr></thead>
+          <thead class="bg-surface-card"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Produto</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Status</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Marca</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Categoria</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Preço</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Ação</th></tr></thead>
           <tbody id="estoque-tbody"><tr><td colspan="5" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Nenhum produto cadastrado no Supabase ainda.</td></tr></tbody>
         </table>
       </div>
@@ -1261,6 +1261,13 @@ function renderEstoqueTable(products) {
                     <img src="${p.img_url || 'imagem_2026-06-17_163850035-removebg-preview.png'}" class="w-10 h-10 object-cover bg-surface-main flex-shrink-0" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'">
                     <span class="text-[11px] font-label-caps text-primary uppercase">${p.name}</span>
                 </div>
+            </td>
+            <td class="px-6 py-4">
+                ${p.status ? `
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[9px] uppercase tracking-wider font-semibold whitespace-nowrap" style="background: ${p.status === 'Ativo' ? 'rgba(34,197,94,0.15)' : p.status === 'Inativo' ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)'}; color: ${p.status === 'Ativo' ? '#4ade80' : p.status === 'Inativo' ? '#f87171' : '#fbbf24'}">
+                    <span style="width: 6px; height: 6px; border-radius: 50%; display: inline-block; background: ${p.status === 'Ativo' ? '#4ade80' : p.status === 'Inativo' ? '#f87171' : '#fbbf24'}"></span>
+                    ${p.status}
+                </span>` : '<span class="text-[11px] text-white/40">—</span>'}
             </td>
             <td class="px-6 py-4 text-[11px] font-label-caps text-on-surface-variant">${p.brand || '-'}</td>
             <td class="px-6 py-4 text-[11px] font-label-caps text-on-surface-variant">${p.category || '-'}</td>
