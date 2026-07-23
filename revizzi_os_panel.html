@@ -273,7 +273,7 @@
   <div id="section-Diagnósticos" class="section-view">
     <div class="flex items-center justify-between mb-8">
       <div><h1 class="font-headline-xl text-primary uppercase">Diagnósticos</h1><p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Verificação de saúde do sistema e integrações</p></div>
-      <button onclick="showToast('Diagnóstico completo iniciado...')" class="flex items-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">play_circle</span>Rodar Diagnóstico</button>
+      <button onclick="showToast('Diagnóstico completo iniciado...')" class="flex items-center gap-2 border border-white/20 px-4 py-2 text-[10px] text-white/80 hover:text-white font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">play_circle</span>Rodar Diagnóstico</button>
     </div>
     <div class="glass-panel p-0 overflow-hidden mb-6">
       <div class="p-6 border-b border-border-subtle"><h2 class="font-headline-lg text-primary uppercase text-xl">Status dos Módulos</h2></div>
@@ -296,7 +296,7 @@
         <input type="file" id="import-excel-input" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleExcelImport(event)">
         <button id="btn-import-excel" onclick="document.getElementById('import-excel-input').click()" class="flex items-center justify-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all text-primary"><span class="material-symbols-outlined text-sm">upload_file</span>Importar Planilha</button>
         <button onclick="deleteAllProducts()" class="flex items-center justify-center gap-2 border border-red-500/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-red-500/60 transition-all text-red-500"><span class="material-symbols-outlined text-sm">delete_sweep</span>Excluir Tudo</button>
-        <button onclick="openProductModal()" class="flex items-center justify-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">add</span>Adicionar Item</button>
+        <button onclick="openProductModal()" class="flex items-center justify-center gap-2 border border-white/20 px-4 py-2 text-[10px] text-white/80 hover:text-white font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">add</span>Adicionar Item</button>
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -332,7 +332,7 @@
   <div id="section-Desempenho" class="section-view">
     <div class="flex items-center justify-between mb-8">
       <div><h1 class="font-headline-xl text-primary uppercase">Desempenho</h1><p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Relatórios estratégicos e análise de metas</p></div>
-      <button onclick="showToast('Exportando relatório PDF...')" class="flex items-center gap-2 border border-white/20 px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">download</span>Exportar PDF</button>
+      <button onclick="showToast('Exportando relatório PDF...')" class="flex items-center gap-2 border border-white/20 px-4 py-2 text-[10px] text-white/80 hover:text-white font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">download</span>Exportar PDF</button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
       <div class="glass-panel p-8"><h2 class="font-headline-lg text-primary uppercase text-xl mb-2">Meta Mensal</h2><p class="text-[11px] text-on-surface-variant font-label-caps mb-6">Progresso de receita vs meta definida</p><div class="flex items-end gap-4 mb-4"><div class="font-display-lg text-5xl text-primary">0%</div><div class="text-[10px] font-label-caps text-white pb-2">META: R$ 0,00</div></div><div class="stat-bar"><div class="stat-bar-fill" style="width:0%"></div></div></div>
