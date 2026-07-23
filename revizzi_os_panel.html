@@ -305,7 +305,20 @@
       <div class="glass-panel p-6"><div class="text-[10px] font-label-caps text-white uppercase tracking-tighter mb-2">Valor do Estoque</div><div class="font-display-lg text-3xl text-primary">R$ 0,00</div><div class="text-[10px] text-white/70 font-label-caps uppercase mt-1">— Inventário vazio</div></div>
     </div>
     <div class="glass-panel p-0 overflow-hidden">
-      <div class="p-6 border-b border-border-subtle flex items-center justify-between"><h2 class="font-headline-lg text-primary uppercase text-xl">Inventário de Produtos</h2><span class="text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Conectado ao Supabase</span></div>
+      <div class="p-6 border-b border-border-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-headline-lg text-primary uppercase text-xl">Inventário de Produtos</h2>
+          <span class="text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Conectado ao Supabase</span>
+        </div>
+        <div class="flex gap-2">
+          <select id="filter-category" onchange="filterEstoqueSelects()" class="bg-surface-card border border-white/10 text-white font-label-caps text-[11px] uppercase px-3 py-1.5 outline-none appearance-none cursor-pointer">
+            <option value="">Todas as Categorias</option>
+          </select>
+          <select id="filter-brand" onchange="filterEstoqueSelects()" class="bg-surface-card border border-white/10 text-white font-label-caps text-[11px] uppercase px-3 py-1.5 outline-none appearance-none cursor-pointer">
+            <option value="">Todas as Marcas</option>
+          </select>
+        </div>
+      </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left">
           <thead class="bg-surface-card"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Produto</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Status</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Marca</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Categoria</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Preço</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Ação</th></tr></thead>
@@ -339,7 +352,7 @@
         <h1 class="font-headline-xl text-primary uppercase">Depoimentos</h1>
         <p class="font-label-caps text-[11px] text-on-surface-variant mt-1">Gerencie os depoimentos exibidos no site</p>
       </div>
-      <button onclick="openTestimonialModal()" class="bg-white text-black px-6 py-3 font-label-caps text-[11px] uppercase tracking-widest flex items-center gap-2 hover:bg-white/80 transition-colors">
+      <button onclick="openTestimonialModal()" class="bg-[#222] text-white border border-white/20 px-6 py-3 font-label-caps text-[11px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#333] transition-colors">
         <span class="material-symbols-outlined text-sm">add</span> Novo Depoimento
       </button>
     </div>
@@ -377,7 +390,9 @@
           <div><label class="text-[10px] font-label-caps text-white uppercase tracking-widest block mb-2">Nome da Empresa</label><input type="text" placeholder="Revizzi Centro Automotivo" class="w-full bg-surface-main border border-white/10 px-4 py-3 text-[11px] font-label-caps text-primary placeholder:text-on-surface-variant/30 focus:border-white/40 focus:outline-none uppercase tracking-widest"></div>
           <div><label class="text-[10px] font-label-caps text-white uppercase tracking-widest block mb-2">Email de Contato</label><input type="email" placeholder="contato@revizzi.com.br" class="w-full bg-surface-main border border-white/10 px-4 py-3 text-[11px] font-label-caps text-primary placeholder:text-on-surface-variant/30 focus:border-white/40 focus:outline-none tracking-widest"></div>
           <div><label class="text-[10px] font-label-caps text-white uppercase tracking-widest block mb-2">Cidade / Estado</label><input type="text" placeholder="São Paulo, SP" class="w-full bg-surface-main border border-white/10 px-4 py-3 text-[11px] font-label-caps text-primary placeholder:text-on-surface-variant/30 focus:border-white/40 focus:outline-none uppercase tracking-widest"></div>
-          <button onclick="showToast('Configurações salvas!')" class="w-full bg-white text-black font-label-caps text-[11px] uppercase tracking-widest py-3 hover:bg-white/80 transition-colors">Salvar Alterações</button>
+          <div class="col-span-2 pt-4">
+            <button onclick="showToast('Configurações salvas!')" class="w-full bg-[#222] text-white border border-white/20 font-label-caps text-[11px] uppercase tracking-widest py-3 hover:bg-[#333] transition-colors">Salvar Alterações</button>
+          </div>
         </div>
       </div>
       <div class="flex flex-col gap-6">
@@ -410,7 +425,7 @@
             <p class="text-[10px] text-on-surface-variant mt-2">Dica: Selecione várias imagens (máx 20MB cada) para criar um carrossel dinâmico.</p>
           </div>
           <div class="flex gap-4">
-            <button onclick="saveHeroImage()" id="btn-save-hero" class="flex-1 bg-white text-black font-label-caps text-[11px] uppercase tracking-widest py-3 hover:bg-white/80 transition-colors">Salvar Imagens</button>
+            <button onclick="saveHeroImage()" id="btn-save-hero" class="flex-1 bg-[#222] text-white border border-white/20 font-label-caps text-[11px] uppercase tracking-widest py-3 hover:bg-[#333] transition-colors">Salvar Imagens</button>
             <button onclick="removeHeroImage()" class="bg-red-500/20 text-red-500 hover:bg-red-500/30 border border-red-500/30 px-6 font-label-caps text-[11px] uppercase tracking-widest transition-colors">Remover Tudo</button>
           </div>
         </div>
@@ -432,15 +447,16 @@
             <input id="ig-link-input" type="url" placeholder="https://www.instagram.com/p/..." class="w-full bg-surface-main border border-white/10 px-3 py-2 text-[11px] font-label-caps text-white placeholder:text-on-surface-variant/40 focus:border-white/40 focus:outline-none tracking-widest">
           </div>
         </div>
-        <button onclick="addInstagramItem()" class="bg-white text-black font-label-caps text-[11px] uppercase tracking-widest px-6 py-2 hover:bg-white/80 transition-colors mb-6">+ Adicionar Imagem</button>
+        <button onclick="addInstagramItem()" class="bg-[#222] text-white border border-white/20 font-label-caps text-[11px] uppercase tracking-widest px-6 py-2 hover:bg-[#333] transition-colors mb-6">+ Adicionar Imagem</button>
 
         <!-- List -->
-        <div id="ig-list" class="space-y-2 mb-6"></div>
+        <div id="insta-list" class="flex flex-col gap-4 mb-6">
+          <!-- Populated by JS -->
+        </div>
 
         <!-- Save -->
-        <div class="flex items-center gap-4">
-          <button onclick="saveInstagramCarousel()" id="btn-save-instagram" class="bg-white text-black font-label-caps text-[11px] uppercase tracking-widest px-8 py-3 hover:bg-white/80 transition-colors">Salvar Lista →</button>
-          <button onclick="clearInstagramCarousel()" class="border border-red-500/30 text-red-400 font-label-caps text-[11px] uppercase tracking-widest px-6 py-3 hover:bg-red-500/10 transition-colors">Limpar Tudo</button>
+        <div class="flex justify-end pt-4 border-t border-border-subtle">
+          <button onclick="saveInstagramCarousel()" id="btn-save-instagram" class="bg-[#222] text-white border border-white/20 font-label-caps text-[11px] uppercase tracking-widest px-8 py-3 hover:bg-[#333] transition-colors">Salvar Lista →</button>
         </div>
       </div>
 
@@ -528,7 +544,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = 'https://lpovueymplmwuljohysj.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_R515ACD0X12zo_inHPj_1w_ElYu0B0A';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxwb3Z1ZXltcGxtd3Vsam9oeXNqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE3ODY0MCwiZXhwIjoyMDkzNzU0NjQwfQ._HMesJL9z2gCsqp-IN26I7mAD5S58JVxZDagmOZ7RII';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const ORDERS = [];
@@ -637,7 +653,7 @@ function openOrderModal(order) {
                 <span class="material-symbols-outlined" style="font-size:16px;">receipt_long</span> GERAR NFE (RECIBO)
             </button>
         </div>
-        <button onclick="document.getElementById('order-modal-overlay').style.display='none';showToast('Pedido ${order.id} atualizado!')" style="width:100%;background:#fff;color:#000;border:none;padding:12px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">MARCAR COMO CONCLUÍDO →</button>
+        <button onclick="document.getElementById('order-modal-overlay').style.display='none';showToast('Pedido ${order.id} atualizado!')" style="width:100%;background:#222;color:#fff;border:1px solid rgba(255,255,255,0.2);padding:12px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;">MARCAR COMO CONCLUÍDO →</button>
     `;
     overlay.style.display = 'flex';
 }
@@ -692,11 +708,29 @@ function initSearch() {
         
         if (document.getElementById('section-Estoque').classList.contains('active')) {
             if (!window._OS_PRODUCTS) return;
-            if (!q) { renderEstoqueTable(window._OS_PRODUCTS); return; }
-            const filtered = window._OS_PRODUCTS.filter(p => p.name.toUpperCase().includes(q) || (p.brand && p.brand.toUpperCase().includes(q)));
-            renderEstoqueTable(filtered);
+            filterEstoqueSelects();
         }
     });
+}
+
+function filterEstoqueSelects() {
+    const q = document.getElementById('vin-search').value.trim().toUpperCase();
+    const cat = document.getElementById('filter-category') ? document.getElementById('filter-category').value : '';
+    const brand = document.getElementById('filter-brand') ? document.getElementById('filter-brand').value : '';
+
+    let filtered = window._OS_PRODUCTS || [];
+    
+    if (q) {
+        filtered = filtered.filter(p => p.name.toUpperCase().includes(q) || (p.brand && p.brand.toUpperCase().includes(q)));
+    }
+    if (cat) {
+        filtered = filtered.filter(p => p.category === cat);
+    }
+    if (brand) {
+        filtered = filtered.filter(p => p.brand === brand);
+    }
+    
+    renderEstoqueTable(filtered);
 }
 
 function initFooter() {
@@ -1234,9 +1268,29 @@ async function fetchEstoqueProducts() {
         const { data, error } = await db.from('products').select('*').order('name');
         if (error) throw error;
         window._OS_PRODUCTS = data || [];
+        populateEstoqueFilters(window._OS_PRODUCTS);
         renderEstoqueTable(window._OS_PRODUCTS);
         updateEstoqueKPIs(window._OS_PRODUCTS);
     } catch(err) { console.error('Error fetching products:', err); }
+}
+
+function populateEstoqueFilters(products) {
+    const cats = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+    const brands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
+    
+    const catSelect = document.getElementById('filter-category');
+    if (catSelect) {
+        const currentCat = catSelect.value;
+        catSelect.innerHTML = '<option value="">Todas as Categorias</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+        catSelect.value = currentCat;
+    }
+
+    const brandSelect = document.getElementById('filter-brand');
+    if (brandSelect) {
+        const currentBrand = brandSelect.value;
+        brandSelect.innerHTML = '<option value="">Todas as Marcas</option>' + brands.map(b => `<option value="${b}">${b}</option>`).join('');
+        brandSelect.value = currentBrand;
+    }
 }
 
 function updateEstoqueKPIs(data) {
@@ -1280,7 +1334,7 @@ function renderEstoqueTable(products) {
             <td class="px-6 py-4 text-[11px] font-label-caps text-primary">${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(p.price || 0)}</td>
             <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-                    <button onclick="openProductModalById('${p.id}')" class="text-[9px] font-label-caps uppercase border border-white/20 px-3 py-1.5 hover:border-white/50 transition-all">Editar</button>
+                    <button onclick="openProductModalById('${p.id}')" class="text-[9px] text-white/80 font-label-caps uppercase border border-white/20 px-3 py-1.5 hover:text-white hover:border-white/50 transition-all">Editar</button>
                     <button onclick="deleteProductById('${p.id}')" class="text-[9px] font-label-caps uppercase border border-red-500/30 text-red-400 px-3 py-1.5 hover:bg-red-500/10 transition-all">Excluir</button>
                 </div>
             </td>
@@ -1381,7 +1435,7 @@ function openProductModal(product = null) {
                 </div>
             </div>
             <div id="pm-error" style="display:none;color:#f87171;font-size:11px;font-family:Inter;letter-spacing:0.05em;"></div>
-            <button onclick="saveProduct(${isEdit ? `'${product.id}'` : 'null'})" style="width:100%;background:#fff;color:#000;border:none;padding:13px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:4px;">
+            <button onclick="saveProduct(${isEdit ? `'${product.id}'` : 'null'})" style="width:100%;background:#222;color:#fff;border:1px solid rgba(255,255,255,0.2);padding:13px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:4px;">
                 ${isEdit ? 'SALVAR ALTERAÇÕES' : 'CADASTRAR PRODUTO'} →
             </button>
         </div>
@@ -1542,7 +1596,7 @@ async function fetchAdminTestimonials() {
                 <td class="px-6 py-4 font-label-caps text-[11px] text-primary tracking-widest">${stars}</td>
                 <td class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest">${dateStr}</td>
                 <td class="px-6 py-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onclick='openTestimonialModal(${JSON.stringify(t).replace(/'/g, "\\'")})' class="p-2 hover:bg-white/10 rounded mr-1"><span class="material-symbols-outlined text-sm">edit</span></button>
+                    <button onclick='openTestimonialModal(${JSON.stringify(t).replace(/'/g, "\\'")})' class="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded mr-1"><span class="material-symbols-outlined text-sm">edit</span></button>
                     <button onclick="deleteTestimonial('${t.id}', '${t.name}')" class="p-2 hover:bg-red-500/20 rounded text-red-400"><span class="material-symbols-outlined text-sm">delete</span></button>
                 </td>
             </tr>`;
@@ -1591,7 +1645,7 @@ function openTestimonialModal(testimonial = null) {
                 </div>
             </div>
             <div id="tm-error" style="display:none;color:#f87171;font-size:11px;font-family:Inter;letter-spacing:0.05em;"></div>
-            <button onclick="saveTestimonial()" style="width:100%;background:#fff;color:#000;border:none;padding:13px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:4px;">
+            <button onclick="saveTestimonial()" style="width:100%;background:#222;color:#fff;border:1px solid rgba(255,255,255,0.2);padding:13px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-top:4px;">
                 ${isEdit ? 'SALVAR ALTERAÇÕES' : 'CADASTRAR DEPOIMENTO'} →
             </button>
         </div>
