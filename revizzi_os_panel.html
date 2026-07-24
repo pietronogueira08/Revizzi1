@@ -311,14 +311,30 @@
           <span class="text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Conectado ao Supabase</span>
         </div>
         <div class="flex gap-2">
-          <select id="filter-category" onchange="filterEstoqueSelects()" class="bg-surface-card border border-white/10 text-white font-label-caps text-[11px] uppercase px-3 py-1.5 outline-none appearance-none cursor-pointer">
-            <option value="">Todas as Categorias</option>
-          </select>
-          <select id="filter-brand" onchange="filterEstoqueSelects()" class="bg-surface-card border border-white/10 text-white font-label-caps text-[11px] uppercase px-3 py-1.5 outline-none appearance-none cursor-pointer">
-            <option value="">Todas as Marcas</option>
-          </select>
+          <button onclick="toggleEstoqueFilters()" class="bg-surface-card border border-white/10 text-white font-label-caps text-[11px] uppercase px-3 py-1.5 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer">
+            <span class="material-symbols-outlined text-[14px]">filter_list</span> Filtros
+          </button>
         </div>
       </div>
+      
+      <!-- Painel de Filtros (Oculto por Padrão) -->
+      <div id="estoque-filters-panel" class="hidden p-6 border-b border-border-subtle bg-surface-card/50">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="font-label-caps text-[10px] text-white/50 uppercase tracking-widest mb-3">Categorias</h3>
+            <div id="filter-category-container" class="flex flex-wrap gap-2">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+          <div>
+            <h3 class="font-label-caps text-[10px] text-white/50 uppercase tracking-widest mb-3">Marcas</h3>
+            <div id="filter-brand-container" class="flex flex-wrap gap-2">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="overflow-x-auto">
         <table class="w-full text-left">
           <thead class="bg-surface-card"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Produto</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Status</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Marca</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Categoria</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Preço</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Ação</th></tr></thead>
@@ -713,21 +729,70 @@ function initSearch() {
     });
 }
 
+let selectedCategories = [];
+let selectedBrands = [];
+
+function toggleEstoqueFilters() {
+    const panel = document.getElementById('estoque-filters-panel');
+    if (panel) panel.classList.toggle('hidden');
+}
+
+function toggleCategoryFilter(cat) {
+    if (selectedCategories.includes(cat)) {
+        selectedCategories = selectedCategories.filter(c => c !== cat);
+    } else {
+        selectedCategories.push(cat);
+    }
+    renderFilterPills();
+    filterEstoqueSelects();
+}
+
+function toggleBrandFilter(brand) {
+    if (selectedBrands.includes(brand)) {
+        selectedBrands = selectedBrands.filter(b => b !== brand);
+    } else {
+        selectedBrands.push(brand);
+    }
+    renderFilterPills();
+    filterEstoqueSelects();
+}
+
+function renderFilterPills() {
+    const catContainer = document.getElementById('filter-category-container');
+    if (catContainer && window._ALL_CATS) {
+        catContainer.innerHTML = window._ALL_CATS.map(c => `
+            <button onclick="toggleCategoryFilter('${c}')" class="px-3 py-1.5 text-[10px] font-label-caps uppercase border transition-all cursor-pointer rounded-sm flex items-center gap-1 ${selectedCategories.includes(c) ? 'bg-primary text-black border-primary' : 'bg-transparent text-white/70 border-white/20 hover:border-white/50'}">
+                ${selectedCategories.includes(c) ? '<span class="material-symbols-outlined text-[12px]">check</span>' : ''} ${c}
+            </button>
+        `).join('');
+    }
+
+    const brandContainer = document.getElementById('filter-brand-container');
+    if (brandContainer && window._ALL_BRANDS) {
+        brandContainer.innerHTML = window._ALL_BRANDS.map(b => `
+            <button onclick="toggleBrandFilter('${b}')" class="px-3 py-1.5 text-[10px] font-label-caps uppercase border transition-all cursor-pointer rounded-sm flex items-center gap-1 ${selectedBrands.includes(b) ? 'bg-primary text-black border-primary' : 'bg-transparent text-white/70 border-white/20 hover:border-white/50'}">
+                ${selectedBrands.includes(b) ? '<span class="material-symbols-outlined text-[12px]">check</span>' : ''} ${b}
+            </button>
+        `).join('');
+    }
+}
+
 function filterEstoqueSelects() {
-    const q = document.getElementById('vin-search').value.trim().toUpperCase();
-    const cat = document.getElementById('filter-category') ? document.getElementById('filter-category').value : '';
-    const brand = document.getElementById('filter-brand') ? document.getElementById('filter-brand').value : '';
+    const searchEl = document.getElementById('vin-search');
+    const q = searchEl ? searchEl.value.trim().toUpperCase() : '';
 
     let filtered = window._OS_PRODUCTS || [];
     
     if (q) {
-        filtered = filtered.filter(p => p.name.toUpperCase().includes(q) || (p.brand && p.brand.toUpperCase().includes(q)));
+        filtered = filtered.filter(p => (p.name && p.name.toUpperCase().includes(q)) || (p.brand && p.brand.toUpperCase().includes(q)));
     }
-    if (cat) {
-        filtered = filtered.filter(p => p.category === cat);
+    
+    if (selectedCategories.length > 0) {
+        filtered = filtered.filter(p => selectedCategories.includes(p.category));
     }
-    if (brand) {
-        filtered = filtered.filter(p => p.brand === brand);
+    
+    if (selectedBrands.length > 0) {
+        filtered = filtered.filter(p => selectedBrands.includes(p.brand));
     }
     
     renderEstoqueTable(filtered);
@@ -1275,22 +1340,9 @@ async function fetchEstoqueProducts() {
 }
 
 function populateEstoqueFilters(products) {
-    const cats = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
-    const brands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
-    
-    const catSelect = document.getElementById('filter-category');
-    if (catSelect) {
-        const currentCat = catSelect.value;
-        catSelect.innerHTML = '<option value="">Todas as Categorias</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
-        catSelect.value = currentCat;
-    }
-
-    const brandSelect = document.getElementById('filter-brand');
-    if (brandSelect) {
-        const currentBrand = brandSelect.value;
-        brandSelect.innerHTML = '<option value="">Todas as Marcas</option>' + brands.map(b => `<option value="${b}">${b}</option>`).join('');
-        brandSelect.value = currentBrand;
-    }
+    window._ALL_CATS = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+    window._ALL_BRANDS = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
+    renderFilterPills();
 }
 
 function updateEstoqueKPIs(data) {
