@@ -1510,7 +1510,7 @@ function buildProductCard(p) {
 
 function getFilteredProducts() {
     let result = PRODUCTS.filter(p => {
-        const catOk = FilterState.categories.size === 0 || Array.from(FilterState.categories).some(c => c.toLowerCase() === p.category.toLowerCase());
+        const catOk = FilterState.categories.size === 0 || Array.from(FilterState.categories).some(c => p.category.split(',').map(x => x.trim().toLowerCase()).includes(c.toLowerCase()));
         const brandOk = FilterState.brands.size === 0 || Array.from(FilterState.brands).some(b => b.toLowerCase() === p.brand.toLowerCase());
         const priceOk = p.price >= FilterState.minPrice && p.price <= FilterState.maxPrice;
         const queryOk = !FilterState.query || p.name.toLowerCase().includes(FilterState.query) || p.brand.toLowerCase().includes(FilterState.query);
@@ -1533,10 +1533,12 @@ function buildFilterCheckboxes() {
     const categoriesMap = new Map();
     PRODUCTS.forEach(p => {
         if (p.category && p.category.trim()) {
-            const cat = p.category.trim();
-            if (!categoriesMap.has(cat.toLowerCase())) {
-                categoriesMap.set(cat.toLowerCase(), cat);
-            }
+            const cats = p.category.split(',').map(c => c.trim()).filter(Boolean);
+            cats.forEach(cat => {
+                if (!categoriesMap.has(cat.toLowerCase())) {
+                    categoriesMap.set(cat.toLowerCase(), cat);
+                }
+            });
         }
     });
     const categories = Array.from(categoriesMap.values()).sort((a, b) => a.localeCompare(b, 'pt-BR'));

@@ -788,7 +788,7 @@ function filterEstoqueSelects() {
     }
     
     if (selectedCategories.length > 0) {
-        filtered = filtered.filter(p => selectedCategories.includes(p.category));
+        filtered = filtered.filter(p => p.category && p.category.split(',').map(c => c.trim()).some(cat => selectedCategories.includes(cat)));
     }
     
     if (selectedBrands.length > 0) {
@@ -1340,7 +1340,7 @@ async function fetchEstoqueProducts() {
 }
 
 function populateEstoqueFilters(products) {
-    window._ALL_CATS = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+    window._ALL_CATS = [...new Set(products.flatMap(p => p.category ? p.category.split(',').map(c => c.trim()) : []).filter(Boolean))].sort();
     window._ALL_BRANDS = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
     renderFilterPills();
 }
