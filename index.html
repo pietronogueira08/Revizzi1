@@ -1627,16 +1627,7 @@ function initFilters() {
         renderFilterGrid();
     });
 
-    const mainSearchBar = document.getElementById('main-search-bar');
-    if (mainSearchBar) {
-        mainSearchBar.addEventListener('input', function(e) {
-            FilterState.query = e.target.value.toLowerCase();
-            renderFilterGrid();
-            if (FilterState.query.length > 1) {
-                smoothScrollTo('#section-catalogo');
-            }
-        });
-    }
+    // O listener de busca do input foi removido para evitar pesquisa automática enquanto digita
     document.getElementById('filter-reset-btn').addEventListener('click', resetFilters);
 
     // Mobile sheet
