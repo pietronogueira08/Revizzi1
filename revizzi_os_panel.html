@@ -760,42 +760,65 @@ function toggleBrandFilter(brand) {
 function renderFilterPills() {
     const catContainer = document.getElementById('filter-category-container');
     if (catContainer && window._ALL_CATS) {
-        catContainer.innerHTML = window._ALL_CATS.map(c => `
-            <button onclick="toggleCategoryFilter('${c}')" class="px-3 py-1.5 text-[10px] font-label-caps uppercase border transition-all cursor-pointer rounded-sm flex items-center gap-1 ${selectedCategories.includes(c) ? 'bg-primary text-black border-primary' : 'bg-transparent text-white/70 border-white/20 hover:border-white/50'}">
+        catContainer.innerHTML = window._ALL_CATS.map(c => {
+            const escapedC = c.replace(/'/g, "\\'");
+            return `
+            <button onclick="toggleCategoryFilter('${escapedC}')" class="px-3 py-1.5 text-[10px] font-label-caps uppercase border transition-all cursor-pointer rounded-sm flex items-center gap-1 ${selectedCategories.includes(c) ? 'bg-primary text-black border-primary' : 'bg-transparent text-white/70 border-white/20 hover:border-white/50'}">
                 ${selectedCategories.includes(c) ? '<span class="material-symbols-outlined text-[12px]">check</span>' : ''} ${c}
             </button>
-        `).join('');
+            `;
+        }).join('');
     }
 
     const brandContainer = document.getElementById('filter-brand-container');
     if (brandContainer && window._ALL_BRANDS) {
-        brandContainer.innerHTML = window._ALL_BRANDS.map(b => `
-            <button onclick="toggleBrandFilter('${b}')" class="px-3 py-1.5 text-[10px] font-label-caps uppercase border transition-all cursor-pointer rounded-sm flex items-center gap-1 ${selectedBrands.includes(b) ? 'bg-primary text-black border-primary' : 'bg-transparent text-white/70 border-white/20 hover:border-white/50'}">
+        brandContainer.innerHTML = window._ALL_BRANDS.map(b => {
+            const escapedB = b.replace(/'/g, "\\'");
+            return `
+            <button onclick="toggleBrandFilter('${escapedB}')" class="px-3 py-1.5 text-[10px] font-label-caps uppercase border transition-all cursor-pointer rounded-sm flex items-center gap-1 ${selectedBrands.includes(b) ? 'bg-primary text-black border-primary' : 'bg-transparent text-white/70 border-white/20 hover:border-white/50'}">
                 ${selectedBrands.includes(b) ? '<span class="material-symbols-outlined text-[12px]">check</span>' : ''} ${b}
             </button>
-        `).join('');
+            `;
+        }).join('');
     }
 }
 
 function filterEstoqueSelects() {
-    const searchEl = document.getElementById('vin-search');
-    const q = searchEl ? searchEl.value.trim().toUpperCase() : '';
+    try {
+        const searchEl = document.getElementById('vin-search');
+        const q = searchEl ? searchEl.value.trim().toUpperCase() : '';
 
-    let filtered = window._OS_PRODUCTS || [];
-    
-    if (q) {
-        filtered = filtered.filter(p => (p.name && p.name.toUpperCase().includes(q)) || (p.brand && p.brand.toUpperCase().includes(q)));
+        let filtered = window._OS_PRODUCTS || [];
+        
+        if (q) {
+            filtered = filtered.filter(p => {
+                const n = p.name ? String(p.name).toUpperCase() : '';
+                const b = p.brand ? String(p.brand).toUpperCase() : '';
+                return n.includes(q) || b.includes(q);
+            });
+        }
+        
+        if (selectedCategories && selectedCategories.length > 0) {
+            filtered = filtered.filter(p => {
+                if (!p.category) return false;
+                const cats = String(p.category).split(',').map(c => c.trim().toLowerCase());
+                return selectedCategories.some(sel => cats.includes(sel.toLowerCase()));
+            });
+        }
+        
+        if (selectedBrands && selectedBrands.length > 0) {
+            filtered = filtered.filter(p => {
+                if (!p.brand) return false;
+                const b = String(p.brand).trim().toLowerCase();
+                return selectedBrands.some(sel => sel.toLowerCase() === b);
+            });
+        }
+        
+        renderEstoqueTable(filtered);
+    } catch(err) {
+        console.error('Erro no filtro de estoque:', err);
+        renderEstoqueTable(window._OS_PRODUCTS || []);
     }
-    
-    if (selectedCategories.length > 0) {
-        filtered = filtered.filter(p => p.category && p.category.split(',').map(c => c.trim()).some(cat => selectedCategories.includes(cat)));
-    }
-    
-    if (selectedBrands.length > 0) {
-        filtered = filtered.filter(p => selectedBrands.includes(p.brand));
-    }
-    
-    renderEstoqueTable(filtered);
 }
 
 function initFooter() {
@@ -1340,8 +1363,8 @@ async function fetchEstoqueProducts() {
 }
 
 function populateEstoqueFilters(products) {
-    window._ALL_CATS = [...new Set(products.flatMap(p => p.category ? p.category.split(',').map(c => c.trim()) : []).filter(Boolean))].sort();
-    window._ALL_BRANDS = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
+    window._ALL_CATS = [...new Set(products.flatMap(p => p.category ? String(p.category).split(',').map(c => c.trim()) : []).filter(Boolean))].sort();
+    window._ALL_BRANDS = [...new Set(products.map(p => p.brand ? String(p.brand).trim() : '').filter(Boolean))].sort();
     renderFilterPills();
 }
 
