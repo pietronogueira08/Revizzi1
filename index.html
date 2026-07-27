@@ -436,14 +436,20 @@
 <!-- Section 1.7: Buscador Principal -->
 <section class="w-full bg-surface-card border-b border-border-subtle py-6 md:py-8 z-40 relative">
     <div class="container mx-auto px-margin-desktop">
-        <div class="relative w-full max-w-3xl mx-auto">
+        <div class="relative w-full max-w-3xl mx-auto flex items-center">
             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary text-2xl pointer-events-none">search</span>
             <input type="text" id="main-search-bar"
                 placeholder="Busque aqui o produto que precisa ou navegue pelas categorias"
-                class="w-full bg-surface-main border border-white/10 focus:border-primary/70 outline-none pl-12 pr-10 py-4 text-[13px] font-label-caps uppercase placeholder:text-white/25 text-primary tracking-wider transition-all"
-                oninput="FilterState.query=this.value.toLowerCase();renderFilterGrid();if(this.value.length>1)smoothScrollTo('#section-catalogo');">
-            <button onclick="document.getElementById('main-search-bar').value='';FilterState.query='';renderFilterGrid();"
-                class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-white/20 hover:text-white/60 transition-colors text-[18px]">close</button>
+                class="w-full bg-surface-main border border-white/10 focus:border-primary/70 outline-none pl-12 pr-[120px] py-4 text-[13px] font-label-caps uppercase placeholder:text-white/25 text-primary tracking-wider transition-all"
+                onkeydown="if(event.key === 'Enter'){ FilterState.query=this.value.toLowerCase(); renderFilterGrid(); if(this.value.length>0)smoothScrollTo('#section-catalogo'); }">
+            <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                <button onclick="document.getElementById('main-search-bar').value='';FilterState.query='';renderFilterGrid();"
+                    class="material-symbols-outlined text-white/20 hover:text-white/60 transition-colors text-[18px] p-1 cursor-pointer">close</button>
+                <button onclick="FilterState.query=document.getElementById('main-search-bar').value.toLowerCase(); renderFilterGrid(); if(document.getElementById('main-search-bar').value.length>0)smoothScrollTo('#section-catalogo');"
+                    class="bg-primary text-surface-main hover:bg-white transition-colors px-4 py-2 text-[10px] font-label-caps uppercase tracking-widest cursor-pointer">
+                    BUSCAR
+                </button>
+            </div>
         </div>
     </div>
 </section>
