@@ -1360,52 +1360,96 @@ function initCart() {
 // ═══════════════════════════════════
 // E. PRODUCT MODAL
 // ═══════════════════════════════════
-function openProductModal(id) {
+function openProductModal(id, cardElement) {
     const product = PRODUCTS.find(p => p.id === id);
     if (!product) return;
-    document.getElementById('product-modal-img').src = product.img;
-    document.getElementById('product-modal-img').alt = product.name;
-    document.getElementById('product-modal-brand').textContent = product.brand;
-    document.getElementById('product-modal-name').textContent = product.name;
-    document.getElementById('product-modal-price').textContent = product.priceFormatted;
+    
+    const updateDOM = () => {
+        document.getElementById('product-modal-img').src = product.img;
+        document.getElementById('product-modal-img').alt = product.name;
+        document.getElementById('product-modal-brand').textContent = product.brand;
+        document.getElementById('product-modal-name').textContent = product.name;
+        document.getElementById('product-modal-price').textContent = product.priceFormatted;
 
-    // Bloco PIX + parcelamento no modal
-    const pixEl = document.getElementById('product-modal-pix-block');
-    if (pixEl) {
-        // Parcela máxima sem juros (3x, parcela mín R$50)
-        let maxSemJuros = 0;
-        for (let n = 3; n >= 1; n--) {
-            if (product.price / n >= 50) { maxSemJuros = n; break; }
+        // Bloco PIX + parcelamento no modal
+        const pixEl = document.getElementById('product-modal-pix-block');
+        if (pixEl) {
+            let maxSemJuros = 0;
+            for (let n = 3; n >= 1; n--) {
+                if (product.price / n >= 50) { maxSemJuros = n; break; }
+            }
+            const parcelaStr = maxSemJuros > 1
+                ? `<span class="text-[11px] text-white/50">ou ${maxSemJuros}× de ${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(product.price / maxSemJuros)} sem juros no cartão</span>`
+                : '';
+            pixEl.innerHTML = `
+                <div class="flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-[2px] px-3 py-2">
+                    <div>
+                        <p class="text-green-400 font-bold text-base leading-tight">${product.pixPriceFormatted} <span class="text-[10px] font-normal text-green-500/80 uppercase tracking-wide">no PIX — 5% OFF</span></p>
+                        ${parcelaStr}
+                    </div>
+                </div>`;
         }
-        const parcelaStr = maxSemJuros > 1
-            ? `<span class="text-[11px] text-white/50">ou ${maxSemJuros}× de ${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(product.price / maxSemJuros)} sem juros no cartão</span>`
-            : '';
-        pixEl.innerHTML = `
-            <div class="flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-[2px] px-3 py-2">
-                <div>
-                    <p class="text-green-400 font-bold text-base leading-tight">${product.pixPriceFormatted} <span class="text-[10px] font-normal text-green-500/80 uppercase tracking-wide">no PIX — 5% OFF</span></p>
-                    ${parcelaStr}
-                </div>
-            </div>`;
-    }
 
-    document.getElementById('product-modal-desc').textContent = product.description;
-    const addBtn = document.getElementById('product-modal-add');
-    addBtn.dataset.currentProductId = id;
-    const modal = document.getElementById('product-modal');
-    modal.showModal();
-    requestAnimationFrame(() => { modal.style.opacity = '1'; });
+        document.getElementById('product-modal-desc').textContent = product.description;
+        const addBtn = document.getElementById('product-modal-add');
+        addBtn.dataset.currentProductId = id;
+        const modal = document.getElementById('product-modal');
+        modal.showModal();
+        modal.style.opacity = '1';
+    };
+
+    if (document.startViewTransition && cardElement) {
+        const cardImg = cardElement.querySelector('img');
+        const modalImg = document.getElementById('product-modal-img');
+        if (cardImg) cardImg.style.viewTransitionName = 'modal-product-image';
+        if (modalImg) modalImg.style.viewTransitionName = '';
+        const transition = document.startViewTransition(() => {
+            updateDOM();
+            if (cardImg) cardImg.style.viewTransitionName = '';
+            if (modalImg) modalImg.style.viewTransitionName = 'modal-product-image';
+        });
+        transition.finished.finally(() => {
+            if (modalImg) modalImg.style.viewTransitionName = '';
+        });
+    } else {
+        updateDOM();
+    }
 }
 
 function closeProductModal() {
     const modal = document.getElementById('product-modal');
     if (!modal.open) return;
-    modal.style.opacity = '0';
-    setTimeout(() => { 
-        if (modal.open) modal.close(); 
+    
+    const closeDOM = () => {
+        modal.close(); 
+        modal.style.opacity = '0';
         document.getElementById('product-modal-cep').value = '';
         document.getElementById('product-modal-freight-result').classList.add('hidden');
-    }, 250);
+    };
+
+    const id = document.getElementById('product-modal-add').dataset.currentProductId;
+    const cardElement = document.querySelector(`[data-product-id="${id}"]`);
+
+    if (document.startViewTransition && cardElement) {
+        const cardImg = cardElement.querySelector('img');
+        const modalImg = document.getElementById('product-modal-img');
+        
+        if (modalImg) modalImg.style.viewTransitionName = 'modal-product-image';
+        if (cardImg) cardImg.style.viewTransitionName = '';
+        
+        const transition = document.startViewTransition(() => {
+            closeDOM();
+            if (modalImg) modalImg.style.viewTransitionName = '';
+            if (cardImg) cardImg.style.viewTransitionName = 'modal-product-image';
+        });
+        
+        transition.finished.finally(() => {
+            if (cardImg) cardImg.style.viewTransitionName = '';
+        });
+    } else {
+        modal.style.opacity = '0';
+        setTimeout(closeDOM, 250);
+    }
 }
 
 function initProductModal() {
@@ -1469,7 +1513,7 @@ function initProductModal() {
     document.addEventListener('click', function(e) {
         if (e.target.closest('[data-add-to-cart]')) return; // button handled above
         const card = e.target.closest('[data-product-id]');
-        if (card) openProductModal(card.dataset.productId);
+        if (card) openProductModal(card.dataset.productId, card);
     });
 }
 
