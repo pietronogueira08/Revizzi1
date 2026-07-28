@@ -1044,7 +1044,7 @@
         Siga @revizzisjb
       </a>
     </div>
-    <div id="instagram-carousel-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+    <div id="instagram-carousel-container" class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden" style="scrollbar-width: none; -ms-overflow-style: none;"></div>
   </div>
 </section>
 
@@ -2498,9 +2498,9 @@ async function initInstagramCarousel() {
             const img = `<img src="${item.url}" alt="Instagram @revizzisjb" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">`;
             const innerWrapper = `<div class="w-full h-full overflow-hidden rounded-[2px]">${img}</div>`;
             if (item.link) {
-                return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-square bg-surface-card p-2 group block border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md">${innerWrapper}</a>`;
+                return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-2 group block border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md">${innerWrapper}</a>`;
             }
-            return `<div class="aspect-square bg-surface-card p-2 group border border-border-subtle shadow-lg rounded-md">${innerWrapper}</div>`;
+            return `<div class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-2 group border border-border-subtle shadow-lg rounded-md">${innerWrapper}</div>`;
         }).join('');
         section.style.display = '';
     } catch(e) {
