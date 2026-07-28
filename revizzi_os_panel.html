@@ -460,13 +460,22 @@
           </div>
           <div>
             <label class="text-[10px] font-label-caps text-white/60 uppercase tracking-widest block mb-1">Link do Post (opcional)</label>
-            <input id="ig-link-input" type="url" placeholder="https://www.instagram.com/p/..." class="w-full bg-surface-main border border-white/10 px-3 py-2 text-[11px] font-label-caps text-white placeholder:text-on-surface-variant/40 focus:border-white/40 focus:outline-none tracking-widest">
+            <input id="ig-link-input" oninput="updateInstagramPreview(this.value)" onchange="updateInstagramPreview(this.value)" type="url" placeholder="https://www.instagram.com/p/..." class="w-full bg-surface-main border border-white/10 px-3 py-2 text-[11px] font-label-caps text-white placeholder:text-on-surface-variant/40 focus:border-white/40 focus:outline-none tracking-widest">
           </div>
         </div>
+
+        <!-- Preview ao vivo do Link do Instagram -->
+        <div id="ig-live-preview-container" class="hidden mb-5 p-4 bg-surface-main/60 border border-white/10 rounded-sm">
+          <p class="text-[10px] font-label-caps text-primary uppercase tracking-widest mb-3 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">visibility</span> Preview do Post do Instagram:
+          </p>
+          <div id="ig-live-preview-box" class="flex justify-start"></div>
+        </div>
+
         <button onclick="addInstagramItem()" class="bg-[#222] text-white border border-white/20 font-label-caps text-[11px] uppercase tracking-widest px-6 py-2 hover:bg-[#333] transition-colors mb-6">+ Adicionar Imagem</button>
 
         <!-- List -->
-        <div id="insta-list" class="flex flex-col gap-4 mb-6">
+        <div id="ig-list" class="flex flex-col gap-4 mb-6">
           <!-- Populated by JS -->
         </div>
 
@@ -1944,23 +1953,71 @@ async function deleteAllProducts() {
 // ═══════════════════════════════════
 let instagramItems = []; // { url, link }
 
+function getInstagramEmbedUrl(url) {
+    if (!url) return null;
+    try {
+        const u = new URL(url.trim());
+        if (!u.hostname.includes('instagram.com')) return null;
+        const match = u.pathname.match(/\/(p|reel|tv)\/([a-zA-Z0-9_-]+)/);
+        if (!match) return null;
+        return `https://www.instagram.com/${match[1]}/${match[2]}/embed/`;
+    } catch(e) {
+        return null;
+    }
+}
+
+function updateInstagramPreview(url) {
+    const container = document.getElementById('ig-live-preview-container');
+    const box = document.getElementById('ig-live-preview-box');
+    if (!container || !box) return;
+
+    const embedUrl = getInstagramEmbedUrl(url);
+    if (embedUrl) {
+        box.innerHTML = `<iframe src="${embedUrl}" width="320" height="420" frameborder="0" scrolling="no" allowtransparency="true" class="rounded-md border border-white/15 shadow-xl bg-black/40 max-w-full"></iframe>`;
+        container.classList.remove('hidden');
+    } else {
+        box.innerHTML = '';
+        container.classList.add('hidden');
+    }
+}
+
+function toggleIgItemPreview(index) {
+    const el = document.getElementById(`ig-item-preview-${index}`);
+    if (!el) return;
+    if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+    } else {
+        el.classList.add('hidden');
+    }
+}
+
 function renderInstagramList() {
-    const el = document.getElementById('ig-list');
+    const el = document.getElementById('ig-list') || document.getElementById('insta-list');
     if (!el) return;
     if (instagramItems.length === 0) {
         el.innerHTML = '<p class="text-[10px] font-label-caps text-white/30 uppercase tracking-widest">Nenhuma imagem adicionada.</p>';
         return;
     }
-    el.innerHTML = instagramItems.map((item, i) => `
-        <div class="flex items-center gap-3 border border-white/10 p-3 bg-surface-main/50">
-            <img src="${item.url}" alt="" class="w-14 h-14 object-cover flex-shrink-0 bg-white/5" onerror="this.style.display='none'">
-            <div class="flex-1 min-w-0">
-                <p class="text-[11px] font-label-caps text-white truncate">${item.url}</p>
-                ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="text-[10px] text-on-surface-variant hover:text-primary truncate block">${item.link}</a>` : '<p class="text-[10px] text-white/20 font-label-caps">Sem link</p>'}
+    el.innerHTML = instagramItems.map((item, i) => {
+        const embedUrl = getInstagramEmbedUrl(item.link);
+        return `
+        <div class="flex flex-col gap-3 border border-white/10 p-3 bg-surface-main/50 rounded-sm">
+            <div class="flex items-center gap-3">
+                <img src="${item.url}" alt="" class="w-14 h-14 object-cover flex-shrink-0 bg-white/5 rounded-sm" onerror="this.style.display='none'">
+                <div class="flex-1 min-w-0">
+                    <p class="text-[11px] font-label-caps text-white truncate">${item.url}</p>
+                    ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="text-[10px] text-primary hover:underline truncate block font-mono mt-0.5">${item.link}</a>` : '<p class="text-[10px] text-white/20 font-label-caps mt-0.5">Sem link</p>'}
+                </div>
+                ${embedUrl ? `<button onclick="toggleIgItemPreview(${i})" type="button" class="px-2.5 py-1 text-[10px] font-label-caps uppercase border border-white/20 hover:border-primary hover:text-primary transition-all rounded-sm flex items-center gap-1 bg-white/5 cursor-pointer"><span class="material-symbols-outlined text-[14px]">visibility</span> Preview</button>` : ''}
+                <button onclick="removeInstagramItem(${i})" type="button" class="material-symbols-outlined text-[18px] text-red-400 hover:text-red-300 transition-colors flex-shrink-0 ml-1 cursor-pointer" title="Remover item">delete</button>
             </div>
-            <button onclick="removeInstagramItem(${i})" class="material-symbols-outlined text-[18px] text-red-400 hover:text-red-300 transition-colors flex-shrink-0">delete</button>
+            ${embedUrl ? `
+            <div id="ig-item-preview-${i}" class="hidden pt-3 border-t border-white/5">
+                <p class="text-[9px] font-label-caps text-white/50 uppercase tracking-widest mb-2 flex items-center gap-1"><span class="material-symbols-outlined text-[13px] text-primary">verified</span> Preview da postagem vinculada:</p>
+                <iframe src="${embedUrl}" width="320" height="420" frameborder="0" scrolling="no" allowtransparency="true" class="rounded border border-white/10 shadow-lg bg-black/40 max-w-full"></iframe>
+            </div>` : ''}
         </div>
-    `).join('');
+    `;}).join('');
 }
 
 async function addInstagramItem() {
@@ -1990,7 +2047,7 @@ async function addInstagramItem() {
         
         instagramItems.push({ url: publicUrl, link });
         fileInput.value = '';
-        if (linkInput) linkInput.value = '';
+        if (linkInput) { linkInput.value = ''; updateInstagramPreview(''); }
         renderInstagramList();
         showToast('Imagem adicionada. Clique em Salvar Lista para confirmar.', 'success');
     } catch (err) {
