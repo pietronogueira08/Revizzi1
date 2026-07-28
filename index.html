@@ -1044,7 +1044,7 @@
         Siga @revizzisjb
       </a>
     </div>
-    <div id="instagram-carousel-container" class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 [&::-webkit-scrollbar]:hidden" style="scrollbar-width: none; -ms-overflow-style: none;"></div>
+    <div id="instagram-carousel-container" class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 w-max mx-auto max-w-full [&::-webkit-scrollbar]:hidden" style="scrollbar-width: none; -ms-overflow-style: none;"></div>
   </div>
 </section>
 
@@ -2500,9 +2500,9 @@ async function initInstagramCarousel() {
                 const img = `<img src="${item.url}" alt="Instagram @revizzisjb" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">`;
                 innerWrapper = `<div class="w-full h-full overflow-hidden rounded-[2px]">${img}</div>`;
                 if (item.link) {
-                    return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-2 group block border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md">${innerWrapper}</a>`;
+                    return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-[4/5] flex-shrink-0 w-[260px] sm:w-[320px] snap-center bg-surface-card p-2 group block border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md">${innerWrapper}</a>`;
                 }
-                return `<div class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-2 group border border-border-subtle shadow-lg rounded-md">${innerWrapper}</div>`;
+                return `<div class="aspect-[4/5] flex-shrink-0 w-[260px] sm:w-[320px] snap-center bg-surface-card p-2 group border border-border-subtle shadow-lg rounded-md">${innerWrapper}</div>`;
             } else if (item.link) {
                 let embedUrl = null;
                 try {
@@ -2512,8 +2512,8 @@ async function initInstagramCarousel() {
                 } catch(e) {}
                 
                 if (embedUrl) {
-                    // Render iframe directly inside the box (no <a> tag, because iframe is interactive)
-                    return `<div class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-1 group border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md flex items-center justify-center overflow-hidden"><iframe src="${embedUrl}" class="w-full h-full" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
+                    // Render iframe with fixed width/height matching the panel to prevent clipping
+                    return `<div class="flex-shrink-0 w-[320px] h-[430px] snap-center bg-surface-card p-1 group border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md flex items-center justify-center overflow-hidden"><iframe src="${embedUrl}" width="320" height="420" frameborder="0" scrolling="no" allowtransparency="true" class="w-full h-full"></iframe></div>`;
                 }
             }
             return '';
