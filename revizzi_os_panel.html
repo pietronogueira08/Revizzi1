@@ -455,7 +455,7 @@
         <!-- Add form -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
           <div class="md:col-span-2">
-            <label class="text-[10px] font-label-caps text-white/60 uppercase tracking-widest block mb-1">Upload da Imagem *</label>
+            <label class="text-[10px] font-label-caps text-white/60 uppercase tracking-widest block mb-1">Upload da Imagem (Opcional se usar link)</label>
             <input id="ig-file-input" type="file" accept="image/*" class="w-full bg-surface-main border border-white/10 px-3 py-2 text-[11px] font-label-caps text-white focus:border-white/40 focus:outline-none tracking-widest file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-primary/20 file:text-primary hover:file:bg-primary/30">
           </div>
           <div>
@@ -2003,9 +2003,9 @@ function renderInstagramList() {
         return `
         <div class="flex flex-col gap-3 border border-white/10 p-3 bg-surface-main/50 rounded-sm">
             <div class="flex items-center gap-3">
-                <img src="${item.url}" alt="" class="w-14 h-14 object-cover flex-shrink-0 bg-white/5 rounded-sm" onerror="this.style.display='none'">
+                <img src="${item.url || 'https://placehold.co/100x100/111/444?text=IG'}" alt="" class="w-14 h-14 object-cover flex-shrink-0 bg-white/5 rounded-sm" onerror="this.style.display='none'">
                 <div class="flex-1 min-w-0">
-                    <p class="text-[11px] font-label-caps text-white truncate">${item.url}</p>
+                    <p class="text-[11px] font-label-caps text-white truncate">${item.url || 'Iframe Embed'}</p>
                     ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="text-[10px] text-primary hover:underline truncate block font-mono mt-0.5">${item.link}</a>` : '<p class="text-[10px] text-white/20 font-label-caps mt-0.5">Sem link</p>'}
                 </div>
                 ${embedUrl ? `<button onclick="toggleIgItemPreview(${i})" type="button" class="px-2.5 py-1 text-[10px] font-label-caps uppercase border border-white/20 hover:border-primary hover:text-primary transition-all rounded-sm flex items-center gap-1 bg-white/5 cursor-pointer"><span class="material-symbols-outlined text-[14px]">visibility</span> Preview</button>` : ''}
@@ -2026,33 +2026,37 @@ async function addInstagramItem() {
     const files = fileInput.files;
     const link = (linkInput?.value || '').trim();
     
-    if (!files || files.length === 0) { showToast('Selecione uma imagem.', 'error'); return; }
+    if ((!files || files.length === 0) && !link) { showToast('Selecione uma imagem ou insira um link do Instagram.', 'error'); return; }
     
-    const file = files[0];
-    if (file.size > 20 * 1024 * 1024) { showToast('Erro: Arquivo maior que 20MB', 'error'); return; }
-
+    let publicUrl = '';
     const btn = document.querySelector('button[onclick="addInstagramItem()"]');
     const originalText = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin inline-block align-middle mr-2">refresh</span>Enviando...';
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin inline-block align-middle mr-2">refresh</span>Adicionando...';
     btn.disabled = true;
 
     try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `ig_${Date.now()}.${fileExt}`;
-        const { data, error } = await db.storage.from('hero-images').upload(fileName, file);
-        
-        if (error) throw error;
-        
-        const { data: { publicUrl } } = db.storage.from('hero-images').getPublicUrl(fileName);
+        if (files && files.length > 0) {
+            const file = files[0];
+            if (file.size > 20 * 1024 * 1024) { showToast('Erro: Arquivo maior que 20MB', 'error'); return; }
+            const fileExt = file.name.split('.').pop();
+            const fileName = `ig_${Date.now()}.${fileExt}`;
+            const { data, error } = await db.storage.from('hero-images').upload(fileName, file);
+            if (error) throw error;
+            const { data: publicUrlData } = db.storage.from('hero-images').getPublicUrl(fileName);
+            publicUrl = publicUrlData.publicUrl;
+        } else {
+            const embedUrl = getInstagramEmbedUrl(link);
+            if (!embedUrl) { showToast('Link do Instagram inválido. Cole a URL de um post.', 'error'); return; }
+        }
         
         instagramItems.push({ url: publicUrl, link });
         fileInput.value = '';
         if (linkInput) { linkInput.value = ''; updateInstagramPreview(''); }
         renderInstagramList();
-        showToast('Imagem adicionada. Clique em Salvar Lista para confirmar.', 'success');
+        showToast('Item adicionado. Clique em Salvar Lista para confirmar.', 'success');
     } catch (err) {
         console.error('Erro no upload IG:', err);
-        showToast('Erro ao fazer upload da imagem.', 'error');
+        showToast('Erro ao adicionar o item.', 'error');
     } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;

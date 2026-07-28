@@ -2495,12 +2495,28 @@ async function initInstagramCarousel() {
         const container = document.getElementById('instagram-carousel-container');
         if (!section || !container) return;
         container.innerHTML = items.map(item => {
-            const img = `<img src="${item.url}" alt="Instagram @revizzisjb" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">`;
-            const innerWrapper = `<div class="w-full h-full overflow-hidden rounded-[2px]">${img}</div>`;
-            if (item.link) {
-                return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-2 group block border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md">${innerWrapper}</a>`;
+            let innerWrapper = '';
+            if (item.url) {
+                const img = `<img src="${item.url}" alt="Instagram @revizzisjb" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">`;
+                innerWrapper = `<div class="w-full h-full overflow-hidden rounded-[2px]">${img}</div>`;
+                if (item.link) {
+                    return `<a href="${item.link}" target="_blank" rel="noopener" class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-2 group block border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md">${innerWrapper}</a>`;
+                }
+                return `<div class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-2 group border border-border-subtle shadow-lg rounded-md">${innerWrapper}</div>`;
+            } else if (item.link) {
+                let embedUrl = null;
+                try {
+                    const u = new URL(item.link);
+                    const match = u.pathname.match(/\/(p|reel|tv)\/([a-zA-Z0-9_-]+)/);
+                    if (match) embedUrl = `https://www.instagram.com/${match[1]}/${match[2]}/embed/`;
+                } catch(e) {}
+                
+                if (embedUrl) {
+                    // Render iframe directly inside the box (no <a> tag, because iframe is interactive)
+                    return `<div class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-1 group border border-border-subtle hover:border-white/30 transition-all shadow-lg rounded-md flex items-center justify-center overflow-hidden"><iframe src="${embedUrl}" class="w-full h-full" frameborder="0" scrolling="no" allowtransparency="true"></iframe></div>`;
+                }
             }
-            return `<div class="aspect-square flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-center bg-surface-card p-2 group border border-border-subtle shadow-lg rounded-md">${innerWrapper}</div>`;
+            return '';
         }).join('');
         section.style.display = '';
     } catch(e) {
