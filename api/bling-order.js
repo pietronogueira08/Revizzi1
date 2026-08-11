@@ -173,6 +173,36 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Erro ao criar pedido no Bling', details: result });
         }
 
+        // ==========================================
+        // NOTIFICAÇÃO DO TELEGRAM (NOVO BOT WEBHOOK)
+        // ==========================================
+        const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
+        const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+
+        if (telegramToken && telegramChatId) {
+            try {
+                let itensMsg = items.map(i => `- ${i.quantity || 1}x ${i.name || i.title || 'Produto'}`).join('\n');
+                let message = `🎉 *NOVA VENDA REALIZADA!*\n\n` +
+                              `👤 *Cliente:* ${customerName || 'Não informado'}\n` +
+                              `📦 *Itens:*\n${itensMsg}\n\n` +
+                              `💰 *Total:* R$ ${Number(total || 0).toFixed(2)}\n` +
+                              `🏷️ *ID Bling:* ${result.data.id}`;
+
+                await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: telegramChatId,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+            } catch (tgError) {
+                console.error('Erro ao enviar Telegram:', tgError);
+                // Não falhamos o pedido se o telegram der erro
+            }
+        }
+
         return res.status(200).json({ success: true, bling_order_id: result.data.id });
 
     } catch (error) {
