@@ -442,6 +442,67 @@
 </button>
 </section>
 
+<!-- ── PROMO BANNER G26 ── -->
+<section id="section-promo-g26" class="w-full bg-surface-card border-b border-white/10 relative overflow-hidden">
+  <div class="relative z-10 container mx-auto px-margin-desktop py-8 md:py-10">
+    <div class="flex flex-col md:flex-row items-center gap-6 md:gap-10 justify-between">
+
+      <!-- Left: Coupon -->
+      <div class="flex flex-col items-center md:items-start text-center md:text-left gap-3">
+        <span class="font-label-caps text-[9px] uppercase tracking-[0.3em] text-white/40">Cupom exclusivo</span>
+        <div class="flex items-center gap-4">
+          <div class="bg-white text-black font-headline-lg text-[28px] md:text-[36px] px-4 py-1 tracking-[0.2em] cursor-pointer hover:opacity-90 transition-opacity select-all"
+               onclick="navigator.clipboard&&navigator.clipboard.writeText('G26').then(()=>showToast('Cupom G26 copiado!','success'))"
+               title="Clique para copiar o cupom">G26</div>
+          <div>
+            <p class="font-headline-lg text-[28px] md:text-[36px] leading-none tracking-widest">10% OFF</p>
+            <p class="font-label-caps text-[10px] text-white/50 uppercase tracking-widest">em toda a loja</p>
+          </div>
+        </div>
+        <p class="text-[11px] text-white/40 uppercase tracking-wider">Não cumulável com desconto PIX</p>
+      </div>
+
+      <div class="hidden md:block h-16 w-px bg-white/10"></div>
+
+      <!-- Center: Raffle -->
+      <div class="flex flex-col items-center text-center gap-2">
+        <span class="text-3xl">🎲</span>
+        <p class="font-headline-lg text-[22px] md:text-[28px] tracking-widest uppercase leading-tight">Sorteio Mensal</p>
+        <p class="font-label-caps text-[10px] text-white/50 uppercase tracking-widest max-w-[220px]">
+          Compras acima de R$100 ganham um número da sorte
+        </p>
+        <p class="font-label-caps text-[9px] uppercase tracking-[0.15em] text-white/30 mt-1">Sorteio no último dia do mês</p>
+      </div>
+
+      <div class="hidden md:block h-16 w-px bg-white/10"></div>
+
+      <!-- Right: Prize -->
+      <div class="flex flex-col items-center md:items-end text-center md:text-right gap-2">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-white/30 text-[16px]">emoji_events</span>
+          <span class="font-label-caps text-[9px] uppercase tracking-[0.3em] text-white/40">Prêmio do mês</span>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center gap-2 justify-center md:justify-end">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/40 shrink-0"></span>
+            <span class="text-white/70 font-label-caps text-[11px] uppercase tracking-wider">Bubble Foam Jaça 500ml</span>
+          </div>
+          <div class="flex items-center gap-2 justify-center md:justify-end">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/40 shrink-0"></span>
+            <span class="text-white/70 font-label-caps text-[11px] uppercase tracking-wider">Met Mol Jaça 500ml</span>
+          </div>
+          <div class="flex items-center gap-2 justify-center md:justify-end">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/40 shrink-0"></span>
+            <span class="text-white/70 font-label-caps text-[11px] uppercase tracking-wider">Toalha Microfibra 40×60</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+</section>
+
 <!-- Section 1.7: Buscador Principal -->
 <section class="w-full bg-surface-card border-b border-border-subtle py-6 md:py-8 z-40 relative">
     <div class="container mx-auto px-margin-desktop">
@@ -584,18 +645,29 @@
 </section>
 
 <!-- Section 6: Shipping Banner -->
-<section class="py-20 bg-surface-card border-y border-border-subtle relative overflow-hidden">
+<section class="py-16 bg-surface-card border-y border-border-subtle relative overflow-hidden">
 <div class="container mx-auto px-margin-desktop flex justify-center items-center relative z-10">
-<div class="flex items-center gap-16">
+<div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
 <div class="text-center"><span class="block font-display-lg text-headline-xl leading-none">24H</span><span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">Expedição</span></div>
-<div class="h-16 w-px bg-white/10"></div>
+<div class="hidden sm:block h-16 w-px bg-white/10"></div>
 <div class="text-center"><span class="block font-display-lg text-headline-xl leading-none">10X</span><span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">No Cartão</span></div>
-<div class="h-16 w-px bg-white/10"></div>
-<div class="text-center"><span class="block font-display-lg text-headline-xl leading-none">PIX</span><span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">&nbsp;</span></div>
+<div class="hidden sm:block h-16 w-px bg-white/10"></div>
+<div class="text-center"><span class="block font-display-lg text-headline-xl leading-none">PIX</span><span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">5% OFF</span></div>
+<div class="hidden sm:block h-16 w-px bg-white/10"></div>
+<div class="text-center cursor-pointer" onclick="document.getElementById('section-promo-g26').scrollIntoView({behavior:'smooth'})">
+  <span class="block font-display-lg text-headline-xl leading-none">G26</span>
+  <span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">10% OFF Cupom</span>
+</div>
+<div class="hidden sm:block h-16 w-px bg-white/10"></div>
+<div class="text-center">
+  <span class="block text-3xl leading-none mb-1">🎲</span>
+  <span class="font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-60">Sorteio Mensal</span>
+</div>
 </div>
 </div>
 <div class="absolute left-0 top-0 h-full w-64 bg-gradient-to-r from-primary/5 to-transparent skew-x-[-20deg] -translate-x-32"></div>
 </section>
+
 
 <!-- ── CART OVERLAY ── -->
 <div id="cart-overlay" class="fixed inset-0 z-[60] bg-black/60"></div>
@@ -974,38 +1046,70 @@
 <!-- PIX Form -->
 <div id="pay-pix-form" class="hidden flex flex-col gap-4 py-2 w-full">
   <!-- Destaque PIX -->
-  <div class="bg-green-500/10 border border-green-500/40 rounded-[2px] px-5 py-4 text-center">
+  <div id="pix-discount-block" class="bg-green-500/10 border border-green-500/40 rounded-[2px] px-5 py-4 text-center">
     <p class="text-green-400 font-bold text-xl mb-1">5% de desconto no PIX</p>
     <p class="text-[12px] text-green-500/80">O valor com desconto será exibido no resumo do pedido.</p>
+  </div>
+  <!-- Aviso cupom + PIX não acumulável -->
+  <div id="pix-coupon-warning" class="hidden bg-yellow-500/10 border border-yellow-500/40 rounded-[2px] px-4 py-3 text-center">
+    <p class="text-yellow-400 text-[12px] font-semibold">⚠️ Cupom G26 ativo — desconto PIX não se acumula</p>
+    <p class="text-[11px] text-yellow-400/70 mt-1">O cupom de 10% já está aplicado ao seu pedido.</p>
   </div>
   <div class="bg-surface-container border border-white/10 rounded-[2px] px-4 py-3">
     <p class="font-label-caps text-[10px] uppercase text-on-surface-variant mb-2">Como funciona</p>
     <ul class="text-[12px] text-white/60 flex flex-col gap-1.5">
       <li>✅ Pagamento instantâneo</li>
       <li>✅ Confirmação automática</li>
-      <li>✅ Desconto de 5% sobre o total</li>
+      <li id="pix-benefit-text">✅ Desconto de 5% sobre o total</li>
     </ul>
   </div>
 </div>
+
+<!-- ── Cupom de Desconto ── -->
+<div class="mt-6 border-t border-white/10 pt-6">
+  <label class="font-label-caps text-[10px] uppercase text-on-surface-variant block mb-2">Cupom de Desconto</label>
+  <div class="flex gap-2">
+    <input id="ck-coupon" type="text" placeholder="Ex: G26" maxlength="20"
+      class="flex-1 bg-surface-container border border-white/10 text-primary font-body-md py-3 px-4 rounded-[2px] focus:outline-none focus:border-white/40 uppercase placeholder:normal-case placeholder:text-white/30"/>
+    <button id="ck-coupon-btn" onclick="applyCoupon()"
+      class="border border-white/20 px-4 py-3 font-label-caps text-label-caps uppercase hover:border-white/60 transition-colors whitespace-nowrap text-sm">
+      Aplicar
+    </button>
+  </div>
+  <div id="coupon-feedback" class="hidden mt-2 text-[11px]"></div>
+</div>
+
 <div class="flex gap-3 mt-8">
 <button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="2">← Voltar</button>
 <button class="checkout-next-btn flex-1 bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:opacity-90 transition-opacity" data-next="4">Continuar →</button>
 </div>
 </div>
 
+
 <!-- Step 4: Confirmação -->
 <div id="checkout-step-4" class="checkout-step-panel">
 <h3 class="font-headline-xl text-headline-xl uppercase mb-8">Resumo do Pedido</h3>
 <div class="border border-white/10 bg-surface-card p-6 mb-8">
 <ul id="checkout-summary-list" class="flex flex-col gap-3 mb-6"></ul>
+<!-- G26 Coupon discount row -->
+<div id="checkout-coupon-row" class="hidden flex justify-between items-center mb-2">
+<span class="text-[11px] text-white uppercase">Cupom G26 (10%)</span>
+<span id="checkout-coupon-value" class="text-[11px] text-white font-bold"></span>
+</div>
 <div id="checkout-pix-discount-row" class="hidden flex justify-between items-center mb-2">
 <span class="text-[11px] text-green-400 uppercase">Desconto PIX (5%)</span>
 <span id="checkout-pix-discount-value" class="text-[11px] text-green-400 font-bold"></span>
+</div>
+<!-- Raffle eligibility notice -->
+<div id="checkout-raffle-notice" class="hidden bg-surface-container border border-white/10 rounded-[2px] px-3 py-2 mb-4 flex items-center gap-2">
+  <span class="text-lg shrink-0">🎲</span>
+  <p class="text-[11px] text-white/60">Sua compra acima de R$100 <span class="text-white font-semibold">garante um número no sorteio mensal!</span></p>
 </div>
 <div class="border-t border-white/10 pt-4 flex justify-between">
 <span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Total</span>
 <span id="checkout-summary-total" class="font-price-display text-price-display"></span>
 </div>
+
 </div>
 <div class="flex gap-3 mb-6">
 <button class="checkout-back-btn flex-1 border border-white/20 font-label-caps text-label-caps py-4 uppercase hover:border-white/60 transition-colors" data-back="3">← Voltar</button>
@@ -1027,7 +1131,52 @@
 </div><!-- end step panels -->
 </div><!-- end checkout-overlay -->
 
+<!-- ── RAFFLE NUMBER MODAL ── -->
+<div id="raffle-modal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="document.getElementById('raffle-modal').classList.add('hidden')"></div>
+  <div class="relative bg-surface-card border border-white/20 w-full max-w-md mx-auto p-8 shadow-2xl text-center">
+    <!-- Close -->
+    <button onclick="document.getElementById('raffle-modal').classList.add('hidden')"
+      class="absolute top-4 right-4 text-white/30 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">close</span>
+    </button>
+    <!-- Header -->
+    <div class="text-5xl mb-4">🎲</div>
+    <p class="font-label-caps text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Sorteio Mensal Revizzi</p>
+    <h2 class="font-headline-xl text-headline-xl uppercase mb-2">Parabéns!</h2>
+    <p class="font-body-md text-body-md text-on-surface-variant mb-6">
+      Sua compra acima de R$100 te garante um número no <strong class="text-white">sorteio do fim do mês!</strong>
+    </p>
+    <!-- Ticket number -->
+    <div class="bg-surface-container border-2 border-white/30 px-8 py-6 mb-6">
+      <p class="font-label-caps text-[10px] uppercase tracking-widest text-white/40 mb-2">Seu número da sorte</p>
+      <p id="raffle-ticket-number" class="font-headline-lg text-[64px] md:text-[80px] tracking-[0.15em] leading-none">—</p>
+    </div>
+    <!-- Prize -->
+    <div class="bg-surface-container border border-white/10 px-4 py-3 mb-6 text-left">
+      <p class="font-label-caps text-[9px] uppercase tracking-widest text-white/40 mb-2">Prêmio do sorteio</p>
+      <ul class="flex flex-col gap-1.5">
+        <li class="flex items-center gap-2 text-[12px] text-white/70">
+          <span class="w-1 h-1 rounded-full bg-white/40"></span> Bubble Foam Jaça 500ml
+        </li>
+        <li class="flex items-center gap-2 text-[12px] text-white/70">
+          <span class="w-1 h-1 rounded-full bg-white/40"></span> Met Mol Jaça 500ml
+        </li>
+        <li class="flex items-center gap-2 text-[12px] text-white/70">
+          <span class="w-1 h-1 rounded-full bg-white/40"></span> Toalha Microfibra 40×60 sem costura
+        </li>
+      </ul>
+    </div>
+    <p class="text-[11px] text-white/30 uppercase tracking-wider">Sorteio realizado no último dia do mês</p>
+    <button onclick="document.getElementById('raffle-modal').classList.add('hidden')"
+      class="mt-6 w-full bg-white text-black font-label-caps uppercase py-3 font-bold hover:opacity-90 transition-opacity">
+      Entendido!
+    </button>
+  </div>
+</div>
+
 </main>
+
 
 <!-- Section 7: Depoimentos -->
 <section id="section-depoimentos" class="py-20 bg-surface-main relative overflow-hidden">
@@ -1797,6 +1946,87 @@ function updateStepperUI(activeStep) {
     });
 }
 
+// ═══════════════════════════════════
+// H-EXTRA. COUPON STATE (G26)
+// ═══════════════════════════════════
+window.CouponState = {
+    code: null,       // e.g. 'G26'
+    discount: 0,      // e.g. 0.10 (10%)
+    applied: false
+};
+
+const VALID_COUPONS = {
+    'G26': { discount: 0.10, label: '10% OFF' }
+};
+
+function applyCoupon() {
+    const input = document.getElementById('ck-coupon');
+    const feedback = document.getElementById('coupon-feedback');
+    const code = (input.value || '').trim().toUpperCase();
+
+    if (!code) {
+        feedback.textContent = 'Digite um cupom válido.';
+        feedback.className = 'mt-2 text-[11px] text-red-400';
+        feedback.classList.remove('hidden');
+        return;
+    }
+
+    const coupon = VALID_COUPONS[code];
+    if (!coupon) {
+        feedback.textContent = 'Cupom inválido ou expirado.';
+        feedback.className = 'mt-2 text-[11px] text-red-400';
+        feedback.classList.remove('hidden');
+        window.CouponState = { code: null, discount: 0, applied: false };
+        updateCouponUI(false);
+        return;
+    }
+
+    // Apply coupon
+    window.CouponState = { code, discount: coupon.discount, applied: true };
+    feedback.textContent = `✅ Cupom ${code} aplicado — ${coupon.label} de desconto!`;
+    feedback.className = 'mt-2 text-[11px] text-green-400';
+    feedback.classList.remove('hidden');
+    input.readOnly = true;
+    document.getElementById('ck-coupon-btn').textContent = 'Aplicado ✓';
+    document.getElementById('ck-coupon-btn').disabled = true;
+    document.getElementById('ck-coupon-btn').classList.add('opacity-50');
+
+    updateCouponUI(true);
+    renderCheckoutSummary();
+}
+
+function removeCoupon() {
+    window.CouponState = { code: null, discount: 0, applied: false };
+    const input = document.getElementById('ck-coupon');
+    if (input) { input.readOnly = false; input.value = ''; }
+    const btn = document.getElementById('ck-coupon-btn');
+    if (btn) { btn.textContent = 'Aplicar'; btn.disabled = false; btn.classList.remove('opacity-50'); }
+    const fb = document.getElementById('coupon-feedback');
+    if (fb) fb.classList.add('hidden');
+    updateCouponUI(false);
+    renderCheckoutSummary();
+}
+
+function updateCouponUI(couponActive) {
+    // If coupon is active and PIX is selected → show warning, hide PIX discount
+    const isPix = document.getElementById('pay-pix-form') && !document.getElementById('pay-pix-form').classList.contains('hidden');
+    const pixWarning = document.getElementById('pix-coupon-warning');
+    const pixBlock = document.getElementById('pix-discount-block');
+    const pixBenefit = document.getElementById('pix-benefit-text');
+
+    if (couponActive) {
+        if (isPix) {
+            if (pixWarning) pixWarning.classList.remove('hidden');
+            if (pixBlock) pixBlock.classList.add('hidden');
+            if (pixBenefit) pixBenefit.textContent = '✅ Pagamento por PIX aceito';
+        }
+    } else {
+        if (pixWarning) pixWarning.classList.add('hidden');
+        if (pixBlock) pixBlock.classList.remove('hidden');
+        if (pixBenefit) pixBenefit.textContent = '✅ Desconto de 5% sobre o total';
+    }
+}
+
 // Taxas Mercado Pago por número de parcelas (% descontado do que o lojista recebe)
 // Para repassar ao comprador: totalCliente = preço / (1 - taxa)
 const MP_FEES = {
@@ -1867,19 +2097,53 @@ function renderCheckoutSummary() {
     const subtotal = Cart.total() + freight;
     const isPix = !document.getElementById('pay-card-form') || document.getElementById('pay-card-form').classList.contains('hidden');
     const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+    const coupon = window.CouponState || { applied: false, discount: 0 };
 
-    if (isPix) {
-        const discount = subtotal * 0.05;
-        const pixTotal = subtotal - discount;
-        if (pixDiscount) pixDiscount.classList.remove('hidden');
-        const discountEl = document.getElementById('checkout-pix-discount-value');
-        if (discountEl) discountEl.textContent = '-' + fmt(discount);
-        totalEl.innerHTML = `${fmt(pixTotal)} <span class="text-green-400 text-[11px] ml-1">PIX</span>`;
-    } else {
+    // Coupon discount row
+    const couponRow = document.getElementById('checkout-coupon-row');
+    const couponValueEl = document.getElementById('checkout-coupon-value');
+
+    if (coupon.applied) {
+        const couponDiscount = subtotal * coupon.discount;
+        const afterCoupon = subtotal - couponDiscount;
+        if (couponRow) couponRow.classList.remove('hidden');
+        if (couponValueEl) couponValueEl.textContent = '-' + fmt(couponDiscount);
+
+        // Coupon is active → no PIX discount, even if PIX is selected
         if (pixDiscount) pixDiscount.classList.add('hidden');
-        totalEl.textContent = fmt(subtotal);
+        totalEl.innerHTML = isPix
+            ? `${fmt(afterCoupon)} <span class="text-white/40 text-[11px] ml-1">PIX</span>`
+            : fmt(afterCoupon);
+    } else {
+        if (couponRow) couponRow.classList.add('hidden');
+
+        if (isPix) {
+            const discount = subtotal * 0.05;
+            const pixTotal = subtotal - discount;
+            if (pixDiscount) pixDiscount.classList.remove('hidden');
+            const discountEl = document.getElementById('checkout-pix-discount-value');
+            if (discountEl) discountEl.textContent = '-' + fmt(discount);
+            totalEl.innerHTML = `${fmt(pixTotal)} <span class="text-green-400 text-[11px] ml-1">PIX</span>`;
+        } else {
+            if (pixDiscount) pixDiscount.classList.add('hidden');
+            totalEl.textContent = fmt(subtotal);
+        }
+    }
+
+    // Raffle eligibility notice (show if subtotal >= 100 after discounts)
+    const effectiveTotal = coupon.applied
+        ? subtotal * (1 - coupon.discount)
+        : (isPix ? subtotal * 0.95 : subtotal);
+    const raffleNotice = document.getElementById('checkout-raffle-notice');
+    if (raffleNotice) {
+        if (effectiveTotal >= 100) {
+            raffleNotice.classList.remove('hidden');
+        } else {
+            raffleNotice.classList.add('hidden');
+        }
     }
 }
+
 
 async function handleConfirmOrder() {
     const btn = document.getElementById('checkout-confirm-btn');
@@ -1923,11 +2187,26 @@ async function handleConfirmOrder() {
 
     const freightPrice = window.CheckoutFreight ? (window.CheckoutFreight.price || 0) : 0;
     const subtotalWithFreight = Cart.total() + freightPrice;
-    // Aplicar desconto PIX se for pagamento PIX
-    const pixDiscountApplied = isPix ? subtotalWithFreight * 0.05 : 0;
-    const orderTotal = subtotalWithFreight - pixDiscountApplied;
+
+    // Coupon state
+    const coupon = window.CouponState || { applied: false, discount: 0, code: null };
+
+    // Desconto: cupom G26 OU desconto PIX — não cumuláveis
+    let couponDiscountApplied = 0;
+    let pixDiscountApplied = 0;
+
+    if (coupon.applied) {
+        // Cupom ativo → sem desconto PIX
+        couponDiscountApplied = subtotalWithFreight * coupon.discount;
+    } else if (isPix) {
+        // Sem cupom + PIX → aplica 5% PIX
+        pixDiscountApplied = subtotalWithFreight * 0.05;
+    }
+
+    const orderTotal = subtotalWithFreight - couponDiscountApplied - pixDiscountApplied;
     // Calcular total com juros se parcelado (4x+)
     const { totalPaid: orderTotalWithFees } = isCard ? calcInstallment(orderTotal, selectedInstallments) : { totalPaid: orderTotal };
+
 
     // Save to Supabase
     try {
@@ -1955,6 +2234,8 @@ async function handleConfirmOrder() {
                 payment_method: paymentMethod,
                 installments:   selectedInstallments,
                 pix_discount:   pixDiscountApplied > 0 ? pixDiscountApplied : null,
+                coupon_code:    coupon.applied ? coupon.code : null,
+                coupon_discount: couponDiscountApplied > 0 ? couponDiscountApplied : null,
                 user_id:        userId
             }]).select();
             
@@ -1988,6 +2269,31 @@ async function handleConfirmOrder() {
                     })
                 }).catch(e => console.error("Falha silenciosa ao enviar para o Bling:", e));
             } catch(e) {}
+
+            // ── SORTEIO: Gera número se pedido >= R$100 ──────────────────
+            try {
+                const raffleRes = await fetch('/api/raffle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        order_id:       insertedOrder[0].id,
+                        customer_name:  customerName,
+                        customer_email: customerEmail,
+                        customer_phone: customerPhoneRaw,
+                        order_total:    orderTotal
+                    })
+                });
+                if (raffleRes.ok) {
+                    const raffleData = await raffleRes.json();
+                    if (raffleData.eligible && raffleData.ticket_number) {
+                        // Armazenar número para exibir no modal após redirect
+                        window._pendingRaffleTicket = raffleData.ticket_number;
+                    }
+                }
+            } catch(raffleErr) {
+                console.warn('Raffle API error (non-fatal):', raffleErr);
+            }
+
 
         } else {
             alert('Erro: supabaseClient não encontrado!');
@@ -2043,11 +2349,27 @@ async function handleConfirmOrder() {
         if (mpData.init_point) {
             Cart.items = [];
             updateCartBadge();
-            window.location.href = mpData.init_point;
+
+            // Se tiver número de sorteio, mostrar modal ANTES do redirect
+            if (window._pendingRaffleTicket) {
+                const ticketEl = document.getElementById('raffle-ticket-number');
+                const raffleModal = document.getElementById('raffle-modal');
+                if (ticketEl) ticketEl.textContent = window._pendingRaffleTicket;
+                if (raffleModal) raffleModal.classList.remove('hidden');
+                text.textContent = 'Redirecionando em 5s...';
+                // Redirecionar após 5 segundos para o cliente ver o número
+                setTimeout(() => {
+                    window._pendingRaffleTicket = null;
+                    window.location.href = mpData.init_point;
+                }, 5000);
+            } else {
+                window.location.href = mpData.init_point;
+            }
         } else {
             alert('Erro ao redirecionar para o Mercado Pago: ' + (mpData.error || 'Desconhecido'));
             setTimeout(closeCheckout, 2500);
         }
+
 
     } catch (err) {
         console.error('API Error:', err);
@@ -2225,6 +2547,7 @@ function initCheckout() {
         pix.classList.remove('bg-primary', 'text-surface-main');
         pix.classList.add('text-on-surface-variant');
         populateInstallments();
+        updateCouponUI(window.CouponState && window.CouponState.applied);
         renderCheckoutSummary();
     });
     document.getElementById('pay-pix-btn').addEventListener('click', function() {
@@ -2235,8 +2558,10 @@ function initCheckout() {
         const card = document.getElementById('pay-card-btn');
         card.classList.remove('bg-primary', 'text-surface-main');
         card.classList.add('text-on-surface-variant');
+        updateCouponUI(window.CouponState && window.CouponState.applied);
         renderCheckoutSummary();
     });
+
 
     // Next/Back navigation (delegated on overlay)
     document.getElementById('checkout-overlay').addEventListener('click', function(e) {

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin — Sorteio Revizzi</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: { extend: { colors: {
+        "surface-main": "#0C0C0C",
+        "surface-card": "#131313",
+        "surface-container": "#201f1f",
+        "on-surface-variant": "#c4c7c8"
+    }}}
+};
+</script>
+<style>
+body { background: #0C0C0C; color: #fff; font-family: 'Inter', sans-serif; }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="min-h-screen">
+
+<!-- ── AUTH GATE ── -->
+<div id="auth-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0C0C0C]">
+    <div class="bg-[#131313] border border-white/10 p-8 w-full max-w-sm flex flex-col gap-6">
+        <h1 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.05em;" class="uppercase">
+            Admin — Sorteio
+        </h1>
+        <p class="text-sm text-white/50">Digite a senha para acessar o painel.</p>
+        <input type="password" id="admin-pw" placeholder="Senha" 
+            class="bg-[#0C0C0C] border border-white/10 p-3 text-sm w-full outline-none focus:border-white/40 transition-colors"
+            onkeydown="if(event.key==='Enter') checkAuth()"/>
+        <button onclick="checkAuth()" 
+            class="bg-white text-black font-bold uppercase text-sm py-3 hover:opacity-90 transition-opacity">
+            Entrar
+        </button>
+        <p id="auth-error" class="text-red-400 text-xs hidden">Senha incorreta.</p>
+    </div>
+</div>
+
+<!-- ── MAIN PANEL ── -->
+<div id="main-panel" class="hidden">
+<header class="bg-[#131313] border-b border-white/10 px-8 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+        <h1 style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:0.05em;" class="uppercase">
+            Revizzi — Painel de Sorteio
+        </h1>
+    </div>
+    <button onclick="logout()" class="text-xs text-white/40 hover:text-white/80 transition-colors uppercase tracking-widest">Sair</button>
+</header>
+
+<main class="p-8 max-w-6xl mx-auto flex flex-col gap-8">
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-[#131313] border border-white/10 p-6">
+            <p class="text-xs text-white/40 uppercase tracking-widest mb-1">Números Este Mês</p>
+            <p id="stat-count" class="text-4xl font-bold" style="font-family:'Bebas Neue',sans-serif;">—</p>
+        </div>
+        <div class="bg-[#131313] border border-white/10 p-6">
+            <p class="text-xs text-white/40 uppercase tracking-widest mb-1">Mês do Sorteio</p>
+            <p id="stat-month" class="text-4xl font-bold" style="font-family:'Bebas Neue',sans-serif;">—</p>
+        </div>
+        <div class="bg-[#131313] border border-white/10 p-6">
+            <p class="text-xs text-white/40 uppercase tracking-widest mb-1">Data do Sorteio</p>
+            <p id="stat-date" class="text-4xl font-bold" style="font-family:'Bebas Neue',sans-serif;">—</p>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div class="flex items-center gap-3">
+            <label class="text-xs text-white/40 uppercase tracking-widest">Mês:</label>
+            <input type="month" id="month-selector" 
+                class="bg-[#201f1f] border border-white/10 text-white text-sm px-3 py-2 outline-none focus:border-white/40"
+                onchange="loadTickets()"/>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="loadTickets()" 
+                class="border border-white/20 text-white text-xs uppercase tracking-widest px-4 py-2 hover:border-white/60 transition-colors flex items-center gap-2">
+                ↻ Atualizar
+            </button>
+            <button onclick="exportCSV()" 
+                class="bg-white text-black text-xs uppercase tracking-widest font-bold px-6 py-2 hover:opacity-90 transition-opacity flex items-center gap-2">
+                ↓ Exportar CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-[#131313] border border-white/10 overflow-hidden">
+        <div id="loading-state" class="py-16 text-center text-white/30 text-sm">Carregando...</div>
+        <div id="empty-state" class="hidden py-16 text-center">
+            <p class="text-white/30 text-sm">Nenhum número gerado neste mês.</p>
+        </div>
+        <div id="table-container" class="hidden overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-white/10 bg-[#0C0C0C]">
+                        <th class="text-left px-6 py-4 text-xs uppercase tracking-widest text-white/40">Número</th>
+                        <th class="text-left px-6 py-4 text-xs uppercase tracking-widest text-white/40">Cliente</th>
+                        <th class="text-left px-6 py-4 text-xs uppercase tracking-widest text-white/40">E-mail</th>
+                        <th class="text-left px-6 py-4 text-xs uppercase tracking-widest text-white/40">Telefone</th>
+                        <th class="text-left px-6 py-4 text-xs uppercase tracking-widest text-white/40">Valor do Pedido</th>
+                        <th class="text-left px-6 py-4 text-xs uppercase tracking-widest text-white/40">Data</th>
+                    </tr>
+                </thead>
+                <tbody id="tickets-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Raffle draw button -->
+    <div class="bg-[#131313] border border-white/20 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <h3 class="font-bold uppercase text-sm tracking-widest mb-1">Realizar Sorteio</h3>
+            <p class="text-xs text-white/40">Clique para sortear um número aleatório dentre os cadastrados no mês.</p>
+        </div>
+        <button onclick="drawWinner()" 
+            class="bg-white text-black font-bold uppercase text-sm px-8 py-3 hover:opacity-90 transition-opacity whitespace-nowrap">
+            🎲 Sortear Agora
+        </button>
+    </div>
+
+    <!-- Winner display -->
+    <div id="winner-display" class="hidden bg-[#131313] border-2 border-white/60 p-8 text-center">
+        <p class="text-xs text-white/40 uppercase tracking-widest mb-2">Número Sorteado 🏆</p>
+        <p id="winner-number" class="text-8xl font-bold mb-4" style="font-family:'Bebas Neue',sans-serif; letter-spacing:0.1em;">—</p>
+        <p id="winner-name" class="text-lg font-semibold mb-1">—</p>
+        <p id="winner-contact" class="text-sm text-white/50">—</p>
+        <button onclick="document.getElementById('winner-display').classList.add('hidden')" 
+            class="mt-6 border border-white/20 text-xs uppercase px-4 py-2 hover:border-white/60 transition-colors">
+            Fechar
+        </button>
+    </div>
+
+</main>
+</div>
+
+<script>
+// ─── Config ───────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://lpovueymplmwuljohysj.supabase.co';
+const SERVICE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxwb3Z1ZXltcGxtd3Vsam9oeXNqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE3ODY0MCwiZXhwIjoyMDkzNzU0NjQwfQ._HMesJL9z2gCsqp-IN26I7mAD5S58JVxZDagmOZ7RII';
+const ADMIN_PASSWORD = 'Revizzi@2026'; // Troque para a senha que preferir
+
+let tickets = [];
+
+// ─── Auth ─────────────────────────────────────────────────────────────────
+function checkAuth() {
+    const pw = document.getElementById('admin-pw').value;
+    if (pw === ADMIN_PASSWORD) {
+        sessionStorage.setItem('raffle_admin', '1');
+        document.getElementById('auth-gate').classList.add('hidden');
+        document.getElementById('main-panel').classList.remove('hidden');
+        init();
+    } else {
+        document.getElementById('auth-error').classList.remove('hidden');
+        document.getElementById('admin-pw').value = '';
+    }
+}
+
+function logout() {
+    sessionStorage.removeItem('raffle_admin');
+    location.reload();
+}
+
+// ─── Init ──────────────────────────────────────────────────────────────────
+function init() {
+    // Set default month to current
+    const now = new Date();
+    const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    document.getElementById('month-selector').value = monthStr;
+
+    // Set stats
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    document.getElementById('stat-month').textContent = monthStr;
+    document.getElementById('stat-date').textContent = `${lastDay}/${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+    loadTickets();
+}
+
+// ─── Load Tickets ──────────────────────────────────────────────────────────
+async function loadTickets() {
+    const month = document.getElementById('month-selector').value;
+    if (!month) return;
+
+    document.getElementById('loading-state').classList.remove('hidden');
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('table-container').classList.add('hidden');
+
+    try {
+        const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/raffle_tickets?raffle_month=eq.${encodeURIComponent(month)}&order=ticket_number.asc&limit=1000`,
+            {
+                headers: {
+                    'apikey': SERVICE_KEY,
+                    'Authorization': `Bearer ${SERVICE_KEY}`
+                }
+            }
+        );
+
+        if (!res.ok) {
+            const err = await res.text();
+            throw new Error(err);
+        }
+
+        tickets = await res.json();
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('stat-count').textContent = tickets.length;
+
+        if (tickets.length === 0) {
+            document.getElementById('empty-state').classList.remove('hidden');
+            return;
+        }
+
+        const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+        const fmtDate = d => new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        const tbody = document.getElementById('tickets-tbody');
+        tbody.innerHTML = tickets.map((t, i) => `
+            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}">
+                <td class="px-6 py-4">
+                    <span class="text-2xl font-bold" style="font-family:'Bebas Neue',sans-serif; letter-spacing:0.05em;">${t.ticket_number}</span>
+                </td>
+                <td class="px-6 py-4 text-sm">${t.customer_name || '—'}</td>
+                <td class="px-6 py-4 text-sm text-white/60">${t.customer_email || '—'}</td>
+                <td class="px-6 py-4 text-sm text-white/60">${t.customer_phone || '—'}</td>
+                <td class="px-6 py-4 text-sm font-bold">${fmt(t.order_total)}</td>
+                <td class="px-6 py-4 text-xs text-white/40">${fmtDate(t.created_at)}</td>
+            </tr>
+        `).join('');
+
+        document.getElementById('table-container').classList.remove('hidden');
+
+    } catch (e) {
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('empty-state').classList.remove('hidden');
+        document.getElementById('empty-state').innerHTML = `
+            <p class="text-red-400 text-sm">Erro ao carregar dados: ${e.message}</p>
+            <p class="text-white/30 text-xs mt-2">Verifique se a tabela raffle_tickets existe no Supabase.</p>
+        `;
+    }
+}
+
+// ─── Export CSV ────────────────────────────────────────────────────────────
+function exportCSV() {
+    if (!tickets || tickets.length === 0) {
+        alert('Nenhum número para exportar neste mês.');
+        return;
+    }
+
+    const month = document.getElementById('month-selector').value;
+    const headers = ['Número do Sorteio', 'Nome do Cliente', 'E-mail', 'Telefone', 'Valor do Pedido (R$)', 'Data'];
+    const rows = tickets.map(t => [
+        t.ticket_number,
+        (t.customer_name || '').replace(/,/g, ' '),
+        t.customer_email || '',
+        t.customer_phone || '',
+        (t.order_total || 0).toFixed(2).replace('.', ','),
+        new Date(t.created_at).toLocaleString('pt-BR')
+    ]);
+
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sorteio_revizzi_${month}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// ─── Draw Winner ───────────────────────────────────────────────────────────
+function drawWinner() {
+    if (!tickets || tickets.length === 0) {
+        alert('Nenhum número cadastrado para sortear.');
+        return;
+    }
+
+    const winner = tickets[Math.floor(Math.random() * tickets.length)];
+    document.getElementById('winner-number').textContent = winner.ticket_number;
+    document.getElementById('winner-name').textContent = winner.customer_name || 'Nome não informado';
+    document.getElementById('winner-contact').textContent = `${winner.customer_email || ''}${winner.customer_email && winner.customer_phone ? ' · ' : ''}${winner.customer_phone || ''}`;
+    document.getElementById('winner-display').classList.remove('hidden');
+    document.getElementById('winner-display').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ─── Auto-check auth ───────────────────────────────────────────────────────
+if (sessionStorage.getItem('raffle_admin') === '1') {
+    document.getElementById('auth-gate').classList.add('hidden');
+    document.getElementById('main-panel').classList.remove('hidden');
+    init();
+}
+
+// Enter key on password
+document.getElementById('admin-pw').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkAuth();
+});
+</script>
+</body>
+</html>

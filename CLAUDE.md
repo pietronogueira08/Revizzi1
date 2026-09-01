@@ -70,3 +70,12 @@ document.querySelectorAll('.group').forEach(card => { ... })
 - [ ] Newsletter, testimonials
 - [ ] Checkout flow (formulários, máscaras)
 - [ ] Mobile nav (drawer)
+
+## Funcionalidades implementadas (G26 Promo — Set/2026)
+- **Cupom G26**: 10% OFF, não cumulável com PIX. Campo no Step 3 do checkout.
+- **Sorteio mensal**: Pedidos ≥ R$100 geram número aleatório (10000–99999).
+- **`api/raffle.js`**: Endpoint serverless para geração e armazenamento do número.
+- **`admin-raffle.html`**: Painel admin (senha: `Revizzi@2026`) para ver números e exportar CSV.
+- **`scripts/create_raffle_table.sql`**: SQL para criar tabela `raffle_tickets` no Supabase.
+- **Modal de número**: Exibido imediatamente após confirmação do pedido, 5s antes do redirect MP.
+- **Banner promocional**: Seção entre o hero e o buscador com cupom, sorteio e prêmio.
