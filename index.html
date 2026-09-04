@@ -423,11 +423,11 @@
 </section>
 
 <!-- Section 2: Hero Section -->
-<section id="section-hero" class="relative w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden flex items-center bg-surface-main group/hero">
+<section id="section-hero" class="relative w-full aspect-[16/9] overflow-hidden flex items-center bg-surface-main group/hero">
 <!-- Hero Carousel Background -->
 <div id="hero-carousel" class="absolute inset-0 w-full h-full z-0">
   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100">
-    <img class="w-full h-full object-cover object-center" src="https://lpovueymplmwuljohysj.supabase.co/storage/v1/object/public/hero-images/sorteio_premiado_1788521793059.jpeg" alt="Sorteio Premiado"/>
+    <img class="w-full h-full object-contain md:object-cover object-center" src="https://lpovueymplmwuljohysj.supabase.co/storage/v1/object/public/hero-images/sorteio_premiado_1788521793059.jpeg" alt="Sorteio Premiado"/>
   </div>
 </div>
 
@@ -2765,7 +2765,7 @@ async function initHeroCarousel() {
             if (carousel && urls.length > 0) {
                 carousel.innerHTML = urls.map((url, index) => `
                   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}">
-                    <img class="w-full h-full object-cover object-center" src="${url}" alt="Hero ${index}"/>
+                    <img class="w-full h-full object-contain md:object-cover object-center" src="${url}" alt="Hero ${index}"/>
                   </div>
                 `).join('');
             }
