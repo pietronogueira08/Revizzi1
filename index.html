@@ -427,7 +427,7 @@
 <!-- Hero Carousel Background -->
 <div id="hero-carousel" class="absolute inset-0 w-full h-full z-0">
   <div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100">
-    <img class="w-full h-full object-cover object-center" src="https://lpovueymplmwuljohysj.supabase.co/storage/v1/object/public/hero-images/1784135244476_0.jpeg" alt="Hero"/>
+    <img class="w-full h-full object-cover object-center" src="https://lpovueymplmwuljohysj.supabase.co/storage/v1/object/public/hero-images/sorteio_premiado_1788521793059.jpeg" alt="Sorteio Premiado"/>
   </div>
 </div>
 
@@ -1319,8 +1319,8 @@ async function fetchProductsFromSupabase() {
             const s = (item.status || '').toLowerCase().trim();
             return s !== 'inativo' && s !== 'desativado';
         }).map(item => {
-                // +5% sobre o preço da tabela física para cobrir Bling, NF e enquadramento tributário
-                const basePrice = parseFloat(item.price) * 1.05;
+                // +15% sobre o preço da tabela física para cobrir Bling, NF e enquadramento tributário
+                const basePrice = parseFloat(item.price) * 1.15;
                 const pixPrice  = basePrice * 0.95; // desconto PIX de 5%
 
                 // Dimensões: o banco guarda como JSON string {length, width, height} em cm
@@ -2048,7 +2048,7 @@ const MAX_NO_INTEREST = 3;  // até 3x sem juros
 
 function calcInstallment(total, n) {
     if (n <= MAX_NO_INTEREST) {
-        // Sem juros — lojista absorve a taxa (coberta pelo +5% nos preços)
+        // Sem juros — lojista absorve a taxa (coberta pelo +15% nos preços)
         return { monthly: total / n, totalPaid: total, hasInterest: false };
     } else {
         // Com juros — grosseado para que a Revizzi receba o valor cheio
