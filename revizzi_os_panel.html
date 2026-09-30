@@ -299,6 +299,10 @@
         <button onclick="openProductModal()" class="flex items-center justify-center gap-2 border border-white/20 px-4 py-2 text-[10px] text-white/80 hover:text-white font-label-caps uppercase tracking-widest hover:border-white/60 transition-all"><span class="material-symbols-outlined text-sm">add</span>Adicionar Item</button>
       </div>
     </div>
+    
+    <!-- Alerta Inteligente de Conexão com Supabase -->
+    <div id="estoque-alert-container"></div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       <div class="glass-panel p-6"><div class="text-[10px] font-label-caps text-white uppercase tracking-tighter mb-2">Total de SKUs</div><div class="font-display-lg text-3xl text-primary">0</div><div class="text-[10px] text-white/70 font-label-caps uppercase mt-1">— Aguardando cadastro</div></div>
       <div class="glass-panel p-6"><div class="text-[10px] font-label-caps text-white uppercase tracking-tighter mb-2">Itens em Alerta</div><div class="font-display-lg text-3xl text-yellow-400">0</div><div class="text-[10px] text-white/70 font-label-caps uppercase mt-1">— Nível baixo</div></div>
@@ -308,7 +312,7 @@
       <div class="p-6 border-b border-border-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h2 class="font-headline-lg text-primary uppercase text-xl">Inventário de Produtos</h2>
-          <span class="text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Conectado ao Supabase</span>
+          <span id="estoque-connection-status" class="text-[10px] font-label-caps text-white/70 uppercase tracking-widest flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span> Conectando ao Supabase...</span>
         </div>
         <div class="flex gap-2">
           <button onclick="toggleEstoqueFilters()" class="bg-surface-card border border-white/10 text-white font-label-caps text-[11px] uppercase px-3 py-1.5 hover:bg-white/5 transition-colors flex items-center gap-2 cursor-pointer">
@@ -338,7 +342,7 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left">
           <thead class="bg-surface-card"><tr class="border-b border-border-subtle"><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Produto</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Status</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Marca</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Categoria</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Preço</th><th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest text-right">Ação</th></tr></thead>
-          <tbody id="estoque-tbody"><tr><td colspan="5" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Nenhum produto cadastrado no Supabase ainda.</td></tr></tbody>
+          <tbody id="estoque-tbody"><tr><td colspan="6" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/50 uppercase tracking-widest"><span class="inline-block animate-pulse">Carregando catálogo do Supabase...</span></td></tr></tbody>
         </table>
       </div>
     </div>
@@ -1361,14 +1365,106 @@ async function completeOrder(id) {
 // SUPABASE: PRODUCTS CRUD
 // ═══════════════════════════════════════════════════
 async function fetchEstoqueProducts() {
+    const statusEl = document.getElementById('estoque-connection-status');
+    const bannerContainer = document.getElementById('estoque-alert-container');
+    const tbody = document.getElementById('estoque-tbody');
+
+    if (statusEl) {
+        statusEl.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse mr-1.5"></span> Conectando ao Supabase...';
+    }
+
     try {
         const { data, error } = await db.from('products').select('*').order('name');
         if (error) throw error;
+        
         window._OS_PRODUCTS = data || [];
+        
+        // Salva cache local para resiliência caso o banco pause futuramente
+        try {
+            if (window._OS_PRODUCTS.length > 0) {
+                localStorage.setItem('revizzi_cached_products', JSON.stringify(window._OS_PRODUCTS));
+            }
+        } catch(e) {}
+
+        if (bannerContainer) bannerContainer.innerHTML = '';
+        if (statusEl) {
+            statusEl.innerHTML = `<span class="inline-block w-2 h-2 rounded-full bg-green-400 mr-1.5"></span> Conectado ao Supabase (${window._OS_PRODUCTS.length} SKUs)`;
+        }
+
         populateEstoqueFilters(window._OS_PRODUCTS);
         renderEstoqueTable(window._OS_PRODUCTS);
         updateEstoqueKPIs(window._OS_PRODUCTS);
-    } catch(err) { console.error('Error fetching products:', err); }
+
+    } catch(err) {
+        console.error('Error fetching products from Supabase:', err);
+        
+        // Verifica se há dados no cache do navegador
+        let cached = null;
+        try {
+            const raw = localStorage.getItem('revizzi_cached_products');
+            if (raw) cached = JSON.parse(raw);
+        } catch(e) {}
+
+        // Exibe banner inteligente de diagnóstico
+        if (bannerContainer) {
+            bannerContainer.innerHTML = `
+              <div class="bg-amber-500/10 border border-amber-500/30 p-5 rounded-[2px] mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="flex items-start gap-3">
+                  <span class="material-symbols-outlined text-amber-400 text-2xl shrink-0 mt-0.5">cloud_off</span>
+                  <div>
+                    <h3 class="font-bold text-amber-400 text-xs uppercase tracking-wider">Banco de Dados Supabase Inacessível (Projeto Pausado por Inatividade)</h3>
+                    <p class="text-[12px] text-white/70 mt-1 leading-relaxed">
+                      O Supabase pausa automaticamente projetos gratuitos após 7 dias sem requisições. 
+                      <strong>Seus dados e produtos continuam salvos com segurança.</strong> Para restaurar o banco, basta abrir o painel da Supabase e clicar em <em>"Restore project"</em>.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <a href="https://supabase.com/dashboard/project/lpovueymplmwuljohysj" target="_blank" rel="noopener" class="bg-amber-500 text-black font-label-caps text-[10px] font-bold uppercase px-4 py-2 hover:bg-amber-400 transition-colors flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[15px]">open_in_new</span> Reativar no Supabase
+                  </a>
+                  <button onclick="fetchEstoqueProducts()" class="border border-white/20 text-white font-label-caps text-[10px] uppercase px-3 py-2 hover:border-white/50 transition-colors flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[15px]">refresh</span> Tentar Novamente
+                  </button>
+                </div>
+              </div>
+            `;
+        }
+
+        if (statusEl) {
+            statusEl.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-amber-400 mr-1.5"></span> Desconectado (Supabase Pausado)';
+        }
+
+        if (cached && cached.length > 0) {
+            window._OS_PRODUCTS = cached;
+            populateEstoqueFilters(cached);
+            renderEstoqueTable(cached);
+            updateEstoqueKPIs(cached);
+            showToast('Exibindo produtos salvos do cache local', 'default');
+        } else {
+            if (tbody) {
+                tbody.innerHTML = `
+                  <tr>
+                    <td colspan="6" class="px-6 py-16 text-center">
+                      <span class="material-symbols-outlined text-amber-400/80 text-4xl mb-3 block">dns</span>
+                      <p class="text-xs font-label-caps text-amber-400 uppercase tracking-widest font-bold mb-1">Projeto Supabase Pausado ou Offline</p>
+                      <p class="text-[12px] text-white/50 max-w-md mx-auto mb-5 leading-relaxed">
+                        Não foi possível consultar os produtos porque a conexão com o Supabase falhou. No plano gratuito, o projeto pausa automaticamente após 7 dias sem atividade.
+                      </p>
+                      <div class="flex items-center justify-center gap-3">
+                        <a href="https://supabase.com/dashboard/project/lpovueymplmwuljohysj" target="_blank" rel="noopener" class="bg-primary text-surface-main px-5 py-2.5 font-label-caps text-[11px] uppercase font-bold hover:opacity-90 inline-flex items-center gap-2">
+                          <span class="material-symbols-outlined text-base">power_settings_new</span> Reativar Projeto no Supabase
+                        </a>
+                        <button onclick="fetchEstoqueProducts()" class="border border-white/20 px-4 py-2.5 font-label-caps text-[11px] uppercase text-white hover:border-white/60 inline-flex items-center gap-1.5">
+                          <span class="material-symbols-outlined text-base">refresh</span> Tentar Novamente
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+            }
+        }
+    }
 }
 
 function populateEstoqueFilters(products) {
@@ -1389,7 +1485,7 @@ function renderEstoqueTable(products) {
     const tbody = document.getElementById('estoque-tbody');
     if (!tbody) return;
     if (!products || products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Nenhum produto cadastrado ainda. Clique em "Adicionar Item".</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-[10px] font-label-caps text-white/70 uppercase tracking-widest">Nenhum produto cadastrado ainda. Clique em "Adicionar Item".</td></tr>`;
         return;
     }
     tbody.innerHTML = products.map(p => `

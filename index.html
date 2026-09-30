@@ -1347,9 +1347,47 @@ async function fetchProductsFromSupabase() {
                     dimensions: dims                                      // {length, width, height} em cm
                 };
             });
+            try {
+                localStorage.setItem('revizzi_public_products_cache', JSON.stringify(data));
+            } catch(e) {}
         }
     } catch (err) {
         console.error('Error fetching products from Supabase:', err);
+        try {
+            const raw = localStorage.getItem('revizzi_public_products_cache');
+            if (raw) {
+                const cachedData = JSON.parse(raw);
+                if (cachedData && cachedData.length > 0) {
+                    window.PRODUCTS = cachedData.filter(item => {
+                        const s = (item.status || '').toLowerCase().trim();
+                        return s !== 'inativo' && s !== 'desativado';
+                    }).map(item => {
+                        const basePrice = parseFloat(item.price) * 1.15;
+                        const pixPrice  = basePrice * 0.95;
+                        let dims = null;
+                        if (item.dimensions) {
+                            try { dims = typeof item.dimensions === 'string' ? JSON.parse(item.dimensions) : item.dimensions; } catch(e) {}
+                        }
+                        return {
+                            id: item.id,
+                            brand: item.brand,
+                            name: item.name,
+                            price: basePrice,
+                            priceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(basePrice),
+                            pixPrice: pixPrice,
+                            pixPriceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(pixPrice),
+                            category: item.category,
+                            badge: item.badge_text ? { text: item.badge_text, style: item.badge_style || 'bg-primary text-surface-main' } : null,
+                            img: item.img_url || 'imagem_2026-06-17_163850035-removebg-preview.png',
+                            description: item.description,
+                            status: item.status || 'Disponível',
+                            weight: item.weight ? Number(item.weight) : null,
+                            dimensions: dims
+                        };
+                    });
+                }
+            }
+        } catch(e) {}
     }
 }
 
