@@ -1,6 +1,6 @@
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://lpovueymplmwuljohysj.supabase.co';
-const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_R515ACD0X12zo_inHPj_1w_ElYu0B0A';
-const SERVICE_KEY  = process.env.VITE_SUPABASE_SERVICE_ROLE || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxwb3Z1ZXltcGxtd3Vsam9oeXNqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE3ODY0MCwiZXhwIjoyMDkzNzU0NjQwfQ._HMesJL9z2gCsqp-IN26I7mAD5S58JVxZDagmOZ7RII';
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://gieubdiyzjphtkvwaawp.supabase.co';
+const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZXViZGl5empwaHRrdndhYXdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3ODA3ODQsImV4cCI6MjEwNjM1Njc4NH0.rg-xUKwaD1bsqcPrGbnQHXPL_V61_bPCnEOubcZEKIg';
+const SERVICE_KEY  = process.env.VITE_SUPABASE_SERVICE_ROLE || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZXViZGl5empwaHRrdndhYXdwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MDc4MDc4NCwiZXhwIjoyMTA2MzU2Nzg0fQ.ikK22xkYPY6aYmTsanEsAjulZ52eQ8_sceNzMIi4Cys';
 
 // ─── Generates a random 5-digit number (10000-99999) ───────────────────────
 function generateTicketNumber() {

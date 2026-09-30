@@ -1,5 +1,5 @@
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://lpovueymplmwuljohysj.supabase.co';
-const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_R515ACD0X12zo_inHPj_1w_ElYu0B0A';
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://gieubdiyzjphtkvwaawp.supabase.co';
+const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZXViZGl5empwaHRrdndhYXdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3ODA3ODQsImV4cCI6MjEwNjM1Njc4NH0.rg-xUKwaD1bsqcPrGbnQHXPL_V61_bPCnEOubcZEKIg';
 
 const clientId = '5b76c6ac2c067ae57225fb7b5a3d24ccf70a0ab8';
 const clientSecret = '852612b7ac9fd86bd94e74ae6aacab3be0654271b6e80316c622697cde02';
