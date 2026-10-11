@@ -20,12 +20,14 @@ const mime = {
 
 http.createServer((req, res) => {
   let url = req.url.split('?')[0];
-  if (url === '/' || url === '/revizzi' || url === '/index') {
+  if (url === '/' || url === '/revizzi' || url === '/index' || url.startsWith('/produto/')) {
     url = '/index.html';
   }
-  if (!path.extname(url)) url += '.html';
-
-  const filePath = path.join(__dirname, url);
+  const rootDir = path.dirname(__dirname);
+  let filePath = path.join(rootDir, url);
+  if (!fs.existsSync(filePath) && !path.extname(url)) {
+    filePath += '.html';
+  }
   const ext = path.extname(filePath);
 
   fs.readFile(filePath, (err, data) => {
