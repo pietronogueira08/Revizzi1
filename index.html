@@ -11,6 +11,15 @@
 </script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script>
+  (function() {
+    var p = window.location.pathname;
+    var h = window.location.hash;
+    if (p.startsWith('/produto/') || h.startsWith('#produto/')) {
+      document.documentElement.classList.add('is-product-page-route');
+    }
+  })();
+</script>
 <title>REVIZZI | Loja de Produtos para Estética Automotiva</title>
 <link rel="icon" type="image/jpeg" href="/imagem_2026-06-17_163850035-removebg-preview.png"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -212,6 +221,22 @@
         #auth-overlay.open { display: block; }
         #auth-drawer { opacity: 0; pointer-events: none; }
         #auth-drawer.open { opacity: 1; pointer-events: auto; }
+
+        /* ── Direct Product Route (Zero Flash, Instant Render) ── */
+        html.is-product-page-route #store-main-view {
+            display: none !important;
+        }
+        html.is-product-page-route #product-page-view {
+            transform: translateX(0) !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            transition: none !important;
+        }
+        html.is-product-page-route #product-page-view .parallax-media {
+            transform: translateX(0) !important;
+            transition: none !important;
+        }
 
         /* ── Store Main View & Dedicated Product Page Transition ── */
         #store-main-view {
@@ -1719,9 +1744,99 @@ const SUPABASE_URL = 'https://gieubdiyzjphtkvwaawp.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpZXViZGl5empwaHRrdndhYXdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3ODA3ODQsImV4cCI6MjEwNjM1Njc4NH0.rg-xUKwaD1bsqcPrGbnQHXPL_V61_bPCnEOubcZEKIg';
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+function createProductSlug(text) {
+    if (!text) return '';
+    return text
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function formatProductItem(item) {
+    const basePrice = parseFloat(item.price) * 1.15;
+    const pixPrice  = basePrice * 0.95;
+    let dims = null;
+    if (item.dimensions) {
+        try { dims = typeof item.dimensions === 'string' ? JSON.parse(item.dimensions) : item.dimensions; } catch(e) {}
+    }
+    return {
+        id: item.id,
+        slug: createProductSlug(item.name),
+        brand: item.brand,
+        name: item.name,
+        price: basePrice,
+        priceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(basePrice),
+        pixPrice: pixPrice,
+        pixPriceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(pixPrice),
+        category: item.category,
+        badge: item.badge_text ? { text: item.badge_text, style: item.badge_style || 'bg-primary text-surface-main' } : null,
+        img: item.img_url || 'imagem_2026-06-17_163850035-removebg-preview.png',
+        description: item.description,
+        status: item.status || 'Disponível',
+        weight: item.weight ? Number(item.weight) : null,
+        dimensions: dims
+    };
+}
+
+function getProductSlugFromUrl() {
+    const path = window.location.pathname;
+    const hash = window.location.hash;
+    if (path.startsWith('/produto/')) {
+        return path.replace(/^\/produto\//, '').replace(/\/$/, '');
+    } else if (hash.startsWith('#produto/')) {
+        return hash.replace(/^#produto\//, '');
+    }
+    return null;
+}
+
+function showProductPageSkeleton(slug) {
+    const titleEl = document.getElementById('pp-title');
+    const brandEl = document.getElementById('pp-brand');
+    const priceEl = document.getElementById('pp-pix-price');
+    const basePriceEl = document.getElementById('pp-base-price');
+    const descEl = document.getElementById('pp-full-description');
+    const crumbEl = document.getElementById('pp-crumb-name');
+    
+    if (crumbEl && slug) crumbEl.textContent = decodeURIComponent(slug).replace(/-/g, ' ');
+    if (titleEl) titleEl.innerHTML = '<span class="inline-block w-3/4 h-7 bg-white/10 rounded animate-pulse"></span>';
+    if (brandEl) brandEl.innerHTML = '<span class="inline-block w-24 h-4 bg-white/10 rounded animate-pulse"></span>';
+    if (priceEl) priceEl.innerHTML = '<span class="inline-block w-36 h-8 bg-white/10 rounded animate-pulse"></span>';
+    if (basePriceEl) basePriceEl.textContent = 'R$ --,--';
+    if (descEl) descEl.innerHTML = '<div class="space-y-2"><div class="w-full h-4 bg-white/10 rounded animate-pulse"></div><div class="w-5/6 h-4 bg-white/10 rounded animate-pulse"></div><div class="w-4/6 h-4 bg-white/10 rounded animate-pulse"></div></div>';
+}
+
 window.PRODUCTS = [];
 
-function createProductSlug(text) {
+// Preload produtos sincronamente do cache localStorage para render 0ms
+try {
+    const rawCache = localStorage.getItem('revizzi_public_products_cache');
+    if (rawCache) {
+        const cachedArr = JSON.parse(rawCache);
+        if (Array.isArray(cachedArr) && cachedArr.length > 0) {
+            window.PRODUCTS = cachedArr.filter(item => {
+                const s = (item.status || '').toLowerCase().trim();
+                return s !== 'inativo' && s !== 'desativado';
+            }).map(formatProductItem);
+        }
+    }
+} catch(e) {}
+
+// Se a página foi carregada diretamente na rota de produto, inicializa imediatamente
+const _initialDirectSlug = getProductSlugFromUrl();
+if (_initialDirectSlug) {
+    document.documentElement.classList.add('is-product-page-route');
+    if (window.PRODUCTS && window.PRODUCTS.length > 0) {
+        setTimeout(() => { openProductPage(_initialDirectSlug, false); }, 0);
+    } else {
+        window._pendingProductRoute = { idOrSlug: _initialDirectSlug, pushHistory: false };
+        setTimeout(() => { showProductPageSkeleton(_initialDirectSlug); }, 0);
+    }
+}
+
+function _unusedCreateProductSlug(text) {
     if (!text) return '';
     return text
         .toString()
@@ -1744,42 +1859,21 @@ async function fetchProductsFromSupabase() {
         if (error) throw error;
         
         if (data && data.length > 0) {
-        window.PRODUCTS = data.filter(item => {
-            const s = (item.status || '').toLowerCase().trim();
-            return s !== 'inativo' && s !== 'desativado';
-        }).map(item => {
-                // +15% sobre o preço da tabela física para cobrir Bling, NF e enquadramento tributário
-                const basePrice = parseFloat(item.price) * 1.15;
-                const pixPrice  = basePrice * 0.95; // desconto PIX de 5%
+            window.PRODUCTS = data.filter(item => {
+                const s = (item.status || '').toLowerCase().trim();
+                return s !== 'inativo' && s !== 'desativado';
+            }).map(formatProductItem);
 
-                // Dimensões: o banco guarda como JSON string {length, width, height} em cm
-                let dims = null;
-                if (item.dimensions) {
-                    try { dims = typeof item.dimensions === 'string' ? JSON.parse(item.dimensions) : item.dimensions; } catch(e) {}
-                }
-
-                return {
-                    id: item.id,
-                    slug: createProductSlug(item.name),
-                    brand: item.brand,
-                    name: item.name,
-                    price: basePrice,
-                    priceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(basePrice),
-                    pixPrice: pixPrice,
-                    pixPriceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(pixPrice),
-                    category: item.category,
-                    badge: item.badge_text ? { text: item.badge_text, style: item.badge_style || 'bg-primary text-surface-main' } : null,
-                    img: item.img_url || 'imagem_2026-06-17_163850035-removebg-preview.png',
-                    description: item.description,
-                    status: item.status || 'Disponível',
-                    // Logística
-                    weight: item.weight ? Number(item.weight) : null,   // gramas
-                    dimensions: dims                                      // {length, width, height} em cm
-                };
-            });
             try {
                 localStorage.setItem('revizzi_public_products_cache', JSON.stringify(data));
             } catch(e) {}
+
+            // Atualiza imediatamente o produto da URL direta
+            const targetSlug = window._pendingProductRoute?.idOrSlug || getProductSlugFromUrl();
+            if (targetSlug) {
+                openProductPage(targetSlug, false);
+                window._pendingProductRoute = null;
+            }
         }
     } catch (err) {
         console.error('Error fetching products from Supabase:', err);
@@ -1791,31 +1885,12 @@ async function fetchProductsFromSupabase() {
                     window.PRODUCTS = cachedData.filter(item => {
                         const s = (item.status || '').toLowerCase().trim();
                         return s !== 'inativo' && s !== 'desativado';
-                    }).map(item => {
-                        const basePrice = parseFloat(item.price) * 1.15;
-                        const pixPrice  = basePrice * 0.95;
-                        let dims = null;
-                        if (item.dimensions) {
-                            try { dims = typeof item.dimensions === 'string' ? JSON.parse(item.dimensions) : item.dimensions; } catch(e) {}
-                        }
-                        return {
-                            id: item.id,
-                    slug: createProductSlug(item.name),
-                            brand: item.brand,
-                            name: item.name,
-                            price: basePrice,
-                            priceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(basePrice),
-                            pixPrice: pixPrice,
-                            pixPriceFormatted: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(pixPrice),
-                            category: item.category,
-                            badge: item.badge_text ? { text: item.badge_text, style: item.badge_style || 'bg-primary text-surface-main' } : null,
-                            img: item.img_url || 'imagem_2026-06-17_163850035-removebg-preview.png',
-                            description: item.description,
-                            status: item.status || 'Disponível',
-                            weight: item.weight ? Number(item.weight) : null,
-                            dimensions: dims
-                        };
-                    });
+                    }).map(formatProductItem);
+                    const targetSlug = window._pendingProductRoute?.idOrSlug || getProductSlugFromUrl();
+                    if (targetSlug) {
+                        openProductPage(targetSlug, false);
+                        window._pendingProductRoute = null;
+                    }
                 }
             }
         } catch(e) {}
@@ -2032,12 +2107,16 @@ function updateProductPageCartBadge() {
 function openProductPage(idOrSlug, pushHistory = true) {
     if (!window.PRODUCTS || window.PRODUCTS.length === 0) {
         window._pendingProductRoute = { idOrSlug, pushHistory };
+        showProductPageSkeleton(idOrSlug);
         return;
     }
 
     const product = findProduct(idOrSlug);
     if (!product) {
         console.warn('Produto não encontrado:', idOrSlug);
+        document.documentElement.classList.remove('is-product-page-route');
+        closeProductPage(false);
+        showToast('Produto não encontrado.', 'error');
         if (pushHistory) history.replaceState(null, '', '/');
         return;
     }
@@ -2159,7 +2238,11 @@ function openProductPage(idOrSlug, pushHistory = true) {
 function closeProductPage(pushHistory = true) {
     const pageView = document.getElementById('product-page-view');
     const storeMain = document.getElementById('store-main-view');
-    if (!pageView || !pageView.classList.contains('page-active')) return;
+
+    // Remove lock da rota direta
+    document.documentElement.classList.remove('is-product-page-route');
+
+    if (!pageView) return;
 
     pageView.classList.remove('page-active');
     if (storeMain) storeMain.classList.remove('page-retracted');
@@ -3634,13 +3717,18 @@ async function initHeroCarousel() {
 }
 
 async function init() {
+    initProductPage();
+    initCart();
+    
+    // Depoimentos em segundo plano (não bloqueia carregamento da página nem produtos)
+    fetchTestimonialsFromSupabase();
+
     await fetchProductsFromSupabase();
-    await fetchTestimonialsFromSupabase();
     
     populateFeatured();
-    initCart();
-    initProductPage();
-    checkInitialRoute();
+    if (!window.currentProductPageId) {
+        checkInitialRoute();
+    }
     initFilters();
     initCheckout();
     initNavLinks();
