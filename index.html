@@ -337,52 +337,22 @@
                 align-items: center; 
             }
 
-            /* 4. Grids (Categorias e Produtos) */
-            /* Categorias: Horizontal Swipe */
-            #section-categorias .grid { 
-                display: flex !important; 
-                flex-wrap: nowrap !important; 
-                overflow-x: auto !important; 
-                scroll-snap-type: x mandatory !important; 
-                gap: 16px !important;
-                padding-bottom: 24px !important;
-            }
-            #section-categorias .grid::-webkit-scrollbar { display: none; }
-            #section-categorias .grid > div {
-                flex: 0 0 calc(50% - 8px) !important;
-                scroll-snap-align: start;
-            }
-            
-            /* Produtos: 2 colunas compactas */
+            /* 4. Categorias Stories & Rail */
+            .no-scrollbar::-webkit-scrollbar { display: none !important; }
+            .no-scrollbar { -ms-overflow-style: none !important; scrollbar-width: none !important; }
+
+            /* Produtos: 2 colunas compactas no mobile */
             #featured-grid, #filter-products-grid, .related-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 12px !important;
+                gap: 10px !important;
             }
             #featured-grid > div, #filter-products-grid > div, .related-grid > div {
                 min-width: 0;
             }
-            /* Ajuste de espaçamento interno nos cards para 2 colunas */
-            #featured-grid .p-6, #filter-products-grid .p-6, .related-grid .p-6 {
-                padding: 12px !important;
-            }
-            
-            /* Ajuste de tipografia nos cards para 2 colunas */
-            #featured-grid h3, #filter-products-grid h3, .related-grid h3 {
-                font-size: 11px !important;
-                margin-bottom: 8px !important;
-                display: -webkit-box !important;
-                -webkit-line-clamp: 2 !important;
-                -webkit-box-orient: vertical !important;
-                overflow: hidden !important;
-            }
-            #featured-grid .text-price-display, #filter-products-grid .text-price-display, .related-grid .text-price-display {
-                font-size: 16px !important;
-                margin-bottom: 12px !important;
-            }
             
             /* 5. Área de Toque */
-            button, select, input { min-height: 44px !important; }
-            .material-symbols-outlined { font-size: 24px !important; }
+            button, select, input { min-height: 44px; }
+            .material-symbols-outlined { font-size: 24px; }
         }
         /* Instagram Hover */
         .hover-insta:hover svg { fill: url(#ig-grad); }
@@ -567,33 +537,192 @@
 </div>
 </section>
 
-<!-- Section 4: Categories Grid -->
-<section id="section-categorias" class="py-section-padding bg-surface-main">
+<!-- Section 4: Categories Carousel / Stories -->
+<section id="section-categorias" class="py-6 sm:py-8 md:py-10 bg-surface-main border-b border-border-subtle relative overflow-hidden">
 <div class="container mx-auto px-margin-desktop">
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" data-cat="Polimento"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/polimento.jpg" alt="Polimento" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.05s" data-cat="Equipamentos"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/equipamentos.jpg" alt="Equipamentos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.1s" data-cat="Acessórios"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/acessorios.jpg" alt="Acessórios" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.15s" data-cat="Motocicletas"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/motocicletas.jpg" alt="Motocicletas" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.2s" data-cat="Desengraxantes e desincrustantes"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/desengraxantes.jpg" alt="Desengraxantes e desincrustantes" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.25s" data-cat="Aplicadores"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/aplicadores.jpg" alt="Aplicadores" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.3s" data-cat="Escovas e pincéis"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/escovas.jpg" alt="Escovas e pincéis" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.35s" data-cat="Toalhas"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/toalhas.jpg" alt="Toalhas" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.4s" data-cat="Ceras"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/ceras.jpg" alt="Ceras" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.45s" data-cat="Pneus e rodas"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/pneus_rodas.jpg" alt="Pneus e rodas" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.5s" data-cat="Couro"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/couro.jpg" alt="Couro" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.55s" data-cat="Lava auto"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/lava_auto.jpg" alt="Lava auto" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.6s" data-cat="Plásticos"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/plasticos.jpg" alt="Plásticos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.65s" data-cat="Específicos"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/especificos.jpg" alt="Específicos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.7s" data-cat="Vidros"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/vidros.jpg" alt="Vidros" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.75s" data-cat="Itens de reposição"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/reposicao.jpg" alt="Itens de reposição" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.8s" data-cat="Aromatizantes"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/aromatizantes.jpg" alt="Aromatizantes" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.85s" data-cat="Descontaminante"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/descontaminante.jpg" alt="Descontaminante" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.9s" data-cat="Limpadores"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/limpadores.jpg" alt="Limpadores" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:0.95s" data-cat="Selante sintético"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/selante.jpg" alt="Selante sintético" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:1.0s" data-cat="Verniz"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/verniz.jpg" alt="Verniz" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-<div class="reveal relative flex flex-col items-center justify-center aspect-square border border-white/10 hover:border-white/40 transition-all duration-500 group cursor-pointer cat-filter-btn bg-[#0C0C0C] p-3 sm:p-5 rounded-md shadow-2xl" style="transition-delay:1.05s" data-cat="Vitrificador"><div class="w-full h-full overflow-hidden border border-white/5 rounded-sm relative bg-black"><img src="assets/categories/vitrificador.jpg" alt="Vitrificador" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"></div></div>
-</div>
+    <div class="flex items-end justify-between mb-4 md:mb-6">
+        <div>
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="font-label-caps text-[10px] md:text-[11px] text-white/50 uppercase tracking-[0.25em]">Navegação Rápida</span>
+            </div>
+            <h2 class="font-headline-xl text-xl sm:text-2xl md:text-3xl uppercase tracking-widest text-primary">Categorias</h2>
+        </div>
+        <!-- Desktop rail scroll arrows -->
+        <div class="hidden md:flex items-center gap-2">
+            <button id="cat-scroll-left" class="w-8 h-8 border border-white/10 hover:border-white/40 flex items-center justify-center text-white/60 hover:text-white transition-all rounded-[2px] cursor-pointer" title="Anterior">
+                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+            </button>
+            <button id="cat-scroll-right" class="w-8 h-8 border border-white/10 hover:border-white/40 flex items-center justify-center text-white/60 hover:text-white transition-all rounded-[2px] cursor-pointer" title="Próximo">
+                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Stories / Pill Carousel Track -->
+    <div id="categories-track" class="flex gap-3 sm:gap-4 overflow-x-auto pb-2 pt-1 scroll-smooth snap-x snap-mandatory no-scrollbar select-none -mx-4 px-4 sm:mx-0 sm:px-0">
+        <!-- Todas -->
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="all">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-primary/40 bg-surface-card flex items-center justify-center p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <span class="material-symbols-outlined text-primary text-[22px] sm:text-[26px]">grid_view</span>
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-primary group-hover:text-white transition-colors text-center mt-2 leading-tight uppercase tracking-wider">Todos</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Polimento">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/polimento.jpg" alt="Polimento" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Polimento</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Equipamentos">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/equipamentos.jpg" alt="Equipamentos" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Equipamentos</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Acessórios">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/acessorios.jpg" alt="Acessórios" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Acessórios</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Motocicletas">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/motocicletas.jpg" alt="Motocicletas" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Motos</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Desengraxantes e desincrustantes">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/desengraxantes.jpg" alt="Desengraxantes e desincrustantes" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Desengraxante</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Aplicadores">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/aplicadores.jpg" alt="Aplicadores" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Aplicadores</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Escovas e pincéis">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/escovas.jpg" alt="Escovas e pincéis" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Escovas</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Toalhas">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/toalhas.jpg" alt="Toalhas" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Toalhas</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Ceras">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/ceras.jpg" alt="Ceras" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Ceras</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Pneus e rodas">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/pneus_rodas.jpg" alt="Pneus e rodas" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Pneus & Rodas</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Couro">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/couro.jpg" alt="Couro" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Couro</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Lava auto">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/lava_auto.jpg" alt="Lava auto" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Lava Auto</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Plásticos">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/plasticos.jpg" alt="Plásticos" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Plásticos</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Específicos">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/especificos.jpg" alt="Específicos" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Específicos</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Vidros">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/vidros.jpg" alt="Vidros" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Vidros</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Itens de reposição">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/reposicao.jpg" alt="Itens de reposição" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Reposição</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Aromatizantes">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/aromatizantes.jpg" alt="Aromatizantes" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Aromatizantes</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Descontaminante">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/descontaminante.jpg" alt="Descontaminante" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Descontaminação</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Limpadores">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/limpadores.jpg" alt="Limpadores" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Limpadores</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Selante sintético">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/selante.jpg" alt="Selante sintético" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Selantes</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Verniz">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/verniz.jpg" alt="Verniz" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Vernizes</span>
+        </div>
+
+        <div class="cat-filter-btn flex flex-col items-center shrink-0 w-[72px] sm:w-[84px] md:w-[92px] group cursor-pointer snap-start" data-cat="Vitrificador">
+            <div class="cat-circle w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-white/15 bg-surface-card overflow-hidden p-0.5 group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-md">
+                <img src="assets/categories/vitrificador.jpg" alt="Vitrificador" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100" loading="lazy">
+            </div>
+            <span class="cat-label font-label-caps text-[10px] sm:text-[11px] font-bold text-white/70 group-hover:text-primary transition-colors text-center mt-2 leading-tight uppercase tracking-wider truncate w-full px-1">Vitrificadores</span>
+        </div>
+    </div>
 </div>
 </section>
 
@@ -2270,41 +2399,113 @@ const FilterState = {
 };
 
 function buildProductCard(p) {
-    const badge = p.badge
-        ? `<div class="absolute top-4 left-4 ${p.badge.style} font-label-caps text-[10px] px-2 py-1 uppercase font-bold">${p.badge.text}</div>`
-        : '';
-    
     const isOutOfStock = (p.status || '').toLowerCase().trim() === 'fora de estoque';
+    const pNameEscaped = (p.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const pName = p.name || '';
+    const pBrand = p.brand || 'Revizzi';
+
+    // Badge prioritário de destaque / lançamento
+    let badgeHtml = '';
+    if (p.badge && p.badge.text) {
+        badgeHtml = `<div class="absolute top-2 left-2 ${p.badge.style || 'bg-primary text-surface-main'} font-label-caps text-[9px] sm:text-[10px] px-2 py-0.5 uppercase font-bold tracking-wider rounded-[2px] shadow-md z-10">${p.badge.text}</div>`;
+    }
+
+    // Micro badge de envio/estoque no topo direito
+    const trustBadge = isOutOfStock
+        ? `<div class="absolute top-2 right-2 bg-red-950/90 border border-red-500/40 text-red-400 font-label-caps text-[8px] sm:text-[9px] px-1.5 py-0.5 uppercase tracking-wider font-bold rounded-[2px] shadow-sm z-10 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>Esgotado</div>`
+        : `<div class="absolute top-2 right-2 bg-black/75 backdrop-blur-sm border border-white/10 text-emerald-400 font-label-caps text-[8px] sm:text-[9px] px-1.5 py-0.5 uppercase tracking-wider font-bold rounded-[2px] shadow-sm z-10 flex items-center gap-0.5"><span class="material-symbols-outlined text-[11px]">bolt</span>Envio 24h</div>`;
+
+    // Preços e Formatação
+    const basePrice = Number(p.price) || 0;
+    const pixPriceFormatted = p.pixPriceFormatted || new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(basePrice * 0.95);
+    const regularPriceFormatted = p.priceFormatted || new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(basePrice);
+
+    // Parcelamento calculado
+    let installmentText = '';
+    if (basePrice >= 45) {
+        const instVal = (basePrice / 3).toFixed(2).replace('.', ',');
+        installmentText = `ou 3x de R$ ${instVal} sem juros`;
+    } else {
+        installmentText = `ou até 12x no cartão`;
+    }
+
+    // Bloco de Preço
+    let pricingHtml = '';
+    if (isOutOfStock) {
+        pricingHtml = `
+            <div class="mt-auto pt-2 mb-2 sm:mb-3">
+                <span class="font-price-display text-base sm:text-lg text-white/40 tracking-tight leading-none">${regularPriceFormatted}</span>
+                <p class="text-[9px] sm:text-[10px] text-white/40 font-label-caps uppercase tracking-wider mt-1">Indisponível no momento</p>
+            </div>
+        `;
+    } else {
+        pricingHtml = `
+            <div class="mt-auto pt-2 mb-2 sm:mb-3">
+                <div class="flex items-baseline gap-1.5 flex-wrap">
+                    <span class="font-price-display text-base sm:text-xl font-black text-emerald-400 tracking-tight leading-none">${pixPriceFormatted}</span>
+                    <span class="bg-emerald-500/10 text-emerald-400 font-label-caps text-[8px] sm:text-[9px] font-bold px-1 py-0.2 rounded border border-emerald-500/20 uppercase tracking-wider">PIX (5% OFF)</span>
+                </div>
+                <p class="font-label-caps text-[9px] sm:text-[10px] text-white/45 uppercase tracking-wider mt-1 truncate">
+                    ${installmentText}
+                </p>
+            </div>
+        `;
+    }
+
+    // Botão de Ação (Mobile-First Compact)
     const btnClass = isOutOfStock
-        ? 'w-full bg-transparent text-primary font-label-caps text-label-caps py-4 uppercase font-bold border border-primary/50 hover:bg-primary/10 transition-colors cursor-pointer'
-        : 'w-full bg-primary text-surface-main font-label-caps text-label-caps py-4 uppercase font-bold hover:bg-on-surface-variant transition-colors';
-    const btnText = isOutOfStock ? '🔔 Avise-me quando disponível' : 'Adicionar ao Carrinho';
-    const pName = (p.name || '').replace(/'/g, "\\'");
+        ? 'w-full bg-transparent text-white/80 font-label-caps text-[10px] sm:text-[11px] py-2 sm:py-2.5 px-2 uppercase font-bold border border-white/20 hover:border-primary hover:text-primary transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 rounded-[2px]'
+        : 'w-full bg-primary text-surface-main font-label-caps text-[10px] sm:text-[11px] py-2 sm:py-2.5 px-2 uppercase font-bold hover:bg-white transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 shadow-md rounded-[2px]';
+
+    const btnText = isOutOfStock
+        ? `<span class="material-symbols-outlined text-[14px] sm:text-[16px]">notifications</span><span class="hidden sm:inline">Avise-me quando chegar</span><span class="sm:hidden">Avise-me</span>`
+        : `<span class="material-symbols-outlined text-[14px] sm:text-[16px]">shopping_bag</span><span class="hidden sm:inline">Adicionar ao Carrinho</span><span class="sm:hidden">Comprar</span>`;
+
     const btnAttr = isOutOfStock
-        ? `onclick="event.stopPropagation();openWaitlistModal('${p.id}', '${pName}')"`
+        ? `onclick="event.stopPropagation();openWaitlistModal('${p.id}', '${pNameEscaped}')"`
         : `data-add-to-cart="${p.id}"`;
 
-    // Linha de preço PIX nos cards
-    const pixLine = isOutOfStock ? '<p class="text-[11px] text-white/40 font-bold mb-2">Produto fora de estoque</p>' : `<p class="text-[11px] text-green-400 font-bold mb-2 flex items-center gap-1">
-        ${p.pixPriceFormatted} no PIX <span class="text-[9px] text-green-500/80 font-normal">(5% OFF)</span>
-    </p>`;
-
-    return `<div class="bg-surface-card border border-white/10 group overflow-hidden cursor-pointer" data-product-id="${p.id}">
-        <div class="aspect-square relative overflow-hidden bg-surface-main">
-            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'opacity-50 grayscale' : ''}" src="${p.img}" alt="${p.name}" onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
-            ${badge}
+    return `
+    <div class="bg-surface-card border border-white/10 hover:border-white/30 transition-all duration-300 group overflow-hidden cursor-pointer flex flex-col justify-between h-full rounded-[2px] relative" data-product-id="${p.id}">
+        <!-- Imagem e Badges -->
+        <div class="aspect-square relative overflow-hidden bg-black/40">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'opacity-40 grayscale' : ''}" 
+                 src="${p.img}" 
+                 alt="${pName}" 
+                 loading="lazy"
+                 onerror="this.src='imagem_2026-06-17_163850035-removebg-preview.png'"/>
+            ${badgeHtml}
+            ${trustBadge}
         </div>
-        <div class="p-6">
-            <p class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">${p.brand}</p>
-            <h3 class="font-body-md text-body-md mb-2 uppercase ${isOutOfStock ? 'text-white/50' : ''}">${p.name}</h3>
-            <p class="font-price-display text-price-display mb-1 ${isOutOfStock ? 'text-white/50' : ''}">${p.priceFormatted}</p>
-            ${pixLine}
-            <div class="mb-4"></div>
-            <button class="${btnClass}" ${btnAttr}>${btnText}</button>
+
+        <!-- Conteúdo do Card -->
+        <div class="p-2.5 sm:p-4 flex flex-col flex-1 justify-between">
+            <div>
+                <!-- Avaliação Social Proof + Marca -->
+                <div class="flex items-center justify-between gap-1 mb-1">
+                    <p class="font-label-caps text-[8px] sm:text-[10px] text-white/40 uppercase tracking-widest truncate max-w-[65%]">${pBrand}</p>
+                    <div class="flex items-center gap-0.5 shrink-0 text-amber-400 text-[9px] sm:text-[10px]">
+                        <span>★★★★★</span>
+                        <span class="text-white/40 font-mono text-[8px] sm:text-[9px] ml-0.5">5.0</span>
+                    </div>
+                </div>
+
+                <!-- Título do Produto com 2 Linhas Uniformes -->
+                <h3 class="font-body-md text-[11px] sm:text-[13px] uppercase font-semibold text-white/90 group-hover:text-primary transition-colors line-clamp-2 min-h-[28px] sm:min-h-[36px] leading-tight mb-1 sm:mb-2 ${isOutOfStock ? 'text-white/40' : ''}">
+                    ${pName}
+                </h3>
+            </div>
+
+            <!-- Bloco de Preços -->
+            ${pricingHtml}
+
+            <!-- Botão de Ação -->
+            <button class="${btnClass}" ${btnAttr}>
+                ${btnText}
+            </button>
         </div>
     </div>`;
 }
-
 function getFilteredProducts() {
     let result = PRODUCTS.filter(p => {
         const catOk = FilterState.categories.size === 0 || Array.from(FilterState.categories).some(c => p.category.split(',').map(x => x.trim().toLowerCase()).includes(c.toLowerCase()));
@@ -2366,6 +2567,7 @@ function buildFilterCheckboxes() {
 }
 
 function resetFilters() {
+    if (typeof updateCategoryCarouselActive === 'function') updateCategoryCarouselActive('all');
     FilterState.categories.clear(); FilterState.brands.clear();
     FilterState.minPrice = 0; FilterState.maxPrice = Infinity; FilterState.sort = 'relevance'; FilterState.query = '';
     document.querySelectorAll('.filter-category, .filter-brand').forEach(cb => cb.checked = false);
@@ -3191,19 +3393,61 @@ function initNavLinks() {
     if (btnExplorar) btnExplorar.addEventListener('click', () => smoothScrollTo('#section-catalogo'));
     if (btnPolimentos) btnPolimentos.addEventListener('click', () => smoothScrollTo('#section-categorias'));
 
+        // Category carousel helper to highlight active story
+    function updateCategoryCarouselActive(selectedCat) {
+        document.querySelectorAll('#categories-track .cat-filter-btn').forEach(btn => {
+            const cat = btn.dataset.cat;
+            const circle = btn.querySelector('.cat-circle');
+            const label = btn.querySelector('.cat-label');
+            const isActive = (selectedCat === 'all' && cat === 'all') || (selectedCat && cat && selectedCat.toLowerCase() === cat.toLowerCase());
+            if (circle) {
+                if (isActive) {
+                    circle.classList.add('border-primary', 'ring-2', 'ring-primary/40');
+                    circle.classList.remove('border-white/15', 'border-white/20');
+                } else {
+                    circle.classList.remove('border-primary', 'ring-2', 'ring-primary/40');
+                    circle.classList.add(cat === 'all' ? 'border-primary/40' : 'border-white/15');
+                }
+            }
+            if (label) {
+                if (isActive) {
+                    label.classList.add('text-primary');
+                    label.classList.remove('text-white/70');
+                } else {
+                    label.classList.remove('text-primary');
+                    label.classList.add(cat === 'all' ? 'text-primary' : 'text-white/70');
+                }
+            }
+        });
+    }
+    window.updateCategoryCarouselActive = updateCategoryCarouselActive;
+
+    // Desktop Carousel Arrows
+    const catTrack = document.getElementById('categories-track');
+    const catLeftBtn = document.getElementById('cat-scroll-left');
+    const catRightBtn = document.getElementById('cat-scroll-right');
+    if (catTrack) {
+        if (catLeftBtn) catLeftBtn.addEventListener('click', () => catTrack.scrollBy({ left: -280, behavior: 'smooth' }));
+        if (catRightBtn) catRightBtn.addEventListener('click', () => catTrack.scrollBy({ left: 280, behavior: 'smooth' }));
+    }
+
     // Category cards → filter + scroll to catalog
     document.querySelectorAll('.cat-filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const cat = this.dataset.cat;
             if (!cat) return;
-            // Apply filter
-            FilterState.categories.clear();
-            FilterState.categories.add(cat);
-            document.querySelectorAll('.filter-category').forEach(cb => {
-                cb.checked = cb.value === cat;
-            });
+            if (cat === 'all') {
+                FilterState.categories.clear();
+                document.querySelectorAll('.filter-category').forEach(cb => cb.checked = false);
+            } else {
+                FilterState.categories.clear();
+                FilterState.categories.add(cat);
+                document.querySelectorAll('.filter-category').forEach(cb => {
+                    cb.checked = cb.value.toLowerCase() === cat.toLowerCase();
+                });
+            }
+            updateCategoryCarouselActive(cat);
             renderFilterGrid();
-            // Scroll to catalog
             smoothScrollTo('#section-catalogo');
         });
     });
